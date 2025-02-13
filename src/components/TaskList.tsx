@@ -30,7 +30,8 @@ const TaskCard = ({ task }: { task: Task }) => {
     dispatch(updateTask({ 
       ...task, 
       status: newStatus,
-      completed: newStatus === "Completed"
+      completed: newStatus === "Completed",
+      selected: false
     }));
   };
 
@@ -211,12 +212,23 @@ export default function TaskView() {
     selectedTasks.forEach(task => {
       dispatch(deleteTask(task.id));
     });
+    // Reset all selected states after bulk delete
+    tasks.forEach(task => {
+      if (task.selected) {
+        dispatch(updateTask({ ...task, selected: false }));
+      }
+    });
   };
 
   const handleBulkStatusChange = (newStatus: string) => {
     const selectedTasks = tasks.filter(task => task.selected);
     selectedTasks.forEach(task => {
-      dispatch(updateTask({ ...task, status: newStatus }));
+      dispatch(updateTask({ 
+        ...task, 
+        status: newStatus,
+        completed: newStatus === "Completed",
+        selected: false 
+      }));
     });
   };
 
