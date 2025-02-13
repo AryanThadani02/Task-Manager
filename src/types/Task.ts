@@ -7,4 +7,5 @@ export interface Task {
   dueDate: string;
   status: string;
   fileUrl?: string;
+  order?: number;
 }

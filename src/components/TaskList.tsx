@@ -19,9 +19,16 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   return (
     <div 
+      id={`task-${task.id}`}
       draggable
-      onDragStart={handleDragStart}
-      className="bg-white p-4 rounded-lg shadow mb-3 cursor-move"
+      onDragStart={(e) => {
+        handleDragStart(e);
+        e.currentTarget.classList.add('dragging');
+      }}
+      onDragEnd={(e) => {
+        e.currentTarget.classList.remove('dragging');
+      }}
+      className="task-card bg-white p-4 rounded-lg shadow mb-3 cursor-move"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 flex-grow">
@@ -67,18 +74,60 @@ export default function TaskView() {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
+    const draggingElement = document.querySelector('.dragging');
+    if (!draggingElement) return;
+
+    const container = e.currentTarget;
+    const afterElement = getDragAfterElement(container, e.clientY);
+    
+    if (afterElement) {
+      container.insertBefore(draggingElement, afterElement);
+    } else {
+      container.appendChild(draggingElement);
+    }
+  };
+
+  const getDragAfterElement = (container: Element, y: number) => {
+    const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      } else {
+        return closest;
+      }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
   };
 
   const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
-
+    
     if (task) {
-      dispatch(updateTask({
-        ...task,
-        status: newStatus
-      }));
+      const container = e.currentTarget;
+      const taskElements = [...container.querySelectorAll('.task-card')];
+      const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
+      
+      const tasksInSection = tasks.filter(t => t.status === newStatus);
+      const reorderedTasks = [...tasksInSection];
+      const taskToMove = reorderedTasks.find(t => t.id === taskId);
+      
+      if (taskToMove) {
+        reorderedTasks.splice(reorderedTasks.indexOf(taskToMove), 1);
+        reorderedTasks.splice(newIndex, 0, taskToMove);
+        
+        reorderedTasks.forEach((t, index) => {
+          dispatch(updateTask({
+            ...t,
+            status: newStatus,
+            order: index
+          }));
+        });
+      }
     }
   };
 
