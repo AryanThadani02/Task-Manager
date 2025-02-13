@@ -120,10 +120,11 @@ export default function TaskView() {
     const task = tasks.find(t => t.id === taskId);
 
     if (task) {
-      // Update the task's status
+      // Update the task's status and completed state
       dispatch(updateTask({
         ...task,
-        status: newStatus
+        status: newStatus,
+        completed: newStatus === "Completed" ? true : false
       }));
 
       const container = e.currentTarget;
