@@ -44,6 +44,12 @@ const TaskCard = ({ task }: { task: Task }) => {
             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
           </svg>
         </div>
+        <input
+          type="checkbox"
+          checked={task.completed}
+          onChange={(e) => dispatch(updateTask({ ...task, completed: e.target.checked }))}
+          className="w-4 h-4 rounded-full border-gray-300 text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none"
+        />
         <div className="flex-grow flex items-center space-x-2">
           <span className="text-sm font-normal text-gray-900">{task.title}</span>
         </div>
@@ -60,12 +66,7 @@ const TaskCard = ({ task }: { task: Task }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
           </button>
-          <input
-            type="checkbox"
-            checked={task.completed}
-            onChange={(e) => dispatch(updateTask({ ...task, completed: e.target.checked }))}
-            className="ml-2 h-4 w-4 rounded-full border-gray-300 text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
-          />
+          
         </div>
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
