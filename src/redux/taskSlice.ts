@@ -38,14 +38,22 @@ export const { setTasks, addTask, updateTask, deleteTask } = taskSlice.actions;
 // Thunks
 export const fetchTasks = (userId: string) => async (dispatch: any) => {
   try {
+    if (!userId) {
+      dispatch(setTasks([]));
+      return;
+    }
     const tasksRef = collection(db, 'tasks');
     const q = query(tasksRef, where('userId', '==', userId));
     const querySnapshot = await getDocs(q);
-    const tasks = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Task[];
+    const tasks = querySnapshot.docs.map(doc => ({ 
+      ...doc.data(), 
+      id: doc.id,
+      userId: doc.data().userId || userId // Ensure userId is set
+    })) as Task[];
     dispatch(setTasks(tasks));
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    // Handle error appropriately, e.g., dispatch an error action
+    dispatch(setTasks([]));
   }
 };
 
