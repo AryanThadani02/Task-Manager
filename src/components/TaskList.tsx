@@ -141,13 +141,13 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📋 Task List</h2>
 
-        <div className="grid grid-rows-3 gap-4">
-          <div className="border rounded-lg overflow-hidden">
+        <div className="flex flex-col gap-4">
+          <div className="border rounded-lg overflow-hidden h-auto">
             <div className="bg-purple-200 p-3 font-medium">
               Todo ({todoTasks.length})
             </div>
             <div 
-              className="p-4 min-h-[100px]"
+              className="p-4 min-h-[50px]"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, "Todo")}
             >
