@@ -64,7 +64,7 @@ const TaskCard = ({ task }: { task: Task }) => {
             type="checkbox"
             checked={task.completed}
             onChange={(e) => dispatch(updateTask({ ...task, completed: e.target.checked }))}
-            className="w-4 h-4 rounded-full border-gray-300 text-green-500 focus:ring-green-500"
+            className="ml-2 h-4 w-4 rounded-full border-gray-300 text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
           />
         </div>
       </div>
