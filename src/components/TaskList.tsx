@@ -21,6 +21,7 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSelected(e.target.checked);
+    dispatch(updateTask({ ...task, selected: e.target.checked }));
   };
 
   return (
@@ -148,18 +149,43 @@ export default function TaskView() {
     }
   };
 
-  // Added button for bulk editing -  Placeholder for actual bulk editing logic.
-  const handleBulkEdit = () => {
-    alert("Bulk edit functionality will be implemented here.");
+  const handleBulkDelete = () => {
+    const selectedTasks = tasks.filter(task => task.selected);
+    selectedTasks.forEach(task => {
+      dispatch(deleteTask(task.id));
+    });
+  };
+
+  const handleBulkStatusChange = (newStatus: string) => {
+    const selectedTasks = tasks.filter(task => task.selected);
+    selectedTasks.forEach(task => {
+      dispatch(updateTask({ ...task, status: newStatus }));
+    });
   };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">📋 Task List</h2>
-        <button onClick={handleBulkEdit} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Bulk Edit
-        </button> {/* Added button for bulk edit */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">📋 Task List</h2>
+          <div className="flex gap-2">
+            <select 
+              onChange={(e) => handleBulkStatusChange(e.target.value)}
+              className="px-3 py-2 border rounded"
+            >
+              <option value="">Change Status</option>
+              <option value="Todo">Todo</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+            <button 
+              onClick={handleBulkDelete}
+              className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
+            >
+              Delete Selected
+            </button>
+          </div>
+        </div>
         <div className="flex flex-col gap-4">
           <div className="border rounded-lg overflow-hidden h-auto">
             <div className="bg-purple-200 p-3 font-medium">
