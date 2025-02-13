@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks } from "../redux/taskSlice";
 import { useNavigate, Link, Outlet } from "react-router-dom";
 import { signOutUser } from "../firebase/firebaseConfig";
 import { clearUser } from "../redux/userSlice";
@@ -17,6 +18,12 @@ export default function HomePage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dueDateFilter, setDueDateFilter] = useState("");
   
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchTasks(user.uid));
+    }
+  }, [user, dispatch]);
+
   const handleLogout = () => {
     signOutUser();
     dispatch(clearUser());

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTask } from "../redux/taskSlice";
+import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -13,6 +14,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const user = useSelector((state: RootState) => state.user.user); // Added useSelector
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -21,11 +23,14 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   };
 
   const dispatch = useDispatch();
-  
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!user) return; // Added user check
+
     const newTask = {
-      id: Date.now().toString(),
+      id: Math.random().toString(36).substr(2, 9),
+      userId: user.uid, // Added userId
       title,
       description,
       category,
