@@ -87,7 +87,7 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📋 Task List</h2>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-rows-3 gap-4">
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">
               Todo ({todoTasks.length})
