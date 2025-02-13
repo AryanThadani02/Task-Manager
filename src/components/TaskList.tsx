@@ -92,17 +92,6 @@ export default function TaskView() {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    const draggingElement = document.querySelector('.dragging');
-    if (!draggingElement) return;
-
-    const container = e.currentTarget;
-    const afterElement = getDragAfterElement(container, e.clientY);
-
-    if (afterElement) {
-      container.insertBefore(draggingElement, afterElement);
-    } else {
-      container.appendChild(draggingElement);
-    }
   };
 
   const getDragAfterElement = (container: Element, y: number) => {
