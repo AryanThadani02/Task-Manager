@@ -99,7 +99,7 @@ const TaskCard = ({ task }: { task: Task }) => {
             </button>
             
             {showMenu && (
-              <div className="absolute right-0 top-0 mt-6 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+              <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
