@@ -18,9 +18,20 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const dispatch = useDispatch();
+  
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log({ title, description, category, dueDate, status, file });
+    const newTask = {
+      id: Date.now().toString(),
+      title,
+      description,
+      category,
+      dueDate,
+      status,
+      fileUrl: file ? URL.createObjectURL(file) : undefined
+    };
+    dispatch(addTask(newTask));
     onClose();
   };
 
