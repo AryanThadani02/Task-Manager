@@ -168,24 +168,33 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
-          <div className="flex gap-2">
-            <select 
-              onChange={(e) => handleBulkStatusChange(e.target.value)}
-              className="px-3 py-2 border rounded"
-            >
-              <option value="">Change Status</option>
-              <option value="Todo">Todo</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
+        </div>
+        {tasks.some(task => task.selected) && (
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
+            <span className="text-sm">
+              {tasks.filter(task => task.selected).length} Tasks Selected
+            </span>
+            <span className="text-gray-400">|</span>
+            <div className="relative group">
+              <button className="text-sm hover:text-gray-300">
+                Status ▾
+              </button>
+              <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="py-1">
+                  <button onClick={() => handleBulkStatusChange('TO-DO')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">To-Do</button>
+                  <button onClick={() => handleBulkStatusChange('IN-PROGRESS')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In-Progress</button>
+                  <button onClick={() => handleBulkStatusChange('COMPLETED')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
+                </div>
+              </div>
+            </div>
             <button 
               onClick={handleBulkDelete}
-              className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded"
+              className="text-red-400 hover:text-red-300 text-sm"
             >
-              Delete Selected
+              Delete
             </button>
           </div>
-        </div>
+        )}
         <div className="flex flex-col gap-4">
           <div className="border rounded-lg overflow-hidden h-auto">
             <div className="bg-purple-200 p-3 font-medium">
