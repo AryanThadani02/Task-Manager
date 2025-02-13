@@ -8,6 +8,8 @@ import { updateTask, deleteTask } from "../redux/taskSlice";
 const TaskCard = ({ task }: { task: Task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const dispatch = useDispatch();
+  const [isSelected, setIsSelected] = useState(false); // Added state for checkbox
+
 
   const handleDelete = () => {
     dispatch(deleteTask(task.id));
@@ -15,6 +17,10 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("taskId", task.id);
+  };
+
+  const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSelected(e.target.checked);
   };
 
   return (
@@ -32,6 +38,12 @@ const TaskCard = ({ task }: { task: Task }) => {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4 flex-grow">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-4 h-4"
+          />
           <h3 className="font-semibold w-1/4 truncate">{task.title}</h3>
           <p className="text-gray-600 w-1/4 truncate">{task.description}</p>
           <span className="text-sm text-gray-500 w-24">Due: {task.dueDate}</span>
@@ -136,11 +148,18 @@ export default function TaskView() {
     }
   };
 
+  // Added button for bulk editing -  Placeholder for actual bulk editing logic.
+  const handleBulkEdit = () => {
+    alert("Bulk edit functionality will be implemented here.");
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📋 Task List</h2>
-
+        <button onClick={handleBulkEdit} className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Bulk Edit
+        </button> {/* Added button for bulk edit */}
         <div className="flex flex-col gap-4">
           <div className="border rounded-lg overflow-hidden h-auto">
             <div className="bg-purple-200 p-3 font-medium">

@@ -8,4 +8,5 @@ export interface Task {
   status: string;
   fileUrl?: string;
   order?: number;
+  selected?: boolean;
 }
