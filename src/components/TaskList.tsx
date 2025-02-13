@@ -48,7 +48,7 @@ const TaskCard = ({ task }: { task: Task }) => {
           type="checkbox"
           checked={task.completed}
           onChange={(e) => dispatch(updateTask({ ...task, completed: e.target.checked }))}
-          className="w-4 h-4 rounded-full border-gray-300 text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none"
+          className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
         />
         <div className="flex-grow flex items-center space-x-2">
           <span className="text-sm font-normal text-gray-900">{task.title}</span>
