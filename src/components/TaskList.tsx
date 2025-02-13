@@ -84,7 +84,14 @@ const TaskCard = ({ task }: { task: Task }) => {
         <div>
           <select
             value={task.status}
-            onChange={(e) => dispatch(updateTask({ ...task, status: e.target.value }))}
+            onChange={(e) => {
+              const newStatus = e.target.value;
+              dispatch(updateTask({ 
+                ...task, 
+                status: newStatus,
+                completed: newStatus === "Completed"
+              }));
+            }}
             className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
           >
             <option value="Todo">Todo</option>
