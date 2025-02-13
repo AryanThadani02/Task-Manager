@@ -110,7 +110,7 @@ export default function HomePage() {
       </div>
 
       {/* Render Task or Board View */}
-      <Outlet />
+      <Outlet context={{ searchQuery, categoryFilter, dueDateFilter }} />
 
       {/* Task Modal */}
       {isModalOpen && <AddTaskModal onClose={() => setIsModalOpen(false)} />}

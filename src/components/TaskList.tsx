@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
@@ -134,19 +135,11 @@ const TaskCard = ({ task }: { task: Task }) => {
   );
 };
 
-export default function TaskView() {
+export default function TaskView({searchQuery, categoryFilter, dueDateFilter}: {searchQuery: string, categoryFilter: string, dueDateFilter: string}) {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("");
-  const [dueDateFilter, setDueDateFilter] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const clearFilters = () => {
-    setSearchQuery("");
-    setCategoryFilter("");
-    setDueDateFilter("");
-  };
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -235,7 +228,7 @@ export default function TaskView() {
             Add Task
           </button>
         </div>
-        
+
         <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="w-12"></div>
           <div>Task name</div>
