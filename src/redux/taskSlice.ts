@@ -38,6 +38,7 @@ export const { setTasks, addTask, updateTask, deleteTask } = taskSlice.actions;
 
 // Thunks
 export const fetchTasks = (userId: string) => async (dispatch: any) => {
+  if (!userId) return;
   const q = query(collection(db, 'tasks'), where('userId', '==', userId));
   const querySnapshot = await getDocs(q);
   const tasks = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })) as Task[];

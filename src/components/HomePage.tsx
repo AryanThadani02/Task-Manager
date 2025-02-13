@@ -19,10 +19,10 @@ export default function HomePage() {
   const [dueDateFilter, setDueDateFilter] = useState("");
   
   useEffect(() => {
-    if (user) {
+    if (user?.uid) {
       dispatch(fetchTasks(user.uid));
     }
-  }, [user, dispatch]);
+  }, [user?.uid, dispatch]);
 
   const handleLogout = () => {
     signOutUser();
