@@ -137,10 +137,27 @@ const TaskCard = ({ task }: { task: Task }) => {
 export default function TaskView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [dueDateFilter, setDueDateFilter] = useState("");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const todoTasks = tasks.filter(task => task.status === "Todo");
-  const inProgressTasks = tasks.filter(task => task.status === "In Progress");
-  const completedTasks = tasks.filter(task => task.status === "Completed");
+  const clearFilters = () => {
+    setSearchQuery("");
+    setCategoryFilter("");
+    setDueDateFilter("");
+  };
+
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !categoryFilter || task.category === categoryFilter;
+    const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+    return matchesSearch && matchesCategory && matchesDueDate;
+  });
+
+  const todoTasks = filteredTasks.filter(task => task.status === "Todo");
+  const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
+  const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -211,6 +228,45 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+          >
+            Add Task
+          </button>
+        </div>
+        <div className="flex gap-4 mb-6 items-center">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <select
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            value={categoryFilter}
+          >
+            <option value="">All Categories</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+          </select>
+          <input
+            type="date"
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setDueDateFilter(e.target.value)}
+            value={dueDateFilter}
+          />
+          {(searchQuery || categoryFilter || dueDateFilter) && (
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Clear Filters
+            </button>
+          )}
         </div>
         <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="w-12"></div>
