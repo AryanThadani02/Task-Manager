@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTask } from "../redux/taskSlice";
 
 interface AddTaskModalProps {
   onClose: () => void;
