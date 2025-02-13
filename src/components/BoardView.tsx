@@ -1,28 +1,73 @@
 
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
+import { deleteTask } from "../redux/taskSlice";
+import EditTaskModal from "./EditTaskModal";
 
-const TaskCard = ({ task }: { task: Task }) => (
-  <div className="bg-white p-4 rounded-lg shadow mb-3">
-    <div className="flex justify-between items-start">
-      <h3 className="font-semibold">{task.title}</h3>
-      <span className={`px-2 py-1 rounded text-sm ${
-        task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
-      }`}>
-        {task.category}
-      </span>
+const TaskCard = ({ task }: { task: Task }) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteTask(task.id));
+  };
+
+  return (
+    <div className="bg-white p-4 rounded-lg shadow mb-3">
+      <div className="flex justify-between items-start">
+        <h3 className="font-semibold">{task.title}</h3>
+        <div className="flex gap-2">
+          <span className={`px-2 py-1 rounded text-sm ${
+            task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
+          }`}>
+            {task.category}
+          </span>
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              ⋮
+            </button>
+            {showMenu && (
+              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                <button
+                  onClick={() => {
+                    setIsEditModalOpen(true);
+                    setShowMenu(false);
+                  }}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    handleDelete();
+                    setShowMenu(false);
+                  }}
+                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <p className="text-gray-600 mt-2">{task.description}</p>
+      <div className="mt-3 flex justify-between items-center">
+        <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
+        {task.fileUrl && (
+          <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
+        )}
+      </div>
+      {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
-    <p className="text-gray-600 mt-2">{task.description}</p>
-    <div className="mt-3 flex justify-between items-center">
-      <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-      {task.fileUrl && (
-        <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
-      )}
-    </div>
-  </div>
-);
+  );
+};
 
 export default function BoardView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
