@@ -265,9 +265,9 @@ export default function TaskView() {
               </button>
               <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="py-1">
-                  <button onClick={() => handleBulkStatusChange('TO-DO')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">To-Do</button>
-                  <button onClick={() => handleBulkStatusChange('IN-PROGRESS')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In-Progress</button>
-                  <button onClick={() => handleBulkStatusChange('COMPLETED')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
+                  <button onClick={() => handleBulkStatusChange('Todo')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Todo</button>
+                  <button onClick={() => handleBulkStatusChange('In Progress')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In Progress</button>
+                  <button onClick={() => handleBulkStatusChange('Completed')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
                 </div>
               </div>
             </div>
