@@ -13,7 +13,6 @@ export default function HomePage() {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.user.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -48,7 +47,7 @@ export default function HomePage() {
         </div>
         <div className="flex items-center gap-4">
           {user && (
-            <div className="hidden md:flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <img
                 src={user.photoURL ?? ""}
                 alt="Profile"
@@ -59,16 +58,10 @@ export default function HomePage() {
           )}
           <button
             onClick={handleLogout}
-            className="md:flex hidden items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all"
           >
             <FaSignOutAlt className="text-gray-600" />
             Logout
-          </button>
-          <button
-            onClick={handleLogout}
-            className="flex md:hidden items-center justify-center w-10 h-10 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all"
-          >
-            <FaSignOutAlt className="text-gray-600" />
           </button>
         </div>
       </div>
@@ -84,20 +77,8 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Hamburger Menu for Filters */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
-            className="p-2 text-gray-600 hover:text-gray-800"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Add Task Button and Filters */}
-        <div className={`${isFilterMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-4 items-center absolute md:relative right-0 top-full md:top-auto bg-white md:bg-transparent p-4 md:p-0 rounded-lg shadow-lg md:shadow-none z-50 w-full md:w-auto`}>
+        {/* Add Task Button */}
+        <div className="flex flex-col md:flex-row gap-4 items-center">
           <input
             type="text"
             placeholder="Search tasks..."
