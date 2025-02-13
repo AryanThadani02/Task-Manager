@@ -1,28 +1,91 @@
 
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateTask } from "../redux/taskSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 
-const TaskCard = ({ task }: { task: Task }) => (
-  <div className="bg-white p-4 rounded-lg shadow mb-3">
-    <div className="flex justify-between items-start">
-      <h3 className="font-semibold">{task.title}</h3>
-      <span className={`px-2 py-1 rounded text-sm ${
-        task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
-      }`}>
-        {task.category}
-      </span>
+const TaskCard = ({ task }: { task: Task }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTask, setEditedTask] = useState(task);
+  const dispatch = useDispatch();
+
+  const handleSave = () => {
+    dispatch(updateTask(editedTask));
+    setIsEditing(false);
+  };
+
+  if (isEditing) {
+    return (
+      <div className="bg-white p-4 rounded-lg shadow mb-3">
+        <input
+          type="text"
+          value={editedTask.title}
+          onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
+          className="w-full p-2 mb-2 border rounded"
+        />
+        <textarea
+          value={editedTask.description}
+          onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
+          className="w-full p-2 mb-2 border rounded"
+        />
+        <div className="flex justify-between items-center mt-3">
+          <select
+            value={editedTask.category}
+            onChange={(e) => setEditedTask({...editedTask, category: e.target.value})}
+            className="p-2 border rounded"
+          >
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+          </select>
+          <input
+            type="date"
+            value={editedTask.dueDate}
+            onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+            className="p-2 border rounded"
+          />
+        </div>
+        <div className="flex justify-end gap-2 mt-3">
+          <button onClick={() => setIsEditing(false)} className="px-3 py-1 border rounded">
+            Cancel
+          </button>
+          <button onClick={handleSave} className="px-3 py-1 bg-purple-500 text-white rounded">
+            Save
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white p-4 rounded-lg shadow mb-3">
+      <div className="flex justify-between items-start">
+        <h3 className="font-semibold">{task.title}</h3>
+        <div className="flex gap-2 items-center">
+          <span className={`px-2 py-1 rounded text-sm ${
+            task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
+          }`}>
+            {task.category}
+          </span>
+          <button 
+            onClick={() => setIsEditing(true)}
+            className="text-gray-600 hover:text-purple-500"
+          >
+            ✏️
+          </button>
+        </div>
+      </div>
+      <p className="text-gray-600 mt-2">{task.description}</p>
+      <div className="mt-3 flex justify-between items-center">
+        <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
+        {task.fileUrl && (
+          <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
+        )}
+      </div>
     </div>
-    <p className="text-gray-600 mt-2">{task.description}</p>
-    <div className="mt-3 flex justify-between items-center">
-      <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-      {task.fileUrl && (
-        <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
-      )}
-    </div>
-  </div>
-);
+  );
+};
 
 export default function TaskView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
