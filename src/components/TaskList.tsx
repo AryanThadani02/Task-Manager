@@ -8,12 +8,7 @@ import { updateTask, deleteTask } from "../redux/taskSlice";
 const TaskCard = ({ task }: { task: Task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const dispatch = useDispatch();
-  const [isSelected, setIsSelected] = useState(false); // Added state for checkbox
-
-
-  const handleDelete = () => {
-    dispatch(deleteTask(task.id));
-  };
+  const [isSelected, setIsSelected] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("taskId", task.id);
@@ -22,6 +17,10 @@ const TaskCard = ({ task }: { task: Task }) => {
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSelected(e.target.checked);
     dispatch(updateTask({ ...task, selected: e.target.checked }));
+  };
+
+  const handleComplete = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateTask({ ...task, status: e.target.checked ? "Completed" : "Todo" }));
   };
 
   return (
@@ -35,47 +34,36 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging');
       }}
-      className="task-card bg-white p-4 rounded-lg shadow mb-3 cursor-move"
+      className="task-card bg-white p-3 rounded mb-2 border border-gray-200 cursor-move"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4 flex-grow">
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={handleSelect}
-            className="w-4 h-4"
-          />
-          <h3 className="font-semibold w-1/4 truncate">{task.title}</h3>
-          <p className="text-gray-600 w-1/4 truncate">{task.description}</p>
-          <span className="text-sm text-gray-500 w-24">Due: {task.dueDate}</span>
-          <span className={`px-2 py-1 rounded text-sm ${
-            task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
-          }`}>
-            {task.category}
-          </span>
-          {/* Added to display other fields */}
-          <p className="text-gray-600">Status: {task.status}</p>
-          <p className="text-gray-600">Priority: {task.priority}</p>
-          {/* Add more fields as needed */}
-
+      <div className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={handleSelect}
+          className="w-4 h-4 border-gray-300 rounded"
+        />
+        <div className="drag-handle cursor-move text-gray-400">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM8 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM8 18a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM14 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM14 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM14 18a2 2 0 1 0-4 0 2 2 0 0 0 4 0z" />
+          </svg>
         </div>
-        <div className="flex items-center space-x-2">
-          {task.fileUrl && (
-            <img src={task.fileUrl} alt="attachment" className="w-8 h-8 object-cover rounded" />
-          )}
-          <button 
-            onClick={() => setIsEditModalOpen(true)}
-            className="text-gray-600 hover:text-purple-500"
-          >
-            ✏️
-          </button>
-          <button 
-            onClick={handleDelete}
-            className="text-gray-600 hover:text-red-500"
-          >
-            🗑️
-          </button>
+        <input
+          type="checkbox"
+          checked={task.status === "Completed"}
+          onChange={handleComplete}
+          className="w-4 h-4 rounded-full border-gray-300"
+        />
+        <div className="flex-grow">
+          <h3 className="font-normal text-sm">{task.title}</h3>
         </div>
+        <span className="text-sm text-gray-500">{task.dueDate}</span>
+        <span className="px-2 py-1 text-xs rounded bg-gray-100 text-gray-600">
+          {task.status}
+        </span>
+        <span className="px-2 py-1 text-xs rounded bg-purple-100 text-purple-600">
+          {task.category}
+        </span>
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
