@@ -13,10 +13,20 @@ export default function HomePage() {
   const user = useSelector((state: RootState) => state.user.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [dueDateFilter, setDueDateFilter] = useState("");
+  
   const handleLogout = () => {
     signOutUser();
     dispatch(clearUser());
     navigate("/");
+  };
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setCategoryFilter("");
+    setDueDateFilter("");
   };
 
   return (
@@ -59,12 +69,44 @@ export default function HomePage() {
         </div>
 
         {/* Add Task Button */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition-all"
-        >
-          + Add Task
-        </button>
+        <div className="flex gap-4 items-center">
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            value={categoryFilter}
+          >
+            <option value="">All Categories</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+          </select>
+          <input
+            type="date"
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            onChange={(e) => setDueDateFilter(e.target.value)}
+            value={dueDateFilter}
+          />
+          {(searchQuery || categoryFilter || dueDateFilter) && (
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+            >
+              Clear
+            </button>
+          )}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition-all"
+          >
+            + Add Task
+          </button>
+        </div>
       </div>
 
       {/* Render Task or Board View */}
