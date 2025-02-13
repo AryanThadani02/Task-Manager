@@ -23,34 +23,34 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragStart={handleDragStart}
       className="bg-white p-4 rounded-lg shadow mb-3 cursor-move"
     >
-      <div className="flex justify-between items-start">
-        <h3 className="font-semibold">{task.title}</h3>
-        <div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4 flex-grow">
+          <h3 className="font-semibold w-1/4 truncate">{task.title}</h3>
+          <p className="text-gray-600 w-1/4 truncate">{task.description}</p>
+          <span className="text-sm text-gray-500 w-24">Due: {task.dueDate}</span>
           <span className={`px-2 py-1 rounded text-sm ${
             task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
           }`}>
             {task.category}
           </span>
+        </div>
+        <div className="flex items-center space-x-2">
+          {task.fileUrl && (
+            <img src={task.fileUrl} alt="attachment" className="w-8 h-8 object-cover rounded" />
+          )}
           <button 
             onClick={() => setIsEditModalOpen(true)}
-            className="ml-2 text-gray-600 hover:text-purple-500"
+            className="text-gray-600 hover:text-purple-500"
           >
             ✏️
           </button>
           <button 
             onClick={handleDelete}
-            className="ml-2 text-gray-600 hover:text-red-500"
+            className="text-gray-600 hover:text-red-500"
           >
             🗑️
           </button>
         </div>
-      </div>
-      <p className="text-gray-600 mt-2">{task.description}</p>
-      <div className="mt-3 flex justify-between items-center">
-        <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-        {task.fileUrl && (
-          <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
-        )}
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
