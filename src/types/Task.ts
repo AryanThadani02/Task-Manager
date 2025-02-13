@@ -10,9 +10,4 @@ export interface Task {
   fileUrl?: string;
   order?: number;
   selected?: boolean;
-  activity?: {
-    timestamp: string;
-    action: string;
-    details: string;
-  }[];
 }

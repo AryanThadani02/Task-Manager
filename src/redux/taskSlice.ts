@@ -58,33 +58,13 @@ export const fetchTasks = (userId: string) => async (dispatch: any) => {
 };
 
 export const createTask = (task: Task) => async (dispatch: any) => {
-  const taskWithActivity = {
-    ...task,
-    activity: [{
-      timestamp: new Date().toISOString(),
-      action: 'created',
-      details: `Task "${task.title}" created with status "${task.status}"`
-    }]
-  };
-  const docRef = await addDoc(collection(db, 'tasks'), taskWithActivity);
-  dispatch(addTask({ ...taskWithActivity, id: docRef.id }));
+  const docRef = await addDoc(collection(db, 'tasks'), task);
+  dispatch(addTask({ ...task, id: docRef.id }));
 };
 
 export const modifyTask = (task: Task) => async (dispatch: any) => {
-  const currentTask = (await getDocs(query(collection(db, 'tasks'), where('id', '==', task.id)))).docs[0]?.data();
-  const updatedTask = {
-    ...task,
-    activity: [
-      ...(currentTask?.activity || []),
-      {
-        timestamp: new Date().toISOString(),
-        action: 'updated',
-        details: `Task "${task.title}" updated - New Status: ${task.status}`
-      }
-    ]
-  };
-  await updateDoc(doc(db, 'tasks', task.id), updatedTask);
-  dispatch(updateTask(updatedTask));
+  await updateDoc(doc(db, 'tasks', task.id), task);
+  dispatch(updateTask(task));
 };
 
 export const removeTask = (taskId: string) => async (dispatch: any) => {

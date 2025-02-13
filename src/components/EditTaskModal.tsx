@@ -99,20 +99,6 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             )}
           </div>
 
-          <div className="mt-6 border-t pt-4">
-            <h3 className="text-lg font-medium mb-3">Activity</h3>
-            <div className="max-h-40 overflow-y-auto space-y-2">
-              {task.activity?.map((entry, index) => (
-                <div key={index} className="flex items-start gap-2 text-sm">
-                  <span className="text-gray-500">{new Date(entry.timestamp).toLocaleString()}</span>
-                  <span className="text-gray-700">{entry.details}</span>
-                </div>
-              )) || (
-                <div className="text-gray-500 text-sm">No activity recorded</div>
-              )}
-            </div>
-          </div>
-
           <div className="flex justify-end gap-3 mt-4">
             <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
               Cancel
