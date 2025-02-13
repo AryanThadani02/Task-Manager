@@ -23,7 +23,7 @@ const TaskCard = ({ task }: { task: Task }) => {
             {task.category}
           </span>
           <button 
-            onClick={() => setIsEditing(true)}
+            onClick={() => setShowEditModal(true)}
             className="text-gray-600 hover:text-purple-500"
           >
             ✏️
