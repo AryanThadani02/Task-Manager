@@ -47,11 +47,18 @@ const TaskCard = ({ task }: { task: Task }) => {
         <input
           type="checkbox"
           checked={task.completed}
-          onChange={(e) => dispatch(updateTask({ ...task, completed: e.target.checked }))}
+          onChange={(e) => {
+            const isCompleted = e.target.checked;
+            dispatch(updateTask({ 
+              ...task, 
+              completed: isCompleted,
+              status: isCompleted ? "Completed" : "Todo"
+            }));
+          }}
           className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
         />
         <div className="flex-grow flex items-center space-x-2">
-          <span className="text-sm font-normal text-gray-900">{task.title}</span>
+          <span className={`text-sm font-normal text-gray-900 ${task.completed ? 'line-through' : ''}`}>{task.title}</span>
         </div>
         <div className="flex items-center space-x-3">
           <span className="text-sm text-gray-500">{task.dueDate}</span>
