@@ -65,7 +65,6 @@ const TaskCard = ({ task }: { task: Task }) => {
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
   );
-  );
 };
 
 export default function TaskView() {
