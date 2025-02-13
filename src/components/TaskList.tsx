@@ -143,7 +143,6 @@ export default function TaskView() {
   }>();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 
   const filteredTasks = tasks.filter(task => {
@@ -226,12 +225,6 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Add Task
-          </button>
         </div>
 
         <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
