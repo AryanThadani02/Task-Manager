@@ -126,26 +126,26 @@ export default function TaskView() {
     const task = tasks.find(t => t.id === taskId);
 
     if (task) {
+      // Update the task's status
+      dispatch(updateTask({
+        ...task,
+        status: newStatus
+      }));
+
       const container = e.currentTarget;
       const taskElements = [...container.querySelectorAll('.task-card')];
       const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
 
+      // Update order for all tasks in the section
       const tasksInSection = tasks.filter(t => t.status === newStatus);
-      const reorderedTasks = [...tasksInSection];
-      const taskToMove = reorderedTasks.find(t => t.id === taskId);
-
-      if (taskToMove) {
-        reorderedTasks.splice(reorderedTasks.indexOf(taskToMove), 1);
-        reorderedTasks.splice(newIndex, 0, taskToMove);
-
-        reorderedTasks.forEach((t, index) => {
+      tasksInSection.forEach((t, index) => {
+        if (t.id !== taskId) {
           dispatch(updateTask({
             ...t,
-            status: newStatus,
             order: index
           }));
-        });
-      }
+        }
+      });
     }
   };
 
