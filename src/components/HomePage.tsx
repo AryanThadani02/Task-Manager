@@ -21,6 +21,8 @@ export default function HomePage() {
   useEffect(() => {
     if (user?.uid) {
       dispatch(fetchTasks(user.uid));
+    } else {
+      dispatch(setTasks([]));
     }
   }, [user?.uid, dispatch]);
 

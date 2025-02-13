@@ -30,7 +30,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
     const newTask = {
       id: Math.random().toString(36).substr(2, 9),
-      userId: user.uid,
+      userId: user?.uid || '',
       title,
       description,
       category,
