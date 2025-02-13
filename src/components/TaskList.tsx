@@ -135,7 +135,12 @@ const TaskCard = ({ task }: { task: Task }) => {
   );
 };
 
-export default function TaskView({searchQuery, categoryFilter, dueDateFilter}: {searchQuery: string, categoryFilter: string, dueDateFilter: string}) {
+export default function TaskView() {
+  const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
+    searchQuery: string;
+    categoryFilter: string;
+    dueDateFilter: string;
+  }>();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
