@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [
-    tailwindcss(),
-  ],
+  plugins: [tailwindcss()],
   server: {
-    allowedHosts: ['4eb6d8a1-5f10-4d69-b040-d3d8841a1fa6-00-4uvevmtf5vf1.pike.replit.dev']
-  }
-})
+    allowedHosts: [
+      "ba69477b-8e99-4883-bdbc-15c8b32cbe46-00-1c5lj7jhupvg6.sisko.replit.dev",
+    ],
+  },
+});
