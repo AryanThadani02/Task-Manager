@@ -46,7 +46,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       }}
       className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="grid grid-cols-[30px_30px_30px_1fr_150px_150px_150px_40px] gap-4 items-center px-4">
+      <div className="flex items-center space-x-3">
         <input
           type="checkbox"
           checked={isSelected}
@@ -71,20 +71,23 @@ const TaskCard = ({ task }: { task: Task }) => {
           }}
           className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
         />
-        <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
-        <span className="text-sm text-gray-500">{task.dueDate}</span>
-        <select
-          value={task.status}
-          onChange={(e) => dispatch(updateTask({ ...task, status: e.target.value }))}
-          className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
-        >
-          <option value="Todo">Todo</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600 text-center">
-          {task.category}
-        </span>
+        <div className="flex-grow flex items-center space-x-2">
+          <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
+        </div>
+        <div className="flex items-center space-x-3">
+          <span className="text-sm text-gray-500">{task.dueDate}</span>
+          <select
+            value={task.status}
+            onChange={(e) => dispatch(updateTask({ ...task, status: e.target.value }))}
+            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+          >
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
+            {task.category}
+          </span>
           <div className="relative">
             <button 
               onClick={() => setShowMenu(!showMenu)} 
@@ -230,18 +233,6 @@ export default function TaskView() {
           </div>
         )}
         <div className="flex flex-col gap-4">
-          {/* Header Row */}
-          <div className="grid grid-cols-[30px_30px_30px_1fr_150px_150px_150px_40px] gap-4 px-4 py-2 bg-gray-100 text-gray-600 font-medium text-sm">
-            <div></div> {/* Checkbox */}
-            <div></div> {/* Drag Handle */}
-            <div></div> {/* Complete Checkbox */}
-            <div>Task name</div>
-            <div>Due on</div>
-            <div>Task Status</div>
-            <div>Task Category</div>
-            <div></div> {/* Actions */}
-          </div>
-
           <div className="border rounded-lg overflow-hidden h-auto">
             <div className="bg-purple-200 p-3 font-medium">
               Todo ({todoTasks.length})
