@@ -1,61 +1,15 @@
 
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateTask } from "../redux/taskSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
+import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = ({ task }: { task: Task }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTask, setEditedTask] = useState(task);
-  const dispatch = useDispatch();
-
-  const handleSave = () => {
-    dispatch(updateTask(editedTask));
-    setIsEditing(false);
-  };
-
-  if (isEditing) {
-    return (
-      <div className="bg-white p-4 rounded-lg shadow mb-3">
-        <input
-          type="text"
-          value={editedTask.title}
-          onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
-          className="w-full p-2 mb-2 border rounded"
-        />
-        <textarea
-          value={editedTask.description}
-          onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
-          className="w-full p-2 mb-2 border rounded"
-        />
-        <div className="flex justify-between items-center mt-3">
-          <select
-            value={editedTask.category}
-            onChange={(e) => setEditedTask({...editedTask, category: e.target.value})}
-            className="p-2 border rounded"
-          >
-            <option value="Work">Work</option>
-            <option value="Personal">Personal</option>
-          </select>
-          <input
-            type="date"
-            value={editedTask.dueDate}
-            onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
-            className="p-2 border rounded"
-          />
-        </div>
-        <div className="flex justify-end gap-2 mt-3">
-          <button onClick={() => setIsEditing(false)} className="px-3 py-1 border rounded">
-            Cancel
-          </button>
-          <button onClick={handleSave} className="px-3 py-1 bg-purple-500 text-white rounded">
-            Save
-          </button>
-        </div>
-      </div>
-    );
+  const [showEditModal, setShowEditModal] = useState(false);
+  
+  if (showEditModal) {
+    return <EditTaskModal task={task} onClose={() => setShowEditModal(false)} />;
   }
 
   return (
