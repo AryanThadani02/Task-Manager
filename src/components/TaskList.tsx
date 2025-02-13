@@ -7,6 +7,7 @@ import { updateTask, deleteTask } from "../redux/taskSlice";
 
 const TaskCard = ({ task }: { task: Task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
   const [isSelected, setIsSelected] = useState(false);
 
@@ -17,6 +18,19 @@ const TaskCard = ({ task }: { task: Task }) => {
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSelected(e.target.checked);
     dispatch(updateTask({ ...task, selected: e.target.checked }));
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteTask(task.id));
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    dispatch(updateTask({ 
+      ...task, 
+      status: newStatus,
+      completed: newStatus === "Completed"
+    }));
   };
 
   return (
@@ -30,7 +44,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging');
       }}
-      className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 cursor-move hover:bg-gray-50"
+      className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
       <div className="flex items-center space-x-3">
         <input
@@ -74,12 +88,39 @@ const TaskCard = ({ task }: { task: Task }) => {
           <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
             {task.category}
           </span>
-          <button onClick={() => setIsEditModalOpen(true)} className="text-gray-400 hover:text-gray-600">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-            </svg>
-          </button>
-          
+          <div className="relative">
+            <button 
+              onClick={() => setShowMenu(!showMenu)} 
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+            
+            {showMenu && (
+              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                <button
+                  onClick={() => {
+                    setIsEditModalOpen(true);
+                    setShowMenu(false);
+                  }}
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => {
+                    handleDelete();
+                    setShowMenu(false);
+                  }}
+                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
