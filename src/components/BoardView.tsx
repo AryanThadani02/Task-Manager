@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
@@ -81,7 +80,7 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"> {/*This line was modified */}
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">Todo</div>
             <div className="p-4">

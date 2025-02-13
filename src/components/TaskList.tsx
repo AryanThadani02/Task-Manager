@@ -246,7 +246,7 @@ export default function TaskView() {
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
 
-        <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
+        <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="w-12"></div>
           <div>Task name</div>
           <div>Due on</div>
