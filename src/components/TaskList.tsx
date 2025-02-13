@@ -60,7 +60,7 @@ const TaskCard = ({ task }: { task: Task }) => {
         </div>
         <input
           type="checkbox"
-          checked={task.completed}
+          checked={task.status === "Completed"}
           onChange={(e) => {
             const isCompleted = e.target.checked;
             dispatch(updateTask({ 
@@ -97,7 +97,7 @@ const TaskCard = ({ task }: { task: Task }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
               </svg>
             </button>
-            
+
             {showMenu && (
               <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                 <button
