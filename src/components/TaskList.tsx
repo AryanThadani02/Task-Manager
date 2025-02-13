@@ -40,6 +40,11 @@ const TaskCard = ({ task }: { task: Task }) => {
           }`}>
             {task.category}
           </span>
+          {/* Added to display other fields */}
+          <p className="text-gray-600">Status: {task.status}</p>
+          <p className="text-gray-600">Priority: {task.priority}</p>
+          {/* Add more fields as needed */}
+
         </div>
         <div className="flex items-center space-x-2">
           {task.fileUrl && (
@@ -79,7 +84,7 @@ export default function TaskView() {
 
     const container = e.currentTarget;
     const afterElement = getDragAfterElement(container, e.clientY);
-    
+
     if (afterElement) {
       container.insertBefore(draggingElement, afterElement);
     } else {
@@ -89,11 +94,11 @@ export default function TaskView() {
 
   const getDragAfterElement = (container: Element, y: number) => {
     const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
-    
+
     return draggableElements.reduce((closest, child) => {
       const box = child.getBoundingClientRect();
       const offset = y - box.top - box.height / 2;
-      
+
       if (offset < 0 && offset > closest.offset) {
         return { offset, element: child };
       } else {
@@ -106,20 +111,20 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
-    
+
     if (task) {
       const container = e.currentTarget;
       const taskElements = [...container.querySelectorAll('.task-card')];
       const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
-      
+
       const tasksInSection = tasks.filter(t => t.status === newStatus);
       const reorderedTasks = [...tasksInSection];
       const taskToMove = reorderedTasks.find(t => t.id === taskId);
-      
+
       if (taskToMove) {
         reorderedTasks.splice(reorderedTasks.indexOf(taskToMove), 1);
         reorderedTasks.splice(newIndex, 0, taskToMove);
-        
+
         reorderedTasks.forEach((t, index) => {
           dispatch(updateTask({
             ...t,
@@ -142,7 +147,7 @@ export default function TaskView() {
               Todo ({todoTasks.length})
             </div>
             <div 
-              className="p-4 min-h-[200px]"
+              className="p-4 min-h-[100px]"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, "Todo")}
             >
@@ -159,7 +164,7 @@ export default function TaskView() {
               In-Progress ({inProgressTasks.length})
             </div>
             <div 
-              className="p-4 min-h-[200px]"
+              className="p-4 min-h-[100px]"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, "In Progress")}
             >
@@ -176,7 +181,7 @@ export default function TaskView() {
               Completed ({completedTasks.length})
             </div>
             <div 
-              className="p-4 min-h-[200px]"
+              className="p-4 min-h-[100px]"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, "Completed")}
             >
