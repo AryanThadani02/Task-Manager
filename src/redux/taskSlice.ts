@@ -63,7 +63,7 @@ export const createTask = (task: Task) => async (dispatch: any) => {
     activity: [{
       timestamp: new Date().toISOString(),
       action: 'created',
-      details: 'Task created'
+      details: `Task "${task.title}" created with status "${task.status}"`
     }]
   };
   const docRef = await addDoc(collection(db, 'tasks'), taskWithActivity);
@@ -71,14 +71,15 @@ export const createTask = (task: Task) => async (dispatch: any) => {
 };
 
 export const modifyTask = (task: Task) => async (dispatch: any) => {
+  const currentTask = (await getDocs(query(collection(db, 'tasks'), where('id', '==', task.id)))).docs[0]?.data();
   const updatedTask = {
     ...task,
     activity: [
-      ...(task.activity || []),
+      ...(currentTask?.activity || []),
       {
         timestamp: new Date().toISOString(),
         action: 'updated',
-        details: `Task updated - Status: ${task.status}`
+        details: `Task "${task.title}" updated - New Status: ${task.status}`
       }
     ]
   };
