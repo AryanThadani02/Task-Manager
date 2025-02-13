@@ -44,7 +44,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg">
-      <div className="bg-white rounded-lg shadow-xl p-4 md:p-6 w-full max-w-md mx-auto mt-10 md:mt-20 m-4"> {/* Modified div */}
+      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <h2 className="text-xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>
@@ -68,17 +68,17 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
           ></textarea>
 
           {/* Task Category */}
-          <div className="flex flex-wrap gap-2 mb-3"> {/* Added flex-wrap for responsiveness */}
+          <div className="flex gap-2 mb-3">
             <button
               type="button"
-              className={`px-3 py-1 rounded w-full md:w-auto ${category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+              className={`px-3 py-1 rounded ${category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
               onClick={() => setCategory("Work")}
             >
               Work
             </button>
             <button
               type="button"
-              className={`px-3 py-1 rounded w-full md:w-auto ${category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+              className={`px-3 py-1 rounded ${category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
               onClick={() => setCategory("Personal")}
             >
               Personal
@@ -116,10 +116,10 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
           {/* Actions */}
           <div className="flex justify-end gap-3 mt-4">
-            <button type="button" onClick={onClose} className="px-4 py-2 border rounded w-full md:w-auto">
+            <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded w-full md:w-auto">
+            <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded">
               Create
             </button>
           </div>
