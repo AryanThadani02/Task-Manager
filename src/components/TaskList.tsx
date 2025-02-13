@@ -55,9 +55,15 @@ const TaskCard = ({ task }: { task: Task }) => {
         </div>
         <div className="flex items-center space-x-3">
           <span className="text-sm text-gray-500">{task.dueDate}</span>
-          <span className="px-2 py-0.5 text-xs rounded bg-gray-100 text-gray-600">
-            {task.status}
-          </span>
+          <select
+            value={task.status}
+            onChange={(e) => dispatch(updateTask({ ...task, status: e.target.value }))}
+            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+          >
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
           <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
             {task.category}
           </span>
