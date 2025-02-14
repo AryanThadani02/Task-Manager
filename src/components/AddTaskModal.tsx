@@ -25,9 +25,17 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
       }
     });
     
-    quill.on('text-change', function() {
+    const observer = new MutationObserver(() => {
       setDescription(quill.root.innerText);
     });
+    
+    observer.observe(quill.root, {
+      characterData: true,
+      childList: true,
+      subtree: true
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

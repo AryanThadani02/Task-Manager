@@ -25,9 +25,17 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     
     quill.root.innerHTML = editedTask.description;
     
-    quill.on('text-change', function() {
+    const observer = new MutationObserver(() => {
       setEditedTask({...editedTask, description: quill.root.innerText});
     });
+    
+    observer.observe(quill.root, {
+      characterData: true,
+      childList: true,
+      subtree: true
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
