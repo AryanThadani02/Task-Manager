@@ -41,11 +41,11 @@ export default function HomePage() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg shadow-md space-y-4 md:space-y-0">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-bold text-gray-800">📋 TaskBuddy</span>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
           {user && (
             <div className="flex items-center gap-3">
               <img
@@ -72,7 +72,7 @@ export default function HomePage() {
           <Link to="/home/tasks" className="px-3 py-1 bg-gray-200 text-gray-800 rounded">
             📋 Task View
           </Link>
-          <Link to="/home/board" className="px-3 py-1 bg-gray-200 text-gray-800 rounded">
+          <Link to="/home/board" className="hidden md:block px-3 py-1 bg-gray-200 text-gray-800 rounded">
             📌 Board View
           </Link>
         </div>
