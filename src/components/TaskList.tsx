@@ -251,14 +251,6 @@ export default function TaskView() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
-
-        <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
-          <div className="w-12"></div>
-          <div>Task name</div>
-          <div>Due on</div>
-          <div>Task Status</div>
-          <div>Task Category</div>
-        </div>
         {tasks.some(task => task.selected) && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
             <span className="text-sm">
