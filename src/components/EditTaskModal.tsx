@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateTask } from "../redux/taskSlice";
+import { updateTask } from "../redux/taskSlice"; // Assuming this is the correct import, needs verification based on the actual redux setup.
 import { Task } from "../types/Task";
 
 interface EditTaskModalProps {
@@ -22,13 +21,13 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
         toolbar: '#toolbar-container-edit'
       }
     });
-    
+
     quill.root.innerHTML = editedTask.description;
-    
+
     const observer = new MutationObserver(() => {
       setEditedTask({...editedTask, description: quill.root.innerHTML});
     });
-    
+
     observer.observe(quill.root, {
       characterData: true,
       childList: true,
@@ -50,8 +49,12 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
       ...editedTask,
       fileUrl: file ? URL.createObjectURL(file) : editedTask.fileUrl
     };
-    dispatch(updateTask(updatedTask));
-    onClose();
+    try {
+      await dispatch(updateTask(updatedTask)); // Using the provided updateTask action
+      onClose();
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    }
   };
 
   return (

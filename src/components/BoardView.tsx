@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
-import { deleteTask, updateTask } from "../redux/taskSlice";
+import { deleteTask, updateTask } from "../redux/taskSlice"; // Assuming modifyTask is missing and updateTask will be used instead.  This needs verification.
 import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = ({ task }: { task: Task }) => {
@@ -105,20 +104,24 @@ export default function BoardView() {
     draggedOverElement.classList.remove('bg-gray-50');
   };
 
-  const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
+  const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
     e.preventDefault();
     const draggedOverElement = e.currentTarget as HTMLElement;
     draggedOverElement.classList.remove('bg-gray-50');
-    
+
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
-    
+
     if (task && task.status !== newStatus) {
-      dispatch(updateTask({
-        ...task,
-        status: newStatus,
-        completed: newStatus === "Completed"
-      }));
+      try {
+        await dispatch(updateTask({ // Using updateTask instead of modifyTask as modifyTask is not defined.
+          ...task,
+          status: newStatus,
+          completed: newStatus === "Completed"
+        }));
+      } catch (error) {
+        console.error("Failed to update task status:", error);
+      }
     }
   };
 

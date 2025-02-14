@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "../redux/taskSlice";
+import { fetchTasks, setTasks } from "../redux/taskSlice";
 import { useNavigate, Link, Outlet } from "react-router-dom";
 import { signOutUser } from "../firebase/firebaseConfig";
 import { clearUser } from "../redux/userSlice";
