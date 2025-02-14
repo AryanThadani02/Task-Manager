@@ -144,9 +144,9 @@ export const fetchTasks = createAsyncThunk(
     }
 );
 
-export const createTask = createAsyncThunk(
+export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' | 'activity'>, { rejectValue: string }>(
     'tasks/createTask',
-    async (task: Task) => {
+    async (task) => {
       try {
         console.log("Creating task:", task);
         const tasksCollection = collection(db, 'tasks');
