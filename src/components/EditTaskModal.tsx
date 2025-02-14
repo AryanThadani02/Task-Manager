@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { modifyTask } from "../redux/taskSlice";
@@ -47,7 +46,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const changes: string[] = [];
-    
+
     if (task.title !== editedTask.title) {
       changes.push(`Title changed from "${task.title}" to "${editedTask.title}"`);
     }
@@ -104,20 +103,22 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4 z-50">
-      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[70%] max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-0 md:p-4 z-50">
+      <div ref={modalRef} className="bg-white w-full h-full md:h-auto md:w-[500px] md:max-h-[90vh] md:rounded-lg shadow-lg overflow-y-auto">
+        <div className="sticky top-0 bg-white p-4 flex justify-end items-center border-b">
+          <button onClick={onClose} className="text-xl">✕</button>
+        </div>
 
-        <div className="flex gap-6">
-          <form onSubmit={handleSubmit} className="flex-1">
-            <input
-              type="text"
-              placeholder="Task Title"
-              value={editedTask.title}
-              onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
-              className="w-full p-2 mb-3 border rounded"
-              required
-            />
+        <form onSubmit={handleSubmit} className="p-4">
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Task Title"
+                value={editedTask.title}
+                onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
+                className="w-full px-3 py-2 text-base border-0 focus:ring-0 focus:outline-none"
+                required
+              />
 
             <div className="mb-3">
               <div id="toolbar-container-edit">
@@ -182,18 +183,18 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 </p>
               )}
             </div>
-
-            <div className="flex justify-end gap-3 mt-4">
-              <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
-                Cancel
+            </div>
+            <div className="flex justify-between gap-3 mt-4 sticky bottom-0 bg-white p-4 border-t">
+              <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600 font-medium">
+                CANCEL
               </button>
-              <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded">
-                Update
+              <button type="submit" className="px-6 py-2 bg-purple-600 text-white rounded-full font-medium">
+                UPDATE
               </button>
             </div>
-          </form>
+        </form>
 
-          <div className="w-80 border-l pl-6">
+        <div className="w-80 border-l pl-6">
             <h3 className="text-lg font-medium mb-3">Activity</h3>
             <div className="max-h-[calc(90vh-200px)] overflow-y-auto space-y-2">
               {task.activity?.map((entry, index) => (
@@ -206,7 +207,6 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               )}
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
