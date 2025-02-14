@@ -66,7 +66,7 @@ const taskSlice = createSlice({
       });
       builder.addCase(fetchTasks.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.error.message;
+          state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(createTask.pending, (state) => {
           state.loading = true;
@@ -79,7 +79,7 @@ const taskSlice = createSlice({
       });
       builder.addCase(createTask.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.error.message;
+          state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(modifyTask.pending, (state) => {
           state.loading = true;
@@ -95,7 +95,7 @@ const taskSlice = createSlice({
       });
       builder.addCase(modifyTask.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.error.message;
+          state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(removeTask.pending, (state) => {
           state.loading = true;
@@ -108,7 +108,7 @@ const taskSlice = createSlice({
       });
       builder.addCase(removeTask.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.error.message;
+          state.error = action.error.message || 'An unknown error occurred';
       });
   }
 });
