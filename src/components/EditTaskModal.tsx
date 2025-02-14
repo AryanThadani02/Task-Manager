@@ -104,12 +104,20 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4 z-50">
-      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[70%] max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
+    <div className="fixed inset-0 flex items-center md:items-start justify-center backdrop-blur-lg p-0 md:p-4 z-50">
+      <div ref={modalRef} className="bg-white w-full h-full md:h-auto md:w-[500px] md:max-h-[90vh] md:rounded-lg shadow-lg overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+          <h2 className="text-xl font-semibold">Edit Task</h2>
+          <button onClick={onClose} className="text-2xl">&times;</button>
+        </div>
 
-        <div className="flex gap-6">
-          <form onSubmit={handleSubmit} className="flex-1">
+        <div className="flex flex-col">
+          <div className="flex border-b">
+            <button className="flex-1 py-3 border-b-2 border-purple-500 font-medium">DETAILS</button>
+            <button className="flex-1 py-3 text-gray-500">ACTIVITY</button>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="p-4">
             <input
               type="text"
               placeholder="Task Title"
@@ -183,17 +191,17 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               )}
             </div>
 
-            <div className="flex justify-end gap-3 mt-4">
-              <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
-                Cancel
+            <div className="flex justify-end gap-3 mt-4 sticky bottom-0 bg-white p-4 border-t">
+              <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600">
+                CANCEL
               </button>
               <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded">
-                Update
+                UPDATE
               </button>
             </div>
           </form>
 
-          <div className="w-80 border-l pl-6">
+          <div className="hidden md:block w-80 border-l pl-6">
             <h3 className="text-lg font-medium mb-3">Activity</h3>
             <div className="max-h-[calc(90vh-200px)] overflow-y-auto space-y-2">
               {task.activity?.map((entry, index) => (
