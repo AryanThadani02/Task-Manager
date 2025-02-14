@@ -62,7 +62,7 @@ const TaskCard = ({ task }: { task: Task }) => {
             onChange={handleSelect}
             className="w-4 h-4 border-gray-300 rounded focus:ring-0"
           />
-          <div className="drag-handle cursor-move text-gray-400">
+          <div className="hidden md:block drag-handle cursor-move text-gray-400">
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
           </svg>
