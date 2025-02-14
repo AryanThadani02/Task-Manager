@@ -54,37 +54,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       }}
       className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      {/* Mobile View */}
-      <div className="md:hidden flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={handleSelect}
-            className="w-4 h-4 border-gray-300 rounded focus:ring-0"
-          />
-          <select
-            value={task.status}
-            onChange={(e) => {
-              const newStatus = e.target.value;
-              dispatch(updateTask({ 
-                ...task, 
-                status: newStatus,
-                completed: newStatus === "Completed"
-              }));
-            }}
-            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
-          >
-            <option value="Todo">Todo</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-          <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>
-            {task.title}
-          </span>
-        </div>
-      </div>
-      <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
+      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
@@ -280,6 +250,14 @@ export default function TaskView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
+        </div>
+
+        <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
+          <div className="w-12"></div>
+          <div>Task name</div>
+          <div>Due on</div>
+          <div>Task Status</div>
+          <div>Task Category</div>
         </div>
         {tasks.some(task => task.selected) && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
