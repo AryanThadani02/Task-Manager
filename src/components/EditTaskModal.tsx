@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateTask } from "../redux/taskSlice"; // Assuming this is the correct import, needs verification based on the actual redux setup.
+import { modifyTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 
 interface EditTaskModalProps {
@@ -50,7 +50,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
       fileUrl: file ? URL.createObjectURL(file) : editedTask.fileUrl
     };
     try {
-      await dispatch(updateTask(updatedTask)); // Using the provided updateTask action
+      await dispatch(modifyTask(updatedTask));
       onClose();
     } catch (error) {
       console.error("Failed to update task:", error);
