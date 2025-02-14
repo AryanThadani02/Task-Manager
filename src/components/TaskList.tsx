@@ -99,7 +99,7 @@ const TaskCard = ({ task }: { task: Task }) => {
           </select>
         </div>
         <div className="flex items-center justify-between">
-          <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
+          <span className="hidden md:inline-block px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
             {task.category}
           </span>
           <div className="relative">
