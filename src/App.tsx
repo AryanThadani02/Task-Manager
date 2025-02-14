@@ -16,7 +16,9 @@ export default function App() {
       {/* Home Page with nested routes */}
       <Route path="/home" element={user ? <HomePage /> : <Navigate to="/" />}>
         <Route path="tasks" element={<TaskView />} />
-        <Route path="board" element={<BoardView />} />
+        <Route path="board" element={
+          window.innerWidth < 768 ? <Navigate to="/home/tasks" /> : <BoardView />
+        } />
       </Route>
 
       {/* Redirect unknown routes */}

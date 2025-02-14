@@ -68,7 +68,7 @@ export default function HomePage() {
 
       {/* Navigation and Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
-        <Link to="/home/board" className="px-3 py-1 bg-gray-200 text-gray-800 rounded">
+        <Link to="/home/board" className="hidden md:block px-3 py-1 bg-gray-200 text-gray-800 rounded">
           📌 Board View
         </Link>
 
