@@ -52,9 +52,45 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging');
       }}
-      className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
+      className="task-card bg-white px-2 py-1.5 rounded mb-1.5 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
+      {/* Mobile View */}
+      <div className="md:hidden flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-3.5 h-3.5 border-gray-300 rounded focus:ring-0"
+          />
+          <input
+            type="checkbox"
+            checked={task.status === "Completed"}
+            onChange={(e) => {
+              const isCompleted = e.target.checked;
+              dispatch(updateTask({ 
+                ...task, 
+                completed: isCompleted,
+                status: isCompleted ? "Completed" : "Todo"
+              }));
+            }}
+            className="relative w-3.5 h-3.5 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-[10px]"
+          />
+          <span className={`text-xs font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''} max-w-[180px] truncate`}>
+            {task.title}
+          </span>
+        </div>
+        <button 
+          onClick={() => setShowMenu(!showMenu)} 
+          className="text-gray-400 hover:text-gray-600 p-1"
+        >
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center md:block">
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
@@ -67,19 +103,19 @@ const TaskCard = ({ task }: { task: Task }) => {
             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
           </svg>
         </div>
-        <input
-          type="checkbox"
-          checked={task.status === "Completed"}
-          onChange={(e) => {
-            const isCompleted = e.target.checked;
-            dispatch(updateTask({ 
-              ...task, 
-              completed: isCompleted,
-              status: isCompleted ? "Completed" : "Todo"
-            }));
-          }}
-          className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
-        />
+          <input
+            type="checkbox"
+            checked={task.status === "Completed"}
+            onChange={(e) => {
+              const isCompleted = e.target.checked;
+              dispatch(updateTask({ 
+                ...task, 
+                completed: isCompleted,
+                status: isCompleted ? "Completed" : "Todo"
+              }));
+            }}
+            className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
+          />
         </div>
         <div className="flex items-center">
           <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
@@ -99,41 +135,41 @@ const TaskCard = ({ task }: { task: Task }) => {
           </select>
         </div>
         <div className="flex items-center justify-between">
-          <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
-            {task.category}
-          </span>
-          <div className="relative">
-            <button 
-              onClick={() => setShowMenu(!showMenu)} 
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg>
-            </button>
+          {/* Removed category display */}
+          <div className="flex items-center justify-between">
+            <div className="relative">
+              <button 
+                onClick={() => setShowMenu(!showMenu)} 
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+              </button>
 
-            {showMenu && (
-              <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                <button
-                  onClick={() => {
-                    setIsEditModalOpen(true);
-                    setShowMenu(false);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => {
-                    handleDelete();
-                    setShowMenu(false);
-                  }}
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
-                >
-                  Delete
-                </button>
-              </div>
-            )}
+              {showMenu && (
+                <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                  <button
+                    onClick={() => {
+                      setIsEditModalOpen(true);
+                      setShowMenu(false);
+                    }}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleDelete();
+                      setShowMenu(false);
+                    }}
+                    className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
