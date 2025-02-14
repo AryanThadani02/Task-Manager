@@ -1,6 +1,6 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
+import JoditEditor from "jodit-react";
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 
@@ -45,13 +45,17 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <textarea
-            placeholder="Description"
-            value={editedTask.description}
-            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
-            className="w-full p-2 mb-3 border rounded"
-            maxLength={300}
-          ></textarea>
+          <div className="mb-3">
+            <JoditEditor
+              value={editedTask.description}
+              onChange={newContent => setEditedTask({...editedTask, description: newContent})}
+              config={{
+                placeholder: 'Description',
+                height: 300,
+                buttons: ['bold', 'italic', 'underline', 'ul', 'ol', 'link']
+              }}
+            />
+          </div>
 
           <div className="flex gap-2 mb-3">
             <button
