@@ -46,10 +46,40 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    const changes: string[] = [];
+    
+    if (task.title !== editedTask.title) {
+      changes.push(`Title changed from "${task.title}" to "${editedTask.title}"`);
+    }
+    if (task.description !== editedTask.description) {
+      changes.push("Description was updated");
+    }
+    if (task.category !== editedTask.category) {
+      changes.push(`Category changed from "${task.category}" to "${editedTask.category}"`);
+    }
+    if (task.status !== editedTask.status) {
+      changes.push(`Status changed from "${task.status}" to "${editedTask.status}"`);
+    }
+    if (task.dueDate !== editedTask.dueDate) {
+      changes.push(`Due date changed from "${task.dueDate}" to "${editedTask.dueDate}"`);
+    }
+    if (file) {
+      changes.push("New file was attached");
+    }
+
     const updatedTask = {
       ...editedTask,
-      fileUrl: file ? URL.createObjectURL(file) : editedTask.fileUrl
+      fileUrl: file ? URL.createObjectURL(file) : editedTask.fileUrl,
+      activity: [
+        ...(editedTask.activity || []),
+        {
+          timestamp: new Date().toISOString(),
+          action: 'updated',
+          details: changes.length > 0 ? changes.join(", ") : "Task was edited"
+        }
+      ]
     };
+
     try {
       await dispatch(modifyTask(updatedTask));
       onClose();
