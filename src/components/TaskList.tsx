@@ -84,20 +84,13 @@ const TaskCard = ({ task }: { task: Task }) => {
         <div className="flex items-center">
           <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
         </div>
-        <div>
+        <div className="hidden md:block"> {/* Hide due date in mobile view */}
           <span className="text-sm text-gray-500">{task.dueDate}</span>
         </div>
-        <div>
+        <div className="hidden md:block"> {/* Hide status select in mobile view */}
           <select
             value={task.status}
-            onChange={(e) => {
-              const newStatus = e.target.value;
-              dispatch(updateTask({ 
-                ...task, 
-                status: newStatus,
-                completed: newStatus === "Completed"
-              }));
-            }}
+            onChange={handleStatusChange}
             className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
           >
             <option value="Todo">Todo</option>
