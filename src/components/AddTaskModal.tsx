@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { addTask } from "../redux/taskSlice";
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
@@ -61,15 +59,13 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
           />
 
           {/* Description */}
-          <div className="mb-3">
-            <ReactQuill
-              theme="snow"
-              value={description}
-              onChange={setDescription}
-              placeholder="Description"
-              className="bg-white"
-            />
-          </div>
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 mb-3 border rounded"
+            maxLength={300}
+          ></textarea>
 
           {/* Task Category */}
           <div className="flex gap-2 mb-3">
