@@ -75,8 +75,10 @@ export const createTask = (task: Task) => async (dispatch: any) => {
     console.log("Current tasks count before adding:", snapshot.size);
     
     // Prepare task data
+    const { fileUrl, ...taskData } = task;
     const taskWithActivity = {
-      ...task,
+      ...taskData,
+      fileUrl: fileUrl || null, // Ensure fileUrl is never undefined
       createdAt: new Date().toISOString(),
       activity: [{
         timestamp: new Date().toISOString(),
