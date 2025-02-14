@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
+// Quill CSS is loaded from CDN in index.html
 import { addTask } from "../redux/taskSlice";
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
