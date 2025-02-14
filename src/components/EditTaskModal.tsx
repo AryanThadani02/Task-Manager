@@ -74,10 +74,11 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4 z-50">
-      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[40%] max-h-[90vh] overflow-y-auto">
+      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[70%] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
 
-        <form onSubmit={handleSubmit}>
+        <div className="flex gap-6">
+          <form onSubmit={handleSubmit} className="flex-1">
           <input
             type="text"
             placeholder="Task Title"
@@ -151,20 +152,6 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             )}
           </div>
 
-          <div className="mt-6 border-t pt-4">
-            <h3 className="text-lg font-medium mb-3">Activity</h3>
-            <div className="max-h-40 overflow-y-auto space-y-2">
-              {task.activity?.map((entry, index) => (
-                <div key={index} className="flex items-start gap-2 text-sm">
-                  <span className="text-gray-500">{new Date(entry.timestamp).toLocaleString()}</span>
-                  <span className="text-gray-700">{entry.details}</span>
-                </div>
-              )) || (
-                <div className="text-gray-500 text-sm">No activity recorded</div>
-              )}
-            </div>
-          </div>
-
           <div className="flex justify-end gap-3 mt-4">
             <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
               Cancel
@@ -174,6 +161,20 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             </button>
           </div>
         </form>
+
+        <div className="w-80 border-l pl-6">
+          <h3 className="text-lg font-medium mb-3">Activity</h3>
+          <div className="max-h-[calc(90vh-200px)] overflow-y-auto space-y-2">
+            {task.activity?.map((entry, index) => (
+              <div key={index} className="flex flex-col gap-1 text-sm border-b pb-2">
+                <span className="text-gray-500">{new Date(entry.timestamp).toLocaleString()}</span>
+                <span className="text-gray-700">{entry.details}</span>
+              </div>
+            )) || (
+              <div className="text-gray-500 text-sm">No activity recorded</div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
