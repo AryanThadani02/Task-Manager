@@ -17,33 +17,37 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   React.useEffect(() => {
     if (activeTab === 'DETAILS') {
-      const quill = new (window as any).Quill('#quill-editor-edit', {
-        theme: 'snow',
-        placeholder: 'Enter description...',
-        modules: {
-          toolbar: '#toolbar-container-edit'
-        }
-      });
+      setTimeout(() => {
+        const quill = new (window as any).Quill('#quill-editor-edit', {
+          theme: 'snow',
+          placeholder: 'Enter description...',
+          modules: {
+            toolbar: {
+              container: '#toolbar-container-edit'
+            }
+          }
+        });
 
-      quill.root.innerHTML = editedTask.description;
+        quill.root.innerHTML = editedTask.description;
 
-      const observer = new MutationObserver(() => {
-        setEditedTask({...editedTask, description: quill.root.innerHTML});
-      });
+        const observer = new MutationObserver(() => {
+          setEditedTask({...editedTask, description: quill.root.innerHTML});
+        });
 
-      observer.observe(quill.root, {
-        characterData: true,
-        childList: true,
-        subtree: true
-      });
+        observer.observe(quill.root, {
+          characterData: true,
+          childList: true,
+          subtree: true
+        });
 
-      return () => {
-        observer.disconnect();
-        const toolbarElement = document.querySelector('.ql-toolbar');
-        const editorElement = document.querySelector('.ql-editor');
-        if (toolbarElement) toolbarElement.remove();
-        if (editorElement) editorElement.remove();
-      };
+        return () => {
+          observer.disconnect();
+          const toolbarElement = document.querySelector('.ql-toolbar');
+          const editorElement = document.querySelector('.ql-editor');
+          if (toolbarElement) toolbarElement.remove();
+          if (editorElement) editorElement.remove();
+        };
+      }, 0);
     }
   }, [activeTab]);
 
