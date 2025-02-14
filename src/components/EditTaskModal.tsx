@@ -1,8 +1,6 @@
 
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 
@@ -47,15 +45,13 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <div className="mb-3">
-            <ReactQuill
-              theme="snow"
-              value={editedTask.description}
-              onChange={(value) => setEditedTask({...editedTask, description: value})}
-              placeholder="Description"
-              className="bg-white"
-            />
-          </div>
+          <textarea
+            placeholder="Description"
+            value={editedTask.description}
+            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
+            className="w-full p-2 mb-3 border rounded"
+            maxLength={300}
+          ></textarea>
 
           <div className="flex gap-2 mb-3">
             <button
