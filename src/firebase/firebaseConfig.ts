@@ -19,10 +19,21 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 // Verify initialization
+// Verify Firestore connection
 const tasksRef = collection(db, 'tasks');
 getDocs(tasksRef)
-  .then(() => console.log('Firestore is connected'))
-  .catch(error => console.error('Firestore connection error:', error));
+  .then((snapshot) => {
+    console.log('Firestore is connected');
+    console.log('Current number of documents:', snapshot.size);
+    console.log('Firebase config:', {
+      projectId: firebaseConfig.projectId,
+      databaseURL: firebaseConfig.databaseURL
+    });
+  })
+  .catch(error => {
+    console.error('Firestore connection error:', error);
+    console.error('Error details:', JSON.stringify(error, null, 2));
+  });
 
 auth.onAuthStateChanged(user => {
   console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
