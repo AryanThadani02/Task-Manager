@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
-import { deleteTask } from "../redux/taskSlice";
+import { deleteTask, updateTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = ({ task }: { task: Task }) => {
@@ -15,8 +15,22 @@ const TaskCard = ({ task }: { task: Task }) => {
     dispatch(deleteTask(task.id));
   };
 
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData("taskId", task.id);
+    e.currentTarget.classList.add('opacity-50');
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove('opacity-50');
+  };
+
   return (
-    <div className="bg-white p-4 rounded-lg shadow mb-3">
+    <div 
+      className="bg-white p-4 rounded-lg shadow mb-3 cursor-move"
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="flex justify-between items-start">
         <h3 className="font-semibold">{task.title}</h3>
         <div className="flex gap-2">
@@ -71,10 +85,39 @@ const TaskCard = ({ task }: { task: Task }) => {
 
 export default function BoardView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const dispatch = useDispatch();
 
   const todoTasks = tasks.filter(task => task.status === "Todo");
   const inProgressTasks = tasks.filter(task => task.status === "In Progress");
   const completedTasks = tasks.filter(task => task.status === "Completed");
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    const draggedOverElement = e.currentTarget as HTMLElement;
+    draggedOverElement.classList.add('bg-gray-50');
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    const draggedOverElement = e.currentTarget as HTMLElement;
+    draggedOverElement.classList.remove('bg-gray-50');
+  };
+
+  const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
+    e.preventDefault();
+    const draggedOverElement = e.currentTarget as HTMLElement;
+    draggedOverElement.classList.remove('bg-gray-50');
+    
+    const taskId = e.dataTransfer.getData("taskId");
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (task && task.status !== newStatus) {
+      dispatch(updateTask({
+        ...task,
+        status: newStatus,
+        completed: newStatus === "Completed"
+      }));
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -84,7 +127,12 @@ export default function BoardView() {
         <div className="grid grid-cols-3 gap-4">
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">Todo</div>
-            <div className="p-4">
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "Todo")}
+            >
               {todoTasks.length > 0 ? (
                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
               ) : (
@@ -95,7 +143,12 @@ export default function BoardView() {
 
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
-            <div className="p-4">
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "In Progress")}
+            >
               {inProgressTasks.length > 0 ? (
                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
               ) : (
@@ -106,7 +159,12 @@ export default function BoardView() {
 
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-green-200 p-3 font-medium">Completed</div>
-            <div className="p-4">
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "Completed")}
+            >
               {completedTasks.length > 0 ? (
                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
               ) : (
