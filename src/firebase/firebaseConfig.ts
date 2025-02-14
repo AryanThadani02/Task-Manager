@@ -18,6 +18,15 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
+// Verify initialization
+db.collection('tasks').get()
+  .then(() => console.log('Firestore is connected'))
+  .catch(error => console.error('Firestore connection error:', error));
+
+auth.onAuthStateChanged(user => {
+  console.log('Auth state changed:', user ? 'User logged in' : 'User logged out');
+});
+
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);

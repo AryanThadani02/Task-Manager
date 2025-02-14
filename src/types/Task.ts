@@ -15,4 +15,6 @@ export interface Task {
     action: string;
     details: string;
   }[];
+  createdAt?: string;
+  updatedAt?: string;
 }
