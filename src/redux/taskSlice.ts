@@ -68,6 +68,13 @@ export const fetchTasks = (userId: string) => async (dispatch: any) => {
 export const createTask = (task: Task) => async (dispatch: any) => {
   try {
     console.log("Creating task:", task);
+    
+    // First verify the tasks collection
+    const tasksCollection = collection(db, 'tasks');
+    const snapshot = await getDocs(tasksCollection);
+    console.log("Current tasks count before adding:", snapshot.size);
+    
+    // Prepare task data
     const taskWithActivity = {
       ...task,
       createdAt: new Date().toISOString(),
@@ -77,12 +84,20 @@ export const createTask = (task: Task) => async (dispatch: any) => {
         details: `Task "${task.title}" created with status "${task.status}"`
       }]
     };
-    const docRef = await addDoc(collection(db, 'tasks'), taskWithActivity);
-    console.log("Task created with ID:", docRef.id);
+
+    // Add the document
+    const docRef = await addDoc(tasksCollection, taskWithActivity);
+    console.log("Task created successfully with ID:", docRef.id);
+    
+    // Verify the document was added
+    const newDoc = await getDocs(tasksCollection);
+    console.log("Current tasks count after adding:", newDoc.size);
+    
     dispatch(addTask({ ...taskWithActivity, id: docRef.id }));
   } catch (error) {
     console.error("Error creating task:", error);
     console.error("Error details:", JSON.stringify(error, null, 2));
+    throw error; // Rethrow to handle in the UI
   }
 };
 

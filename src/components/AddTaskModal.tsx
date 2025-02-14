@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask } from "../redux/taskSlice";
+import { createTask } from "../redux/taskSlice"; // Assumed action creator
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
 interface AddTaskModalProps {
@@ -24,11 +24,11 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         toolbar: '#toolbar-container'
       }
     });
-    
+
     const observer = new MutationObserver(() => {
       setDescription(quill.root.innerHTML);
     });
-    
+
     observer.observe(quill.root, {
       characterData: true,
       childList: true,
@@ -48,20 +48,29 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!user) return; // Added user check
+    if (!user) {
+      console.error("No user found");
+      return;
+    }
 
-    const newTask = {
-      id: Math.random().toString(36).substr(2, 9),
-      userId: user?.uid || '',
-      title,
-      description,
-      category,
-      dueDate,
-      status,
-      fileUrl: file ? URL.createObjectURL(file) : undefined
-    };
-    dispatch(addTask(newTask));
-    onClose();
+    try {
+      const newTask = {
+        userId: user.uid,
+        title,
+        description,
+        category,
+        dueDate,
+        status,
+        fileUrl: file ? URL.createObjectURL(file) : undefined
+      };
+
+      await dispatch(createTask(newTask));
+      console.log("Task created successfully");
+      onClose();
+    } catch (error) {
+      console.error("Failed to create task:", error);
+      // Here you might want to show an error message to the user
+    }
   };
 
   return (
