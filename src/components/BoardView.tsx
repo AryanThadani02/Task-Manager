@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
-import { removeTask, modifyTask } from "../redux/taskSlice";
+import { deleteTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = ({ task }: { task: Task }) => {
@@ -10,12 +10,8 @@ const TaskCard = ({ task }: { task: Task }) => {
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
 
-  const handleDelete = async () => {
-    try {
-      await dispatch(removeTask(task.id));
-    } catch (error) {
-      console.error("Failed to delete task:", error);
-    }
+  const handleDelete = () => {
+    dispatch(deleteTask(task.id));
   };
 
   const handleDragStart = (e: React.DragEvent) => {
