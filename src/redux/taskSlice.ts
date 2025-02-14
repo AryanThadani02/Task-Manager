@@ -153,14 +153,14 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
         const { fileUrl, ...taskData } = task;
         const taskWithActivity = {
           ...taskData,
-          fileUrl: fileUrl || null,
+          fileUrl: fileUrl ?? undefined,
           createdAt: new Date().toISOString(),
           activity: [{
             timestamp: new Date().toISOString(),
             action: 'created',
             details: `Task "${task.title}" created with status "${task.status}"`
           }]
-        };
+        } as Task;
         const docRef = await addDoc(tasksCollection, taskWithActivity);
         console.log("Task created successfully with ID:", docRef.id);
         return { ...taskWithActivity, id: docRef.id };
@@ -204,7 +204,10 @@ export const modifyTask = createAsyncThunk(
 
 export const removeTask = createAsyncThunk(
     'tasks/removeTask',
-    async (taskId: string) => {
+    async (taskId: string | undefined) => {
+      if (!taskId) {
+        throw new Error('Task ID is required');
+      }
       try {
         console.log('=== DELETE OPERATION START ===');
         if (!taskId) {

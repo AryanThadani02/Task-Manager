@@ -5,8 +5,8 @@ export interface Task {
   title: string;
   description: string;
   status: string;
-  category?: string;
-  dueDate?: string;
+  category: string;
+  dueDate: string;
   fileUrl?: string | null;
   createdAt?: string;
   updatedAt?: string;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, setTasks } from "../redux/taskSlice";
-import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
+import { useNavigate, Link, Outlet } from "react-router-dom";
 import { signOutUser } from "../firebase/firebaseConfig";
 import { clearUser } from "../redux/userSlice";
 import { RootState } from "../redux/store";
@@ -17,7 +17,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dueDateFilter, setDueDateFilter] = useState("");
-  
+
   useEffect(() => {
     if (user?.uid) {
       dispatch(fetchTasks(user.uid));
