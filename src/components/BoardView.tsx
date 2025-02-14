@@ -71,7 +71,10 @@ const TaskCard = ({ task }: { task: Task }) => {
           </div>
         </div>
       </div>
-      <p className="text-gray-600 mt-2">{task.description}</p>
+      <div 
+        className="text-gray-600 mt-2"
+        dangerouslySetInnerHTML={{ __html: task.description }}
+      />
       <div className="mt-3 flex justify-between items-center">
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
         {task.fileUrl && (
