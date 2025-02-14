@@ -138,25 +138,37 @@ export const removeTask = (taskId: string) => async (dispatch: any) => {
       return;
     }
     
-    console.log("Attempting to remove task with ID:", taskId);
+    console.log("DELETE REQUEST - Attempting to remove task with ID:", taskId);
     const taskRef = doc(db, 'tasks', taskId);
     
     // First verify the task exists
+    console.log("CHECKING TASK - Verifying task existence in Firestore");
     const docSnapshot = await getDoc(taskRef);
+    
     if (!docSnapshot.exists()) {
-      console.error("Task not found in Firestore");
+      console.error("SERVER RESPONSE - Task not found in Firestore");
       return;
     }
     
-    // Proceed with deletion
-    await deleteDoc(taskRef);
-    console.log("Task removed successfully from Firestore");
+    console.log("TASK DATA - Current task data:", docSnapshot.data());
     
-    // Update Redux store
-    dispatch(deleteTask(taskId));
+    // Proceed with deletion
+    console.log("SENDING DELETE - Executing deleteDoc operation");
+    await deleteDoc(taskRef);
+    
+    // Verify deletion
+    const verifySnapshot = await getDoc(taskRef);
+    if (!verifySnapshot.exists()) {
+      console.log("SERVER RESPONSE - Task successfully deleted from Firestore");
+      // Update Redux store
+      dispatch(deleteTask(taskId));
+    } else {
+      console.error("SERVER RESPONSE - Delete operation failed, document still exists");
+      throw new Error("Delete operation failed");
+    }
   } catch (error) {
-    console.error("Error removing task:", error);
-    console.error("Error details:", JSON.stringify(error, null, 2));
+    console.error("SERVER ERROR - Failed to delete task:", error);
+    console.error("ERROR DETAILS:", JSON.stringify(error, null, 2));
     throw error;
   }
 };
