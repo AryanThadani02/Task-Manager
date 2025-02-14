@@ -1,8 +1,5 @@
 
 import React, { useState } from "react";
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Placeholder from '@tiptap/extension-placeholder';
 import { useDispatch } from "react-redux";
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
@@ -48,18 +45,13 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <div className="mb-3">
-            <EditorContent
-              editor={useEditor({
-                extensions: [StarterKit, Placeholder.configure({ placeholder: 'Description' })],
-                content: editedTask.description,
-                onUpdate: ({ editor }) => {
-                  setEditedTask({...editedTask, description: editor.getHTML()});
-                },
-              })}
-              className="w-full min-h-[100px] p-2 border rounded prose max-w-none"
-            />
-          </div>
+          <textarea
+            placeholder="Description"
+            value={editedTask.description}
+            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
+            className="w-full p-2 mb-3 border rounded"
+            maxLength={300}
+          ></textarea>
 
           <div className="flex gap-2 mb-3">
             <button
@@ -105,6 +97,20 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 📎 {file ? file.name : "Current attachment"}
               </p>
             )}
+          </div>
+
+          <div className="mt-6 border-t pt-4">
+            <h3 className="text-lg font-medium mb-3">Activity</h3>
+            <div className="max-h-40 overflow-y-auto space-y-2">
+              {task.activity?.map((entry, index) => (
+                <div key={index} className="flex items-start gap-2 text-sm">
+                  <span className="text-gray-500">{new Date(entry.timestamp).toLocaleString()}</span>
+                  <span className="text-gray-700">{entry.details}</span>
+                </div>
+              )) || (
+                <div className="text-gray-500 text-sm">No activity recorded</div>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end gap-3 mt-4">
