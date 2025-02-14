@@ -21,7 +21,11 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
       theme: 'snow',
       placeholder: 'Enter description...',
       modules: {
-        toolbar: false
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean']
+        ]
       }
     });
     
