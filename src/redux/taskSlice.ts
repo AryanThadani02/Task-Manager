@@ -133,12 +133,14 @@ export const modifyTask = (task: Task) => async (dispatch: any) => {
 
 export const removeTask = (taskId: string) => async (dispatch: any) => {
   try {
+    console.log('=== DELETE OPERATION START ===');
     if (!taskId) {
-      console.error("No taskId provided for deletion");
+      console.error("VALIDATION ERROR: No taskId provided for deletion");
       return;
     }
     
-    console.log("DELETE REQUEST - Attempting to remove task with ID:", taskId);
+    console.log('1. DELETE REQUEST - Task ID:', taskId);
+    console.log('2. FIRESTORE CONNECTION:', !!db ? 'Connected' : 'Not Connected');
     const taskRef = doc(db, 'tasks', taskId);
     
     // First verify the task exists
@@ -167,8 +169,13 @@ export const removeTask = (taskId: string) => async (dispatch: any) => {
       throw new Error("Delete operation failed");
     }
   } catch (error) {
-    console.error("SERVER ERROR - Failed to delete task:", error);
-    console.error("ERROR DETAILS:", JSON.stringify(error, null, 2));
+    console.error('=== DELETE OPERATION FAILED ===');
+    console.error('Error name:', error.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    console.error('Full error object:', JSON.stringify(error, null, 2));
+    console.error('Firestore connection state:', !!db);
+    console.error('TaskId:', taskId);
     throw error;
   }
 };

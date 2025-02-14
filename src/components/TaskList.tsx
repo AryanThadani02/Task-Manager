@@ -21,8 +21,14 @@ const TaskCard = ({ task }: { task: Task }) => {
     dispatch(updateTask({ ...task, selected: e.target.checked }));
   };
 
-  const handleDelete = () => {
-    dispatch(deleteTask(task.id));
+  const handleDelete = async () => {
+    console.log('DELETE OPERATION - TaskList - Starting delete for task:', task);
+    try {
+      await dispatch(removeTask(task.id));
+      console.log('DELETE OPERATION - TaskList - Delete dispatch completed for task ID:', task.id);
+    } catch (error) {
+      console.error('DELETE OPERATION - TaskList - Delete failed:', error);
+    }
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
