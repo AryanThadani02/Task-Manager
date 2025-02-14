@@ -1,0 +1,83 @@
+[02:05:00.990] Running build in Washington, D.C., USA (East) – iad1
+[02:05:01.107] Cloning github.com/AryanThadani02/Task-Manager (Branch: main, Commit: 7ba7cd7)
+[02:05:01.415] Cloning completed: 310.000ms
+[02:05:01.706] Previous build cache not available
+[02:05:02.074] Running "vercel build"
+[02:05:02.448] Vercel CLI 41.1.3
+[02:05:03.985] Installing dependencies...
+[02:05:07.576] npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+[02:05:07.639] npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+[02:05:14.798] 
+[02:05:14.798] added 487 packages in 10s
+[02:05:14.799] 
+[02:05:14.799] 99 packages are looking for funding
+[02:05:14.800]   run `npm fund` for details
+[02:05:14.848] Running "npm run build"
+[02:05:14.978] 
+[02:05:14.979] > task-manager@0.0.0 build
+[02:05:14.979] > tsc -b && vite build
+[02:05:14.979] 
+[02:05:18.727] src/components/AddTaskModal.tsx(68,22): error TS2345: Argument of type 'AsyncThunkAction<Task, Omit<Task, "id" | "createdAt" | "activity">, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.728] src/components/AddTaskModal.tsx(68,33): error TS2345: Argument of type '{ userId: string; title: string; description: string; category: string; dueDate: string; status: string; fileUrl: string | null; }' is not assignable to parameter of type 'Omit<Task, "id" | "createdAt" | "activity">'.
+[02:05:18.728]   Types of property 'fileUrl' are incompatible.
+[02:05:18.729]     Type 'string | null' is not assignable to type 'string | undefined'.
+[02:05:18.729]       Type 'null' is not assignable to type 'string | undefined'.
+[02:05:18.729] src/components/BoardView.tsx(15,22): error TS2345: Argument of type 'AsyncThunkAction<string, string, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.729] src/components/BoardView.tsx(15,33): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.729]   Type 'undefined' is not assignable to type 'string'.
+[02:05:18.729] src/components/BoardView.tsx(22,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.730]   Type 'undefined' is not assignable to type 'string'.
+[02:05:18.730] src/components/BoardView.tsx(121,26): error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.730] src/components/BoardView.tsx(124,13): error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+[02:05:18.730] src/components/EditTaskModal.tsx(97,22): error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.730] src/components/EditTaskModal.tsx(97,33): error TS2345: Argument of type '{ fileUrl: string | null | undefined; activity: { timestamp: string; action: string; details: string; }[]; id?: string; userId: string; title: string; description: string; status: string; category?: string; ... 5 more ...; order?: number; }' is not assignable to parameter of type 'Task'.
+[02:05:18.731]   Types of property 'fileUrl' are incompatible.
+[02:05:18.732]     Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+[02:05:18.732]       Type 'null' is not assignable to type 'string | undefined'.
+[02:05:18.732] src/components/HomePage.tsx(4,37): error TS6133: 'useLocation' is declared but its value is never read.
+[02:05:18.732] src/components/HomePage.tsx(23,16): error TS2345: Argument of type 'AsyncThunkAction<Task[], string, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.733] src/components/TaskList.tsx(30,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.733]   Type 'undefined' is not assignable to type 'string'.
+[02:05:18.738] src/components/TaskList.tsx(35,36): error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+[02:05:18.740] src/components/TaskList.tsx(41,22): error TS2345: Argument of type 'AsyncThunkAction<string, string, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+[02:05:18.741] src/components/TaskList.tsx(41,33): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.741]   Type 'undefined' is not assignable to type 'string'.
+[02:05:18.741] src/components/TaskList.tsx(53,7): error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+[02:05:18.741] src/components/TaskList.tsx(91,15): error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+[02:05:18.741] src/components/TaskList.tsx(171,53): error TS2339: Property 'category' does not exist on type 'Task'.
+[02:05:18.742] src/components/TaskList.tsx(172,51): error TS2339: Property 'dueDate' does not exist on type 'Task'.
+[02:05:18.742] src/components/TaskList.tsx(184,9): error TS6133: 'getDragAfterElement' is declared but its value is never read.
+[02:05:18.742] src/components/TaskList.tsx(196,46): error TS2339: Property 'element' does not exist on type '{ offset: number; }'.
+[02:05:18.742] src/components/TaskList.tsx(210,9): error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+[02:05:18.742] src/components/TaskList.tsx(215,13): error TS6133: 'newIndex' is declared but its value is never read.
+[02:05:18.742] src/components/TaskList.tsx(223,13): error TS2353: Object literal may only specify known properties, and 'order' does not exist in type 'Task'.
+[02:05:18.743] src/components/TaskList.tsx(231,53): error TS2339: Property 'selected' does not exist on type 'Task'.
+[02:05:18.743] src/components/TaskList.tsx(233,27): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.752]   Type 'undefined' is not assignable to type 'string'.
+[02:05:18.752] src/components/TaskList.tsx(237,16): error TS2339: Property 'selected' does not exist on type 'Task'.
+[02:05:18.752] src/components/TaskList.tsx(238,40): error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+[02:05:18.753] src/components/TaskList.tsx(244,53): error TS2339: Property 'selected' does not exist on type 'Task'.
+[02:05:18.753] src/components/TaskList.tsx(249,9): error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+[02:05:18.753] src/components/TaskList.tsx(269,34): error TS2339: Property 'selected' does not exist on type 'Task'.
+[02:05:18.753] src/components/TaskList.tsx(272,42): error TS2339: Property 'selected' does not exist on type 'Task'.
+[02:05:18.753] src/firebase/firebaseConfig.ts(29,35): error TS2339: Property 'databaseURL' does not exist on type '{ apiKey: string; authDomain: string; projectId: string; storageBucket: string; messagingSenderId: string; appId: string; measurementId: string; }'.
+[02:05:18.753] src/redux/taskSlice.ts(149,5): error TS2345: Argument of type '(task: Omit<Task, "id" | "createdAt" | "activity">) => Promise<{ id: string; fileUrl: string | null; createdAt: string; activity: { timestamp: string; action: string; details: string; }[]; ... 4 more ...; updatedAt?: string | undefined; }>' is not assignable to parameter of type 'AsyncThunkPayloadCreator<Task, Omit<Task, "id" | "createdAt" | "activity">, { rejectValue: string; state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction> | undefined; ... 4 more ...; rejectedMeta?: unknown; }>'.
+[02:05:18.755]   Type 'Promise<{ id: string; fileUrl: string | null; createdAt: string; activity: { timestamp: string; action: string; details: string; }[]; status: string; userId: string; title: string; description: string; updatedAt?: string | undefined; }>' is not assignable to type 'AsyncThunkPayloadCreatorReturnValue<Task, { rejectValue: string; state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction> | undefined; extra?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>'.
+[02:05:18.760]     Type 'Promise<{ id: string; fileUrl: string | null; createdAt: string; activity: { timestamp: string; action: string; details: string; }[]; status: string; userId: string; title: string; description: string; updatedAt?: string | undefined; }>' is not assignable to type 'Promise<Task | RejectWithValue<string, unknown>>'.
+[02:05:18.764]       Type '{ id: string; fileUrl: string | null; createdAt: string; activity: { timestamp: string; action: string; details: string; }[]; status: string; userId: string; title: string; description: string; updatedAt?: string | undefined; }' is not assignable to type 'Task | RejectWithValue<string, unknown>'.
+[02:05:18.764]         Type '{ id: string; fileUrl: string | null; createdAt: string; activity: { timestamp: string; action: string; details: string; }[]; status: string; userId: string; title: string; description: string; updatedAt?: string | undefined; }' is not assignable to type 'Task'.
+[02:05:18.764]           Types of property 'fileUrl' are incompatible.
+[02:05:18.764]             Type 'string | null' is not assignable to type 'string | undefined'.
+[02:05:18.765]               Type 'null' is not assignable to type 'string | undefined'.
+[02:05:18.765] src/redux/taskSlice.ts(181,25): error TS2769: No overload matches this call.
+[02:05:18.765]   Overload 1 of 3, '(firestore: Firestore, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+[02:05:18.765]     Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+[02:05:18.765]       Type 'undefined' is not assignable to type 'string'.
+[02:05:18.765]   Overload 2 of 3, '(reference: CollectionReference<unknown, DocumentData>, path?: string | undefined, ...pathSegments: string[]): DocumentReference<unknown, DocumentData>', gave the following error.
+[02:05:18.766]     Argument of type 'Firestore' is not assignable to parameter of type 'CollectionReference<unknown, DocumentData>'.
+[02:05:18.766]       Type 'Firestore' is missing the following properties from type 'CollectionReference<unknown, DocumentData>': id, path, parent, withConverter, and 2 more.
+[02:05:18.766]   Overload 3 of 3, '(reference: DocumentReference<unknown, DocumentData>, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+[02:05:18.766]     Argument of type 'Firestore' is not assignable to parameter of type 'DocumentReference<unknown, DocumentData>'.
+[02:05:18.766]       Type 'Firestore' is missing the following properties from type 'DocumentReference<unknown, DocumentData>': converter, firestore, id, path, and 2 more.
+[02:05:19.005] Error: Command "npm run build" exited with 2
+[02:05:19.330] 
