@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Quill from 'quill';
-// Quill CSS is loaded from CDN in index.html
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { addTask } from "../redux/taskSlice";
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
@@ -12,27 +12,6 @@ interface AddTaskModalProps {
 export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const quillRef = useRef<Quill>();
-
-  useEffect(() => {
-    if (!quillRef.current) {
-      quillRef.current = new Quill('#quill-editor', {
-        theme: 'snow',
-        placeholder: 'Description',
-        modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            ['link']
-          ]
-        }
-      });
-      
-      quillRef.current.on('text-change', () => {
-        setDescription(quillRef.current?.root.innerHTML || '');
-      });
-    }
-  }, []);
   const [category, setCategory] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("");
@@ -83,7 +62,13 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
           {/* Description */}
           <div className="mb-3">
-            <div id="quill-editor" className="bg-white" style={{ height: "200px" }}></div>
+            <ReactQuill
+              theme="snow"
+              value={description}
+              onChange={setDescription}
+              placeholder="Description"
+              className="bg-white"
+            />
           </div>
 
           {/* Task Category */}

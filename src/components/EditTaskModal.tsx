@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import Quill from 'quill';
-// Quill CSS is loaded from CDN in index.html
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 
@@ -14,32 +14,6 @@ interface EditTaskModalProps {
 export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const [editedTask, setEditedTask] = useState(task);
   const [file, setFile] = useState<File | null>(null);
-  const quillRef = useRef<Quill>();
-
-  useEffect(() => {
-    if (!quillRef.current) {
-      quillRef.current = new Quill('#quill-editor-edit', {
-        theme: 'snow',
-        placeholder: 'Description',
-        modules: {
-          toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            ['link']
-          ]
-        }
-      });
-
-      quillRef.current.root.innerHTML = editedTask.description;
-      
-      quillRef.current.on('text-change', () => {
-        setEditedTask({
-          ...editedTask,
-          description: quillRef.current?.root.innerHTML || ''
-        });
-      });
-    }
-  }, []);
   const dispatch = useDispatch();
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +48,13 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           />
 
           <div className="mb-3">
-            <div id="quill-editor-edit" className="bg-white" style={{ height: "200px" }}></div>
+            <ReactQuill
+              theme="snow"
+              value={editedTask.description}
+              onChange={(value) => setEditedTask({...editedTask, description: value})}
+              placeholder="Description"
+              className="bg-white"
+            />
           </div>
 
           <div className="flex gap-2 mb-3">
