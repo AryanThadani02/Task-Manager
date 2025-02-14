@@ -106,15 +106,13 @@ export const createTask = (task: Task) => async (dispatch: any) => {
 export const modifyTask = (task: Task) => async (dispatch: any) => {
   try {
     console.log("Modifying task:", task);
-    const taskDoc = await getDocs(query(collection(db, 'tasks'), where('id', '==', task.id)));
-    const currentTask = taskDoc.docs[0]?.data();
-    console.log("Current task data:", currentTask);
-    
+    const taskRef = doc(db, 'tasks', task.id);
+
     const updatedTask = {
       ...task,
       updatedAt: new Date().toISOString(),
       activity: [
-        ...(currentTask?.activity || []),
+        ...(task.activity || []),
         {
           timestamp: new Date().toISOString(),
           action: 'updated',
@@ -123,24 +121,27 @@ export const modifyTask = (task: Task) => async (dispatch: any) => {
       ]
     };
     
-    await updateDoc(doc(db, 'tasks', task.id), updatedTask);
+    await updateDoc(taskRef, updatedTask);
     console.log("Task updated successfully");
     dispatch(updateTask(updatedTask));
   } catch (error) {
     console.error("Error modifying task:", error);
     console.error("Error details:", JSON.stringify(error, null, 2));
+    throw error; // Rethrow to handle in the UI
   }
 };
 
 export const removeTask = (taskId: string) => async (dispatch: any) => {
   try {
     console.log("Removing task:", taskId);
-    await deleteDoc(doc(db, 'tasks', taskId));
+    const taskRef = doc(db, 'tasks', taskId);
+    await deleteDoc(taskRef);
     console.log("Task removed successfully");
     dispatch(deleteTask(taskId));
   } catch (error) {
     console.error("Error removing task:", error);
     console.error("Error details:", JSON.stringify(error, null, 2));
+    throw error; // Rethrow to handle in the UI
   }
 };
 
