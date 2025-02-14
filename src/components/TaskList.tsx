@@ -52,7 +52,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging');
       }}
-      className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
+      className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
       <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
         <div className="flex items-center space-x-2">
@@ -113,7 +113,7 @@ const TaskCard = ({ task }: { task: Task }) => {
             </button>
 
             {showMenu && (
-              <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+              <div className="absolute right-0 top-0 py-2 w-36 sm:w-48 bg-white rounded-md shadow-xl z-20">
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
@@ -239,8 +239,8 @@ export default function TaskView() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="p-2 sm:p-4 md:p-6 bg-gray-50 min-h-screen">
+      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md max-w-full overflow-x-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
@@ -279,8 +279,8 @@ export default function TaskView() {
           </div>
         )}
         <div className="flex flex-col gap-4">
-          <div className="border rounded-lg overflow-hidden h-auto">
-            <div className="bg-purple-200 p-3 font-medium">
+          <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
+            <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
               Todo ({todoTasks.length})
             </div>
             <div 
