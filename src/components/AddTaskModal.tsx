@@ -26,7 +26,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     });
     
     const observer = new MutationObserver(() => {
-      setDescription(quill.root.innerText);
+      setDescription(quill.root.innerHTML);
     });
     
     observer.observe(quill.root, {

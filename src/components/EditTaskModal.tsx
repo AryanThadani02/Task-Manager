@@ -26,7 +26,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     quill.root.innerHTML = editedTask.description;
     
     const observer = new MutationObserver(() => {
-      setEditedTask({...editedTask, description: quill.root.innerText});
+      setEditedTask({...editedTask, description: quill.root.innerHTML});
     });
     
     observer.observe(quill.root, {
