@@ -1,8 +1,10 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
+
 
 interface EditTaskModalProps {
   task: Task;
@@ -13,12 +15,33 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const [editedTask, setEditedTask] = useState(task);
   const [file, setFile] = useState<File | null>(null);
   const dispatch = useDispatch();
+  const quillRef = useRef<Quill | null>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
-  };
+  useEffect(() => {
+    quillRef.current = new Quill('#editor-edit', {
+      theme: 'snow',
+      placeholder: 'Enter description...',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean']
+        ]
+      }
+    });
+
+    quillRef.current.root.innerHTML = editedTask.description;
+    quillRef.current.on('text-change', () => {
+      setEditedTask({
+        ...editedTask,
+        description: quillRef.current?.root.innerHTML || ''
+      });
+    });
+
+    return () => {
+      quillRef.current = null;
+    };
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -45,13 +68,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <textarea
-            placeholder="Description"
-            value={editedTask.description}
-            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
-            className="w-full p-2 mb-3 border rounded"
-            maxLength={300}
-          ></textarea>
+          <div id="editor-edit"></div>
 
           <div className="flex gap-2 mb-3">
             <button
