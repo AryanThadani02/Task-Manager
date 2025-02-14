@@ -30,7 +30,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     });
     
     quill.on('text-change', function() {
-      setDescription(quill.root.innerHTML);
+      setDescription(quill.root.innerText);
     });
   }, []);
 

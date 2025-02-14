@@ -30,7 +30,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     quill.root.innerHTML = editedTask.description;
     
     quill.on('text-change', function() {
-      setEditedTask({...editedTask, description: quill.root.innerHTML});
+      setEditedTask({...editedTask, description: quill.root.innerText});
     });
   }, []);
 
