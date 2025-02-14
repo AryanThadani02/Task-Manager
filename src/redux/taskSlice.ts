@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 import { Task } from '../types/Task';
 
@@ -133,15 +133,31 @@ export const modifyTask = (task: Task) => async (dispatch: any) => {
 
 export const removeTask = (taskId: string) => async (dispatch: any) => {
   try {
-    console.log("Removing task:", taskId);
+    if (!taskId) {
+      console.error("No taskId provided for deletion");
+      return;
+    }
+    
+    console.log("Attempting to remove task with ID:", taskId);
     const taskRef = doc(db, 'tasks', taskId);
+    
+    // First verify the task exists
+    const docSnapshot = await getDoc(taskRef);
+    if (!docSnapshot.exists()) {
+      console.error("Task not found in Firestore");
+      return;
+    }
+    
+    // Proceed with deletion
     await deleteDoc(taskRef);
-    console.log("Task removed successfully");
+    console.log("Task removed successfully from Firestore");
+    
+    // Update Redux store
     dispatch(deleteTask(taskId));
   } catch (error) {
     console.error("Error removing task:", error);
     console.error("Error details:", JSON.stringify(error, null, 2));
-    throw error; // Rethrow to handle in the UI
+    throw error;
   }
 };
 
