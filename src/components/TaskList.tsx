@@ -44,9 +44,29 @@ const TaskCard = ({ task }: { task: Task }) => {
   return (
     <div 
       id={`task-${task.id}`}
+      draggable
+      onDragStart={(e) => {
+        handleDragStart(e);
+        e.currentTarget.classList.add('dragging');
+      }}
+      onDragEnd={(e) => {
+        e.currentTarget.classList.remove('dragging');
+      }}
       className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="flex items-center gap-3">
+      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-4 h-4 border-gray-300 rounded focus:ring-0"
+          />
+          <div className="drag-handle cursor-move text-gray-400">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+          </svg>
+        </div>
         <input
           type="checkbox"
           checked={task.status === "Completed"}
@@ -58,28 +78,46 @@ const TaskCard = ({ task }: { task: Task }) => {
               status: isCompleted ? "Completed" : "Todo"
             }));
           }}
-          className="w-4 h-4 border-gray-300 rounded focus:ring-0"
+          className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
         />
-        <select
-          value={task.status}
-          onChange={(e) => {
-            const newStatus = e.target.value;
-            dispatch(updateTask({ 
-              ...task, 
-              status: newStatus,
-              completed: newStatus === "Completed"
-            }));
-          }}
-          className="text-xs border rounded px-2 py-1 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
-        >
-          <option value="Todo">Todo</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>
-          {task.title}
-        </span>
-      </div>
+        </div>
+        <div className="flex items-center">
+          <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
+        </div>
+        <div>
+          <span className="text-sm text-gray-500">{task.dueDate}</span>
+        </div>
+        <div>
+          <select
+            value={task.status}
+            onChange={(e) => {
+              const newStatus = e.target.value;
+              dispatch(updateTask({ 
+                ...task, 
+                status: newStatus,
+                completed: newStatus === "Completed"
+              }));
+            }}
+            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+          >
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
+            {task.category}
+          </span>
+          <div className="relative">
+            <button 
+              onClick={() => setShowMenu(!showMenu)} 
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
 
             {showMenu && (
               <div className="absolute right-6 top-0 py-2 w-48 bg-white rounded-md shadow-xl z-20">
@@ -104,6 +142,8 @@ const TaskCard = ({ task }: { task: Task }) => {
               </div>
             )}
           </div>
+        </div>
+      </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
   );
@@ -207,7 +247,18 @@ export default function TaskView() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white p-4 rounded-lg shadow-md">
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">📋 Task List</h2>
+        </div>
+
+        <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
+          <div className="w-12"></div>
+          <div>Task name</div>
+          <div>Due on</div>
+          <div>Task Status</div>
+          <div>Task Category</div>
+        </div>
         {tasks.some(task => task.selected) && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
             <span className="text-sm">
