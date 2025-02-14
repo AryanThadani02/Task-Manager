@@ -54,7 +54,37 @@ const TaskCard = ({ task }: { task: Task }) => {
       }}
       className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
+      {/* Mobile View */}
+      <div className="md:hidden flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-4 h-4 border-gray-300 rounded focus:ring-0"
+          />
+          <select
+            value={task.status}
+            onChange={(e) => {
+              const newStatus = e.target.value;
+              dispatch(updateTask({ 
+                ...task, 
+                status: newStatus,
+                completed: newStatus === "Completed"
+              }));
+            }}
+            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+          >
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>
+            {task.title}
+          </span>
+        </div>
+      </div>
+      <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
