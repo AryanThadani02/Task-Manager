@@ -57,9 +57,24 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     }
   };
 
+  const modalRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4">
-      <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[40%] max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4 z-50">
+      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[40%] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Edit Task</h2>
 
         <form onSubmit={handleSubmit}>
