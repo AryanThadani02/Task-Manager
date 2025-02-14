@@ -16,28 +16,36 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const quill = new (window as any).Quill('#quill-editor-edit', {
-      theme: 'snow',
-      placeholder: 'Enter description...',
-      modules: {
-        toolbar: '#toolbar-container-edit'
-      }
-    });
+    if (activeTab === 'DETAILS') {
+      const quill = new (window as any).Quill('#quill-editor-edit', {
+        theme: 'snow',
+        placeholder: 'Enter description...',
+        modules: {
+          toolbar: '#toolbar-container-edit'
+        }
+      });
 
-    quill.root.innerHTML = editedTask.description;
+      quill.root.innerHTML = editedTask.description;
 
-    const observer = new MutationObserver(() => {
-      setEditedTask({...editedTask, description: quill.root.innerHTML});
-    });
+      const observer = new MutationObserver(() => {
+        setEditedTask({...editedTask, description: quill.root.innerHTML});
+      });
 
-    observer.observe(quill.root, {
-      characterData: true,
-      childList: true,
-      subtree: true
-    });
+      observer.observe(quill.root, {
+        characterData: true,
+        childList: true,
+        subtree: true
+      });
 
-    return () => observer.disconnect();
-  }, []);
+      return () => {
+        observer.disconnect();
+        const toolbarElement = document.querySelector('.ql-toolbar');
+        const editorElement = document.querySelector('.ql-editor');
+        if (toolbarElement) toolbarElement.remove();
+        if (editorElement) editorElement.remove();
+      };
+    }
+  }, [activeTab]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
