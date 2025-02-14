@@ -16,6 +16,24 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const user = useSelector((state: RootState) => state.user.user); // Added useSelector
 
+  React.useEffect(() => {
+    const quill = new (window as any).Quill('#quill-editor', {
+      theme: 'snow',
+      placeholder: 'Enter description...',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean']
+        ]
+      }
+    });
+    
+    quill.on('text-change', function() {
+      setDescription(quill.root.innerHTML);
+    });
+  }, []);
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
@@ -59,13 +77,9 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
           />
 
           {/* Description */}
-          <textarea
-            placeholder="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 mb-3 border rounded"
-            maxLength={300}
-          ></textarea>
+          <div className="mb-3">
+            <div id="quill-editor" style={{height: "200px"}} className="mb-3"></div>
+          </div>
 
           {/* Task Category */}
           <div className="flex gap-2 mb-3">

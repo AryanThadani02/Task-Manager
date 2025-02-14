@@ -14,6 +14,26 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    const quill = new (window as any).Quill('#quill-editor-edit', {
+      theme: 'snow',
+      placeholder: 'Enter description...',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['clean']
+        ]
+      }
+    });
+    
+    quill.root.innerHTML = editedTask.description;
+    
+    quill.on('text-change', function() {
+      setEditedTask({...editedTask, description: quill.root.innerHTML});
+    });
+  }, []);
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setFile(event.target.files[0]);
@@ -45,13 +65,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <textarea
-            placeholder="Description"
-            value={editedTask.description}
-            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
-            className="w-full p-2 mb-3 border rounded"
-            maxLength={300}
-          ></textarea>
+          <div className="mb-3">
+            <div id="quill-editor-edit" style={{height: "200px"}} className="mb-3"></div>
+          </div>
 
           <div className="flex gap-2 mb-3">
             <button
