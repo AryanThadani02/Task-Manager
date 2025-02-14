@@ -1,5 +1,8 @@
 
 import React, { useState } from "react";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
 import { useDispatch } from "react-redux";
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
@@ -45,13 +48,18 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             required
           />
 
-          <textarea
-            placeholder="Description"
-            value={editedTask.description}
-            onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
-            className="w-full p-2 mb-3 border rounded"
-            maxLength={300}
-          ></textarea>
+          <div className="mb-3">
+            <EditorContent
+              editor={useEditor({
+                extensions: [StarterKit, Placeholder.configure({ placeholder: 'Description' })],
+                content: editedTask.description,
+                onUpdate: ({ editor }) => {
+                  setEditedTask({...editedTask, description: editor.getHTML()});
+                },
+              })}
+              className="w-full min-h-[100px] p-2 border rounded prose max-w-none"
+            />
+          </div>
 
           <div className="flex gap-2 mb-3">
             <button
