@@ -104,8 +104,6 @@ const TaskCard = ({ task }: { task: Task }) => {
               </div>
             )}
           </div>
-        </div>
-      </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
   );
