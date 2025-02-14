@@ -7,14 +7,13 @@ export interface Task {
   category: string;
   dueDate: string;
   status: string;
-  fileUrl?: string;
-  order?: number;
-  selected?: boolean;
-  activity?: {
+  fileUrl?: string | null;
+  completed?: boolean;
+  createdAt: string;
+  updatedAt?: string;
+  activity: {
     timestamp: string;
     action: string;
     details: string;
   }[];
-  createdAt?: string;
-  updatedAt?: string;
 }
