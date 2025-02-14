@@ -1,6 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import JoditEditor from "jodit-react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { addTask } from "../redux/taskSlice";
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
 
@@ -61,14 +62,12 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
           {/* Description */}
           <div className="mb-3">
-            <JoditEditor
+            <ReactQuill
+              theme="snow"
               value={description}
-              onChange={newContent => setDescription(newContent)}
-              config={{
-                placeholder: 'Description',
-                height: 300,
-                buttons: ['bold', 'italic', 'underline', 'ul', 'ol', 'link']
-              }}
+              onChange={setDescription}
+              placeholder="Description"
+              className="bg-white"
             />
           </div>
 

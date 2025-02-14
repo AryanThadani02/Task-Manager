@@ -1,6 +1,8 @@
-import React, { useState, useRef } from "react";
+
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import JoditEditor from "jodit-react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { updateTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 
@@ -46,14 +48,12 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           />
 
           <div className="mb-3">
-            <JoditEditor
+            <ReactQuill
+              theme="snow"
               value={editedTask.description}
-              onChange={newContent => setEditedTask({...editedTask, description: newContent})}
-              config={{
-                placeholder: 'Description',
-                height: 300,
-                buttons: ['bold', 'italic', 'underline', 'ul', 'ol', 'link']
-              }}
+              onChange={(value) => setEditedTask({...editedTask, description: value})}
+              placeholder="Description"
+              className="bg-white"
             />
           </div>
 
