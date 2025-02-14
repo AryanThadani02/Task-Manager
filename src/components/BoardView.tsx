@@ -118,14 +118,14 @@ export default function BoardView() {
 
     if (task && task.status !== newStatus) {
       try {
-        await dispatch(updateTask({ // Using updateTask instead of modifyTask as modifyTask is not defined.
-          ...task,
-          status: newStatus,
-          completed: newStatus === "Completed"
-        }));
-      } catch (error) {
-        console.error("Failed to update task status:", error);
-      }
+          await dispatch(modifyTask({
+            ...task,
+            status: newStatus,
+            completed: newStatus === "Completed"
+          }));
+        } catch (error) {
+          console.error("Failed to update task status:", error);
+        }
     }
   };
 
