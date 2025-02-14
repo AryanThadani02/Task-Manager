@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTask } from "../redux/taskSlice"; // Assumed action creator
 import { RootState } from "../redux/store"; // Assuming this is where the store is defined
@@ -15,6 +15,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const user = useSelector((state: RootState) => state.user.user); // Added useSelector
+  const modalRef = useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const quill = new (window as any).Quill('#quill-editor', {
@@ -73,9 +74,20 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
+
   return (
     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+      <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <h2 className="text-xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>

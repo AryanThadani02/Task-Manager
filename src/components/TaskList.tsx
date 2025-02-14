@@ -9,6 +9,20 @@ import { updateTask, deleteTask, removeTask } from "../redux/taskSlice";
 const TaskCard = ({ task }: { task: Task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const dispatch = useDispatch();
   const [isSelected, setIsSelected] = useState(false);
 
@@ -102,7 +116,7 @@ const TaskCard = ({ task }: { task: Task }) => {
           <span className="hidden md:inline-block px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
             {task.category}
           </span>
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <button 
               onClick={() => setShowMenu(!showMenu)} 
               className="text-gray-400 hover:text-gray-600"
