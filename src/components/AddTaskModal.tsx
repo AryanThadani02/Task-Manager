@@ -21,11 +21,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
       theme: 'snow',
       placeholder: 'Enter description...',
       modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['clean']
-        ]
+        toolbar: '#toolbar-container'
       }
     });
     
@@ -78,6 +74,20 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
           {/* Description */}
           <div className="mb-3">
+            <div id="toolbar-container">
+              <span className="ql-formats">
+                <button className="ql-bold"></button>
+                <button className="ql-italic"></button>
+                <button className="ql-underline"></button>
+              </span>
+              <span className="ql-formats">
+                <button className="ql-list" value="ordered"></button>
+                <button className="ql-list" value="bullet"></button>
+              </span>
+              <span className="ql-formats">
+                <button className="ql-clean"></button>
+              </span>
+            </div>
             <div id="quill-editor" style={{height: "200px"}} className="mb-3"></div>
           </div>
 
