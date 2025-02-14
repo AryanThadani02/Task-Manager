@@ -19,7 +19,8 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 // Verify initialization
-db.collection('tasks').get()
+const tasksRef = collection(db, 'tasks');
+getDocs(tasksRef)
   .then(() => console.log('Firestore is connected'))
   .catch(error => console.error('Firestore connection error:', error));
 
