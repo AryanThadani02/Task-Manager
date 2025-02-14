@@ -16,14 +16,16 @@ interface Task {
 
 interface TaskState {
   tasks: Task[];
-  loading: boolean;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
+  loading: boolean;
 }
 
 const initialState: TaskState = {
   tasks: [],
-  loading: false,
+  status: 'idle',
   error: null,
+  loading: false
 };
 
 const taskSlice = createSlice({
@@ -32,7 +34,7 @@ const taskSlice = createSlice({
   reducers: {
     setTasks: (state, action: PayloadAction<Task[]>) => {
       state.tasks = action.payload;
-      state.loading = false;
+      state.status = 'succeeded';
       state.error = null;
     },
     addTask: (state, action: PayloadAction<Task>) => {
@@ -48,7 +50,7 @@ const taskSlice = createSlice({
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action;
+      state.loading = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
@@ -56,33 +58,33 @@ const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
       builder.addCase(fetchTasks.pending, (state) => {
-          state.loading = true;
+          state.status = 'loading';
           state.error = null;
       });
       builder.addCase(fetchTasks.fulfilled, (state, action) => {
           state.tasks = action.payload;
-          state.loading = false;
+          state.status = 'succeeded';
           state.error = null;
       });
       builder.addCase(fetchTasks.rejected, (state, action) => {
-          state.loading = false;
+          state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(createTask.pending, (state) => {
-          state.loading = true;
+          state.status = 'loading';
           state.error = null;
       });
       builder.addCase(createTask.fulfilled, (state, action) => {
           state.tasks.push(action.payload);
-          state.loading = false;
+          state.status = 'succeeded';
           state.error = null;
       });
       builder.addCase(createTask.rejected, (state, action) => {
-          state.loading = false;
+          state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(modifyTask.pending, (state) => {
-          state.loading = true;
+          state.status = 'loading';
           state.error = null;
       });
       builder.addCase(modifyTask.fulfilled, (state, action) => {
@@ -90,24 +92,24 @@ const taskSlice = createSlice({
           if (index !== -1) {
               state.tasks[index] = action.payload;
           }
-          state.loading = false;
+          state.status = 'succeeded';
           state.error = null;
       });
       builder.addCase(modifyTask.rejected, (state, action) => {
-          state.loading = false;
+          state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
       builder.addCase(removeTask.pending, (state) => {
-          state.loading = true;
+          state.status = 'loading';
           state.error = null;
       });
       builder.addCase(removeTask.fulfilled, (state, action) => {
           state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-          state.loading = false;
+          state.status = 'succeeded';
           state.error = null;
       });
       builder.addCase(removeTask.rejected, (state, action) => {
-          state.loading = false;
+          state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
   }
@@ -135,8 +137,9 @@ export const fetchTasks = createAsyncThunk(
         })) as Task[];
         return tasks;
       } catch (error) {
-        console.error('Error fetching tasks:', error);
-        throw error instanceof Error ? error : new Error('An error occurred');
+        const err = error as Error;
+        console.error('Error fetching tasks:', err);
+        throw err;
       }
     }
 );
@@ -162,8 +165,9 @@ export const createTask = createAsyncThunk(
         console.log("Task created successfully with ID:", docRef.id);
         return { ...taskWithActivity, id: docRef.id };
       } catch (error) {
-        console.error("Error creating task:", error);
-        throw error instanceof Error ? error : new Error('An error occurred');
+        const err = error as Error;
+        console.error("Error creating task:", err);
+        throw err;
       }
     }
 );
@@ -191,8 +195,9 @@ export const modifyTask = createAsyncThunk(
         console.log("Task updated successfully");
         return updatedTask;
       } catch (error) {
-        console.error("Error modifying task:", error);
-        throw error instanceof Error ? error : new Error('An error occurred');
+        const err = error as Error;
+        console.error("Error modifying task:", err);
+        throw err;
       }
     }
 );
@@ -227,14 +232,15 @@ export const removeTask = createAsyncThunk(
           throw new Error("Delete operation failed");
         }
       } catch (error) {
+        const err = error as Error;
         console.error('=== DELETE OPERATION FAILED ===');
-        console.error('Error name:', error.name);
-        console.error('Error message:', error.message);
-        console.error('Error stack:', error.stack);
-        console.error('Full error object:', JSON.stringify(error, null, 2));
+        console.error('Error name:', err.name);
+        console.error('Error message:', err.message);
+        console.error('Error stack:', err.stack);
+        console.error('Full error object:', JSON.stringify(err, null, 2));
         console.error('Firestore connection state:', !!db);
         console.error('TaskId:', taskId);
-        throw error instanceof Error ? error : new Error('An error occurred');
+        throw err;
       }
     }
 );
