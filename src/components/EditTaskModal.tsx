@@ -90,7 +90,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 flex flex-col bg-white md:items-center md:justify-center md:bg-black/50">
+    <div className="fixed inset-0 flex flex-col bg-white z-[9999] md:items-center md:justify-center md:bg-black/50">
       <div className="flex-1 w-full bg-white md:flex-initial md:max-w-lg md:rounded-lg md:max-h-[90vh] md:my-8 overflow-hidden">
         <div className="sticky top-0 z-10 bg-white border-b">
           <div className="flex justify-end p-4">
