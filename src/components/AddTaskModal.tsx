@@ -86,8 +86,8 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg">
-      <div ref={modalRef} className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+    <div className="fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4">
+      <div ref={modalRef} className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-[95%] sm:max-w-[80%] md:max-w-[60%] lg:max-w-[40%] max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Create Task</h2>
 
         <form onSubmit={handleSubmit}>
