@@ -54,33 +54,62 @@ const TaskCard = ({ task }: { task: Task }) => {
       }}
       className="task-card bg-white px-3 py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col md:grid md:grid-cols-[auto_1fr_1fr_1fr_auto] gap-2 md:gap-4 items-start md:items-center">
+        <div className="flex items-center space-x-2 w-full md:w-auto justify-between md:justify-start">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={handleSelect}
+            className="w-4 h-4 border-gray-300 rounded focus:ring-0"
+          />
+          <div className="drag-handle cursor-move text-gray-400">
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+          </svg>
+        </div>
         <input
           type="checkbox"
-          checked={isSelected}
-          onChange={handleSelect}
-          className="w-4 h-4 border-gray-300 rounded focus:ring-0"
-        />
-        <select
-          value={task.status}
+          checked={task.status === "Completed"}
           onChange={(e) => {
-            const newStatus = e.target.value;
+            const isCompleted = e.target.checked;
             dispatch(updateTask({ 
               ...task, 
-              status: newStatus,
-              completed: newStatus === "Completed"
+              completed: isCompleted,
+              status: isCompleted ? "Completed" : "Todo"
             }));
           }}
-          className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
-        >
-          <option value="Todo">Todo</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-        <span className={`text-sm font-normal text-gray-900 flex-grow ${task.status === 'Completed' ? 'line-through' : ''}`}>
-          {task.title}
-        </span>
-      </div>
+          className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
+        />
+        </div>
+        <div className="flex items-center">
+          <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
+        </div>
+        <div>
+          <span className="text-sm text-gray-500">{task.dueDate}</span>
+        </div>
+        <div>
+          <select
+            value={task.status}
+            onChange={(e) => {
+              const newStatus = e.target.value;
+              dispatch(updateTask({ 
+                ...task, 
+                status: newStatus,
+                completed: newStatus === "Completed"
+              }));
+            }}
+            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+          >
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
+            {task.category}
+          </span>
+          <div className="relative">
             <button 
               onClick={() => setShowMenu(!showMenu)} 
               className="text-gray-400 hover:text-gray-600"
