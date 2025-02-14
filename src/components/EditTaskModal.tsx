@@ -19,11 +19,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
       theme: 'snow',
       placeholder: 'Enter description...',
       modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['clean']
-        ]
+        toolbar: false
       }
     });
     
