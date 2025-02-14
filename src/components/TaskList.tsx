@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask } from "../redux/taskSlice";
+import { updateTask, deleteTask, removeTask } from "../redux/taskSlice";
 
 const TaskCard = ({ task }: { task: Task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
