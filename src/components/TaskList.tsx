@@ -68,7 +68,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       }}
       className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
-      <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
+      <div className="flex items-center justify-between gap-4">
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
@@ -95,27 +95,26 @@ const TaskCard = ({ task }: { task: Task }) => {
           className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
         />
         </div>
-        <div className="flex items-center">
+        <div className="flex-1 flex items-center gap-4">
           <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
-        </div>
-        <div className="hidden md:block"> {/* Hide due date in mobile view */}
-          <span className="text-sm text-gray-500">{task.dueDate}</span>
-        </div>
-        <div className="hidden md:block"> {/* Hide status select in mobile view */}
-          <select
-            value={task.status}
-            onChange={handleStatusChange}
-            className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
-          >
-            <option value="Todo">Todo</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
-        <div className="flex items-center justify-between">
+          <div className="hidden md:block">
+            <span className="text-sm text-gray-500">{task.dueDate}</span>
+          </div>
+          <div className="hidden md:block">
+            <select
+              value={task.status}
+              onChange={handleStatusChange}
+              className="text-xs border rounded px-2 py-0.5 bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200"
+            >
+              <option value="Todo">Todo</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
           <span className="hidden md:inline-block px-2 py-0.5 text-xs rounded bg-purple-100 text-purple-600">
             {task.category}
           </span>
+        </div>
           <div className="relative" ref={menuRef}>
             <button 
               onClick={() => setShowMenu(!showMenu)} 
