@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, setTasks } from "../redux/taskSlice";
-import { useNavigate, Link, Outlet } from "react-router-dom";
+import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
 import { signOutUser } from "../firebase/firebaseConfig";
 import { clearUser } from "../redux/userSlice";
 import { RootState } from "../redux/store";
@@ -68,9 +68,28 @@ export default function HomePage() {
 
       {/* Navigation and Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
-        <Link to="/home/board" className="hidden md:block px-3 py-1 bg-gray-200 text-gray-800 rounded">
-          📌 Board View
-        </Link>
+        <div className="hidden md:flex gap-2">
+          <Link 
+            to="/home/tasks" 
+            className={`px-3 py-1 rounded transition-colors ${
+              location.pathname === '/home/tasks' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            📋 List View
+          </Link>
+          <Link 
+            to="/home/board" 
+            className={`px-3 py-1 rounded transition-colors ${
+              location.pathname === '/home/board' 
+                ? 'bg-purple-500 text-white' 
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            📌 Board View
+          </Link>
+        </div>
 
         {/* Add Task Button */}
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
