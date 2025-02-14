@@ -66,16 +66,11 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation for Task/Board */}
-      <div className="flex justify-between items-center mt-4">
-        <div className="flex gap-4">
-          <Link to="/home/tasks" className="px-3 py-1 bg-gray-200 text-gray-800 rounded">
-            📋 Task View
-          </Link>
-          <Link to="/home/board" className="hidden md:block px-3 py-1 bg-gray-200 text-gray-800 rounded">
-            📌 Board View
-          </Link>
-        </div>
+      {/* Navigation and Controls */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
+        <Link to="/home/board" className="px-3 py-1 bg-gray-200 text-gray-800 rounded">
+          📌 Board View
+        </Link>
 
         {/* Add Task Button */}
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
