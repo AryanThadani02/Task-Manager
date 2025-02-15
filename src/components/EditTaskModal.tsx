@@ -187,7 +187,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 <label className="text-sm text-gray-600">Task Status*</label>
                 <select
                   value={editedTask.status}
-                  onChange={(e) => setEditedTask({...editedTask, status: e.target.value})}
+                  onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
                   className="w-full p-2 mt-1 border rounded"
                   required
                 >

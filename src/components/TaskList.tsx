@@ -32,7 +32,7 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSelected(e.target.checked);
-    dispatch(updateTask({ ...task, selected: e.target.checked }));
+    dispatch(updateTask({ ...task, selected: e.target.checked } as Task));
   };
 
   const handleDelete = async () => {
