@@ -178,7 +178,7 @@ export const modifyTask = createAsyncThunk(
     async (task: Task) => {
       try {
         console.log("Modifying task:", task);
-        const taskRef = doc(db, 'tasks', task.id);
+        const taskRef = doc(db, 'tasks', task.id || '');
         const updatedTask = {
           ...task,
           updatedAt: new Date().toISOString(),

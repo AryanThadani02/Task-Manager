@@ -22,7 +22,7 @@ const TaskCard = ({ task }: { task: Task }) => {
   };
 
   const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("taskId", task.id);
+    e.dataTransfer.setData("taskId", task.id || '');
     e.currentTarget.classList.add('opacity-50');
   };
 

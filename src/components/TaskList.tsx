@@ -27,7 +27,7 @@ const TaskCard = ({ task }: { task: Task }) => {
   const [isSelected, setIsSelected] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("taskId", task.id);
+    e.dataTransfer.setData("taskId", task.id || '');
   };
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

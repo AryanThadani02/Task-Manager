@@ -26,7 +26,7 @@ getDocs(tasksRef)
     console.log('Current number of documents:', snapshot.size);
     console.log('Firebase config:', {
       projectId: firebaseConfig.projectId,
-      databaseURL: firebaseConfig.databaseURL
+      // databaseURL is not required for Firestore
     });
   })
   .catch(error => {
