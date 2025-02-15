@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { modifyTask } from "../redux/taskSlice";
@@ -60,7 +59,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const changes: string[] = [];
-    
+
     if (task.title !== editedTask.title) {
       changes.push(`Title changed from "${task.title}" to "${editedTask.title}"`);
     }
@@ -108,7 +107,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           <div className="flex justify-end p-4">
             <button onClick={onClose} className="text-gray-500">✕</button>
           </div>
-          
+
           {/* Mobile Tabs */}
           <div className="flex border-b md:hidden">
             <button 
@@ -130,7 +129,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
         <div className="hidden md:flex">
           <div className="flex-1 p-4 overflow-y-auto border-r" style={{ height: 'calc(100vh - 150px)' }}>
             <h2 className="text-xl font-semibold mb-4">Details</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="text"
                 placeholder="Task Title"
@@ -200,9 +199,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm text-gray-600">Attachment</label>
-                <div className="mt-1 p-4 border border-dashed rounded-lg text-center">
+              <div className="mb-6">
+                <label className="block text-sm text-gray-600 mb-2">Attachment</label>
+                <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
                   <p className="text-sm text-gray-500">Drop your files here or <span className="text-purple-600">Upload</span></p>
                   <input
                     type="file"
@@ -233,7 +232,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
         {/* Mobile Content */}
         <div className="md:hidden p-4 overflow-y-auto" style={{ height: 'calc(100vh - 150px)' }}>
           {activeTab === 'DETAILS' ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <input
                 type="text"
                 placeholder="Task Title"
@@ -303,9 +302,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm text-gray-600">Attachment</label>
-                <div className="mt-1 p-4 border border-dashed rounded-lg text-center">
+              <div className="mb-6">
+                <label className="block text-sm text-gray-600 mb-2">Attachment</label>
+                <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
                   <p className="text-sm text-gray-500">Drop your files here or <span className="text-purple-600">Upload</span></p>
                   <input
                     type="file"
