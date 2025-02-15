@@ -1,0 +1,494 @@
+src/components/AddTaskModal.tsx:68:22 - error TS2345: Argument of type 'AsyncThunkAction<Task, Omit<Task, "id" | "createdAt" | "activity">, { rejectValue: string; state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction> | undefined; ... 4 more ...; rejectedMeta?: unknown; }>' is not assignable to parameter of type 'UnknownAction'.
+
+68       await dispatch(createTask(newTask));
+                        ~~~~~~~~~~~~~~~~~~~
+
+src/components/AddTaskModal.tsx:68:33 - error TS2345: Argument of type '{ userId: string; title: string; description: string; category: string; dueDate: string; status: string; fileUrl: string | null; }' is not assignable to parameter of type 'Omit<Task, "id" | "createdAt" | "activity">'.
+  Types of property 'fileUrl' are incompatible.
+    Type 'string | null' is not assignable to type 'string | undefined'.
+      Type 'null' is not assignable to type 'string | undefined'.
+
+68       await dispatch(createTask(newTask));
+                                   ~~~~~~~
+
+src/components/BoardView.tsx:16:22 - error TS2345: Argument of type 'AsyncThunkAction<string, string | undefined, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+16       await dispatch(removeTask(task.id));
+                        ~~~~~~~~~~~~~~~~~~~
+
+src/components/BoardView.tsx:23:38 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+23     e.dataTransfer.setData("taskId", task.id);
+                                        ~~~~~~~
+
+src/components/BoardView.tsx:106:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+106     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/BoardView.tsx:107:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+107     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/BoardView.tsx:136:26 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+136           await dispatch(modifyTask({
+                             ~~~~~~~~~~~~
+137             ...task,
+    ~~~~~~~~~~~~~~~~~~~~
+... 
+139             completed: newStatus === "Completed"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+140           }));
+    ~~~~~~~~~~~~
+
+src/components/BoardView.tsx:139:13 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+139             completed: newStatus === "Completed"
+                ~~~~~~~~~
+
+src/components/BoardView.tsx:162:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+162                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/BoardView.tsx:178:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+178                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/BoardView.tsx:194:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+194                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/EditTaskModal.tsx:97:22 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+97       await dispatch(modifyTask(updatedTask));
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+
+src/components/EditTaskModal.tsx:97:33 - error TS2345: Argument of type '{ fileUrl: string | null | undefined; activity: { timestamp: string; action: string; details: string; }[]; id?: string; userId: string; title: string; description: string; status: string; category: string; ... 5 more ...; order?: number; }' is not assignable to parameter of type 'Task'.
+  Types of property 'fileUrl' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+      Type 'null' is not assignable to type 'string | undefined'.
+
+97       await dispatch(modifyTask(updatedTask));
+                                   ~~~~~~~~~~~
+
+src/components/HomePage.tsx:23:16 - error TS2345: Argument of type 'AsyncThunkAction<Task[], string, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+23       dispatch(fetchTasks(user.uid));
+                  ~~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:30:38 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+30     e.dataTransfer.setData("taskId", task.id);
+                                        ~~~~~~~
+
+src/components/TaskList.tsx:35:36 - error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+
+35     dispatch(updateTask({ ...task, selected: e.target.checked }));
+                                      ~~~~~~~~
+
+src/components/TaskList.tsx:41:22 - error TS2345: Argument of type 'AsyncThunkAction<string, string | undefined, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+41       await dispatch(removeTask(task.id));
+                        ~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:53:7 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+53       completed: newStatus === "Completed",
+         ~~~~~~~~~
+
+src/components/TaskList.tsx:91:15 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+91               completed: isCompleted,
+                 ~~~~~~~~~
+
+src/components/TaskList.tsx:171:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+171     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:172:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+172     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/TaskList.tsx:184:9 - error TS6133: 'getDragAfterElement' is declared but its value is never read.
+
+184   const getDragAfterElement = (container: Element, y: number) => {
+            ~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:196:46 - error TS2339: Property 'element' does not exist on type '{ offset: number; }'.
+
+196     }, { offset: Number.NEGATIVE_INFINITY }).element;
+                                                 ~~~~~~~
+
+src/components/TaskList.tsx:210:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+210         completed: isCompleted
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:215:13 - error TS6133: 'newIndex' is declared but its value is never read.
+
+215       const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
+                ~~~~~~~~
+
+src/components/TaskList.tsx:223:13 - error TS2353: Object literal may only specify known properties, and 'order' does not exist in type 'Task'.
+
+223             order: index
+                ~~~~~
+
+src/components/TaskList.tsx:231:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+231     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:233:27 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+233       dispatch(deleteTask(task.id));
+                              ~~~~~~~
+
+src/components/TaskList.tsx:237:16 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+237       if (task.selected) {
+                   ~~~~~~~~
+
+src/components/TaskList.tsx:238:40 - error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+
+238         dispatch(updateTask({ ...task, selected: false }));
+                                           ~~~~~~~~
+
+src/components/TaskList.tsx:244:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+244     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:249:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+249         completed: newStatus === "Completed",
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:269:34 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+269         {tasks.some(task => task.selected) && (
+                                     ~~~~~~~~
+
+src/components/TaskList.tsx:272:42 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+272               {tasks.filter(task => task.selected).length} Tasks Selected
+                                             ~~~~~~~~
+
+src/components/TaskList.tsx:306:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+306                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:323:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+323                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:340:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+340                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/firebase/firebaseConfig.ts:29:35 - error TS2339: Property 'databaseURL' does not exist on type '{ apiKey: string; authDomain: string; projectId: string; storageBucket: string; messagingSenderId: string; appId: string; measurementId: string; }'.
+
+29       databaseURL: firebaseConfig.databaseURL
+                                     ~~~~~~~~~~~
+
+src/redux/taskSlice.ts:181:25 - error TS2769: No overload matches this call.
+  Overload 1 of 3, '(firestore: Firestore, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+  Overload 2 of 3, '(reference: CollectionReference<unknown, DocumentData>, path?: string | undefined, ...pathSegments: string[]): DocumentReference<unknown, DocumentData>', gave the following error.
+    Argument of type 'Firestore' is not assignable to parameter of type 'CollectionReference<unknown, DocumentData>'.
+      Type 'Firestore' is missing the following properties from type 'CollectionReference<unknown, DocumentData>': id, path, parent, withConverter, and 2 more.
+  Overload 3 of 3, '(reference: DocumentReference<unknown, DocumentData>, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'Firestore' is not assignable to parameter of type 'DocumentReference<unknown, DocumentData>'.
+      Type 'Firestore' is missing the following properties from type 'DocumentReference<unknown, DocumentData>': converter, firestore, id, path, and 2 more.
+
+181         const taskRef = doc(db, 'tasks', task.id);
+                            ~~~
+
+
+
+Found 39 errors.
+
+ Environment updated. Reloading shell...
+~/workspace$ ^C
+~/workspace$ npm run build
+
+> task-manager@0.0.0 build
+> tsc -b && vite build
+
+src/components/AddTaskModal.tsx:70:33 - error TS2345: Argument of type '{ userId: string; title: string; description: string; category: string; dueDate: string; status: string; fileUrl: string | null; completed: boolean; selected: boolean; }' is not assignable to parameter of type 'Omit<Task, "id" | "createdAt" | "activity">'.
+  Types of property 'fileUrl' are incompatible.
+    Type 'string | null' is not assignable to type 'string | undefined'.
+      Type 'null' is not assignable to type 'string | undefined'.
+
+70       await dispatch(createTask(newTask) as any);
+                                   ~~~~~~~
+
+src/components/BoardView.tsx:25:38 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+25     e.dataTransfer.setData("taskId", task.id);
+                                        ~~~~~~~
+
+src/components/BoardView.tsx:108:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+108     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/BoardView.tsx:109:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+109     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/BoardView.tsx:138:26 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+138           await dispatch(modifyTask({
+                             ~~~~~~~~~~~~
+139             ...task,
+    ~~~~~~~~~~~~~~~~~~~~
+... 
+141             completed: newStatus === "Completed"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+142           }));
+    ~~~~~~~~~~~~
+
+src/components/BoardView.tsx:141:13 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+141             completed: newStatus === "Completed"
+                ~~~~~~~~~
+
+src/components/BoardView.tsx:164:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+164                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/BoardView.tsx:180:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+180                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/BoardView.tsx:196:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+196                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/BoardView.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/EditTaskModal.tsx:97:22 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+97       await dispatch(modifyTask(updatedTask));
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+
+src/components/EditTaskModal.tsx:97:33 - error TS2345: Argument of type '{ fileUrl: string | null | undefined; activity: { timestamp: string; action: string; details: string; }[]; id?: string; userId: string; title: string; description: string; status: string; category: string; ... 5 more ...; order?: number; }' is not assignable to parameter of type 'Task'.
+  Types of property 'fileUrl' are incompatible.
+    Type 'string | null | undefined' is not assignable to type 'string | undefined'.
+      Type 'null' is not assignable to type 'string | undefined'.
+
+97       await dispatch(modifyTask(updatedTask));
+                                   ~~~~~~~~~~~
+
+src/components/HomePage.tsx:23:16 - error TS2345: Argument of type 'AsyncThunkAction<Task[], string, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+23       dispatch(fetchTasks(user.uid));
+                  ~~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:30:38 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+30     e.dataTransfer.setData("taskId", task.id);
+                                        ~~~~~~~
+
+src/components/TaskList.tsx:35:36 - error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+
+35     dispatch(updateTask({ ...task, selected: e.target.checked }));
+                                      ~~~~~~~~
+
+src/components/TaskList.tsx:55:7 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+55       completed: newStatus === "Completed",
+         ~~~~~~~~~
+
+src/components/TaskList.tsx:93:15 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+93               completed: isCompleted,
+                 ~~~~~~~~~
+
+src/components/TaskList.tsx:173:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+173     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:174:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+174     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/TaskList.tsx:186:9 - error TS6133: 'getDragAfterElement' is declared but its value is never read.
+
+186   const getDragAfterElement = (container: Element, y: number) => {
+            ~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:198:46 - error TS2339: Property 'element' does not exist on type '{ offset: number; }'.
+
+198     }, { offset: Number.NEGATIVE_INFINITY }).element;
+                                                 ~~~~~~~
+
+src/components/TaskList.tsx:212:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+212         completed: isCompleted
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:217:13 - error TS6133: 'newIndex' is declared but its value is never read.
+
+217       const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
+                ~~~~~~~~
+
+src/components/TaskList.tsx:225:13 - error TS2353: Object literal may only specify known properties, and 'order' does not exist in type 'Task'.
+
+225             order: index
+                ~~~~~
+
+src/components/TaskList.tsx:233:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+233     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:235:27 - error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+235       dispatch(deleteTask(task.id));
+                              ~~~~~~~
+
+src/components/TaskList.tsx:239:16 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+239       if (task.selected) {
+                   ~~~~~~~~
+
+src/components/TaskList.tsx:240:40 - error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+
+240         dispatch(updateTask({ ...task, selected: false }));
+                                           ~~~~~~~~
+
+src/components/TaskList.tsx:246:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+246     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:251:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+251         completed: newStatus === "Completed",
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:271:34 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+271         {tasks.some(task => task.selected) && (
+                                     ~~~~~~~~
+
+src/components/TaskList.tsx:274:42 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+274               {tasks.filter(task => task.selected).length} Tasks Selected
+                                             ~~~~~~~~
+
+src/components/TaskList.tsx:308:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+308                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:325:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+325                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:342:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+342                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/firebase/firebaseConfig.ts:29:35 - error TS2339: Property 'databaseURL' does not exist on type '{ apiKey: string; authDomain: string; projectId: string; storageBucket: string; messagingSenderId: string; appId: string; measurementId: string; }'.
+
+29       databaseURL: firebaseConfig.databaseURL
+                                     ~~~~~~~~~~~
+
+src/redux/taskSlice.ts:181:25 - error TS2769: No overload matches this call.
+  Overload 1 of 3, '(firestore: Firestore, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+  Overload 2 of 3, '(reference: CollectionReference<unknown, DocumentData>, path?: string | undefined, ...pathSegments: string[]): DocumentReference<unknown, DocumentData>', gave the following error.
+    Argument of type 'Firestore' is not assignable to parameter of type 'CollectionReference<unknown, DocumentData>'.
+      Type 'Firestore' is missing the following properties from type 'CollectionReference<unknown, DocumentData>': id, path, parent, withConverter, and 2 more.
+  Overload 3 of 3, '(reference: DocumentReference<unknown, DocumentData>, path: string, ...pathSegments: string[]): DocumentReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'Firestore' is not assignable to parameter of type 'DocumentReference<unknown, DocumentData>'.
+      Type 'Firestore' is missing the following properties from type 'DocumentReference<unknown, DocumentData>': converter, firestore, id, path, and 2 more.
+
+181         const taskRef = doc(db, 'tasks', task.id);

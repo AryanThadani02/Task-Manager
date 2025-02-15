@@ -1,0 +1,144 @@
+src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+
+Found 21 errors.
+
+~/workspace$ npm run build
+
+> task-manager@0.0.0 build
+> tsc -b && vite build
+
+src/components/AddTaskModal.tsx:70:22 - error TS2345: Argument of type 'AsyncThunkAction<Task, Omit<Task, "id" | "createdAt" | "activity">, { rejectValue: string; state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction> | undefined; ... 4 more ...; rejectedMeta?: unknown; }>' is not assignable to parameter of type 'UnknownAction'.
+
+70       await dispatch(createTask(newTask));
+                        ~~~~~~~~~~~~~~~~~~~
+
+src/components/BoardView.tsx:112:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+112     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/BoardView.tsx:113:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+113     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/BoardView.tsx:142:26 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
+
+142           await dispatch(modifyTask({
+                             ~~~~~~~~~~~~
+143             ...task,
+    ~~~~~~~~~~~~~~~~~~~~
+... 
+145             completed: newStatus === "Completed"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+146           } as Task));
+    ~~~~~~~~~~~~~~~~~~~~
+
+src/components/BoardView.tsx:168:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+168                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/BoardView.tsx:10:3
+    10   task: Task;
+         ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
+
+src/components/BoardView.tsx:184:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+184                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/BoardView.tsx:10:3
+    10   task: Task;
+         ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
+
+src/components/BoardView.tsx:200:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+200                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/BoardView.tsx:10:3
+    10   task: Task;
+         ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
+
+src/components/TaskList.tsx:93:15 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+93               completed: isCompleted,
+                 ~~~~~~~~~
+
+src/components/TaskList.tsx:173:53 - error TS2339: Property 'category' does not exist on type 'Task'.
+
+173     const matchesCategory = !categoryFilter || task.category === categoryFilter;
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:174:51 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+
+174     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/TaskList.tsx:216:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+216     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:224:16 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+224       if (task.selected) {
+                   ~~~~~~~~
+
+src/components/TaskList.tsx:231:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+231     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:236:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+236         completed: newStatus === "Completed",
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:256:34 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+256         {tasks.some(task => task.selected) && (
+                                     ~~~~~~~~
+
+src/components/TaskList.tsx:259:42 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+259               {tasks.filter(task => task.selected).length} Tasks Selected
+                                             ~~~~~~~~
+
+src/components/TaskList.tsx:293:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+293                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:310:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+310                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:327:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+327                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
