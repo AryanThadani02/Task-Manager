@@ -27,28 +27,59 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [onClose]);
 
   React.useEffect(() => {
-    const quill = new (window as any).Quill('#quill-editor-edit', {
-      theme: 'snow',
-      placeholder: 'Enter description...',
-      modules: {
-        toolbar: '#toolbar-container-edit'
+    let quill: any = null;
+    
+    // Wait for the element to be available
+    const initQuill = () => {
+      const editor = document.querySelector('#quill-editor-edit');
+      if (!editor) {
+        setTimeout(initQuill, 100);
+        return;
       }
-    });
 
-    quill.root.innerHTML = editedTask.description;
+      // Remove any existing toolbar
+      const existingToolbar = document.querySelector('.ql-toolbar');
+      if (existingToolbar) {
+        existingToolbar.remove();
+      }
 
-    const observer = new MutationObserver(() => {
-      setEditedTask(prev => ({...prev, description: quill.root.innerHTML}));
-    });
+      // Initialize Quill
+      quill = new (window as any).Quill('#quill-editor-edit', {
+        theme: 'snow',
+        placeholder: 'Enter description...',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['clean']
+          ]
+        }
+      });
 
-    observer.observe(quill.root, {
-      characterData: true,
-      childList: true,
-      subtree: true
-    });
+      // Set initial content
+      if (editedTask.description) {
+        quill.root.innerHTML = editedTask.description;
+      }
 
-    return () => observer.disconnect();
-  }, []);
+      // Handle content changes
+      quill.on('text-change', () => {
+        setEditedTask(prev => ({...prev, description: quill.root.innerHTML}));
+      });
+    };
+
+    initQuill();
+
+    // Cleanup
+    return () => {
+      if (quill) {
+        quill.off('text-change');
+        const toolbar = document.querySelector('.ql-toolbar');
+        if (toolbar) {
+          toolbar.remove();
+        }
+      }
+    };
+  }, [editedTask.id]); // Only reinitialize when editing a different task
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
