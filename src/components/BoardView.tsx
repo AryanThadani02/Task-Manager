@@ -143,7 +143,7 @@ export default function BoardView() {
             ...task,
             status: newStatus,
             completed: newStatus === "Completed"
-          }));
+          } as Task));
         } catch (error) {
           console.error("Failed to update task status:", error);
         }

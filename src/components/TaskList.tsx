@@ -48,13 +48,13 @@ const TaskCard = ({ task }: { task: Task }) => {
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newStatus = e.target.value;
+    const newStatus = e.target.value as Task['status'];
     dispatch(updateTask({ 
       ...task, 
       status: newStatus,
       completed: newStatus === "Completed",
       selected: false
-    }));
+    } as Task));
   };
 
   return (
