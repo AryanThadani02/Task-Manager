@@ -214,8 +214,6 @@ export default function TaskView() {
 
       const container = e.currentTarget;
       const taskElements = [...container.querySelectorAll('.task-card')];
-      const newIndex = taskElements.findIndex(el => el.id === `task-${taskId}`);
-
       // Update order for all tasks in the section
       const tasksInSection = tasks.filter(t => t.status === newStatus);
       tasksInSection.forEach((t, index) => {
@@ -232,7 +230,9 @@ export default function TaskView() {
   const handleBulkDelete = () => {
     const selectedTasks = tasks.filter(task => task.selected);
     selectedTasks.forEach(task => {
-      dispatch(deleteTask(task.id));
+      if (task.id) {
+        dispatch(deleteTask(task.id));
+      }
     });
     // Reset all selected states after bulk delete
     tasks.forEach(task => {
