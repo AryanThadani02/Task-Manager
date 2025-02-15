@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [tailwindcss()],
   server: {
     allowedHosts: [
-      "fcf2096d-3231-48f4-9a42-ab943ee5f3d4-00-3b8yyj98fa9b.pike.replit.dev",
+      "5e0569d7-12e4-4dd7-9f41-6fa59f1234d2-00-2nlbsu1g57l2m.pike.replit.dev",
     ],
   },
 });
