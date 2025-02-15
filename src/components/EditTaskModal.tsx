@@ -103,13 +103,14 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   return (
     <div className="fixed inset-0 flex flex-col bg-white z-[9999] md:items-center md:justify-center md:bg-black/50">
-      <div className="flex-1 w-full bg-white md:flex-initial md:max-w-lg md:rounded-lg md:max-h-[90vh] md:my-8 overflow-hidden">
+      <div className="flex-1 w-full bg-white md:flex-initial md:max-w-5xl md:rounded-lg md:max-h-[90vh] md:my-8 overflow-hidden">
         <div className="sticky top-0 z-10 bg-white border-b">
           <div className="flex justify-end p-4">
             <button onClick={onClose} className="text-gray-500">✕</button>
           </div>
           
-          <div className="flex border-b">
+          {/* Mobile Tabs */}
+          <div className="flex border-b md:hidden">
             <button 
               className={`flex-1 py-3 text-sm font-semibold ${activeTab === 'DETAILS' ? 'border-b-2 border-purple-600 text-purple-600' : 'text-gray-500'}`}
               onClick={() => setActiveTab('DETAILS')}
@@ -125,7 +126,110 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           </div>
         </div>
 
-        <div className="p-4 overflow-y-auto" style={{ height: 'calc(100vh - 150px)' }}>
+        {/* Desktop Row Layout */}
+        <div className="hidden md:flex">
+          <div className="flex-1 p-4 overflow-y-auto border-r" style={{ height: 'calc(100vh - 150px)' }}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                placeholder="Task Title"
+                value={editedTask.title}
+                onChange={(e) => setEditedTask({...editedTask, title: e.target.value})}
+                className="w-full p-2 text-base border-0 border-b focus:ring-0 focus:border-gray-300"
+                required
+              />
+
+              <div className="space-y-2">
+                <div id="toolbar-container-edit">
+                  <span className="ql-formats">
+                    <button className="ql-bold"></button>
+                    <button className="ql-italic"></button>
+                    <button className="ql-underline"></button>
+                  </span>
+                  <span className="ql-formats">
+                    <button className="ql-list" value="ordered"></button>
+                    <button className="ql-list" value="bullet"></button>
+                  </span>
+                  <span className="ql-formats">
+                    <button className="ql-clean"></button>
+                  </span>
+                </div>
+                <div id="quill-editor-edit" className="h-32 mb-4"></div>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Work' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
+                  onClick={() => setEditedTask({...editedTask, category: 'Work'})}
+                >
+                  Work
+                </button>
+                <button
+                  type="button"
+                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Personal' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
+                  onClick={() => setEditedTask({...editedTask, category: 'Personal'})}
+                >
+                  Personal
+                </button>
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-600">Due on*</label>
+                <input
+                  type="date"
+                  value={editedTask.dueDate}
+                  onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+                  className="w-full p-2 mt-1 border rounded"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-600">Task Status*</label>
+                <select
+                  value={editedTask.status}
+                  onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
+                  className="w-full p-2 mt-1 border rounded"
+                  required
+                >
+                  <option value="Todo">To-Do</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-600">Attachment</label>
+                <div className="mt-1 p-4 border border-dashed rounded-lg text-center">
+                  <p className="text-sm text-gray-500">Drop your files here or <span className="text-purple-600">Upload</span></p>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="file-upload"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div className="w-96 p-4 overflow-y-auto" style={{ height: 'calc(100vh - 150px)' }}>
+            <div className="space-y-4">
+              {task.activity?.map((entry, index) => (
+                <div key={index} className="flex flex-col gap-1 text-sm border-b pb-4">
+                  <span className="text-gray-500">{new Date(entry.timestamp).toLocaleString()}</span>
+                  <span className="text-gray-700">{entry.details}</span>
+                </div>
+              )) || (
+                <div className="text-gray-500 text-sm">No activity recorded</div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Content */}
+        <div className="md:hidden p-4 overflow-y-auto" style={{ height: 'calc(100vh - 150px)' }}>
           {activeTab === 'DETAILS' ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
