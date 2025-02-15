@@ -2,17 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 
-interface Task {
-  id?: string;
-  userId: string;
-  title: string;
-  description: string;
-  status: string;
-  fileUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  activity?: { timestamp: string; action: string; details: string }[];
-}
+import { Task } from '../types/Task';
 
 interface TaskState {
   tasks: Task[];

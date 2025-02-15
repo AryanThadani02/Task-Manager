@@ -57,6 +57,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
       ...task, 
       status: newStatus,
       completed: newStatus === "Completed",
+      category: task.category,
+      dueDate: task.dueDate,
       selected: false
     } as Task));
   };

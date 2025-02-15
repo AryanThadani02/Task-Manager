@@ -143,7 +143,9 @@ export default function BoardView() {
           ...task,
           status: newStatus,
           completed: newStatus === "Completed",
-          selected: task.selected || false
+          selected: task.selected || false,
+          category: task.category,
+          dueDate: task.dueDate
         };
         await dispatch(modifyTask(updatedTask) as any);
       } catch (error) {
