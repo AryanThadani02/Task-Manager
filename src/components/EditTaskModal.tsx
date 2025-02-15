@@ -129,6 +129,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
         {/* Desktop Row Layout */}
         <div className="hidden md:flex">
           <div className="flex-1 p-4 overflow-y-auto border-r" style={{ height: 'calc(100vh - 150px)' }}>
+            <h2 className="text-xl font-semibold mb-4">Details</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
@@ -215,6 +216,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
             </form>
           </div>
           <div className="w-96 p-4 overflow-y-auto" style={{ height: 'calc(100vh - 150px)' }}>
+            <h2 className="text-xl font-semibold mb-4">Activity</h2>
             <div className="space-y-4">
               {task.activity?.map((entry, index) => (
                 <div key={index} className="flex flex-col gap-1 text-sm border-b pb-4">

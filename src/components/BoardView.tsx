@@ -36,10 +36,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   return (
     <div 
-      className="bg-white p-4 rounded-lg shadow mb-3 cursor-move"
-      draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
+      draggable={!isEditModalOpen}
+      onDragStart={!isEditModalOpen ? handleDragStart : undefined}
+      onDragEnd={!isEditModalOpen ? handleDragEnd : undefined}
     >
       <div className="flex justify-between items-start">
         <h3 className={`font-semibold ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</h3>
