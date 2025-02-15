@@ -28,7 +28,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   React.useEffect(() => {
     let quill: any = null;
-    
+
     // Wait for the element to be available
     const initQuill = () => {
       const editor = document.querySelector('#quill-editor-edit');
