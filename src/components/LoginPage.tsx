@@ -35,8 +35,7 @@ export default function LoginPage() {
   
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-50 to-gray-100 p-6 relative">
-      <div className="pointing-bitmoji"></div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-50 to-gray-100 p-6">
       <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center">
         <h1 className="text-4xl font-bold text-purple-600 mb-10">TaskBuddy</h1>
         <p className="text-gray-600 mb-6">
