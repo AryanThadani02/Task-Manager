@@ -144,7 +144,7 @@ export const fetchTasks = createAsyncThunk(
     }
 );
 
-export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' | 'activity'>>('tasks/createTask',
+export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' | 'activity'>>(
     'tasks/createTask',
     async (taskData) => {
       try {
