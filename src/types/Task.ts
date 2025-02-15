@@ -8,7 +8,7 @@ export interface Task {
   category: "Work" | "Personal";
   dueDate: string;
   completed: boolean;
-  selected?: boolean;
+  selected: boolean;
   fileUrl?: string;
   createdAt?: string;
   updatedAt?: string;
