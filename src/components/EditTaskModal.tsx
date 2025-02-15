@@ -12,7 +12,19 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const [editedTask, setEditedTask] = useState(task);
   const [file, setFile] = useState<File | null>(null);
   const [activeTab, setActiveTab] = useState('DETAILS');
+  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
 
   React.useEffect(() => {
     if (activeTab === 'DETAILS') {
@@ -102,7 +114,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
   return (
     <div className="fixed inset-0 flex flex-col bg-white z-[9999] md:items-center md:justify-center md:bg-black/50">
-      <div className="flex-1 w-full bg-white md:flex-initial md:max-w-5xl md:rounded-lg md:max-h-[90vh] md:my-8 overflow-hidden">
+      <div ref={modalRef} className="flex-1 w-full bg-white md:flex-initial md:max-w-5xl md:rounded-lg md:max-h-[90vh] md:my-8 overflow-hidden">
         <div className="sticky top-0 z-10 bg-white border-b">
           <div className="flex justify-end p-4">
             <button onClick={onClose} className="text-gray-500">✕</button>
