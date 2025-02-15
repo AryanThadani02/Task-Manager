@@ -7,7 +7,7 @@ export interface Task {
   status: string;
   category: string;
   dueDate: string;
-  fileUrl?: string | null;
+  fileUrl?: string;
   createdAt?: string;
   updatedAt?: string;
   activity?: { timestamp: string; action: string; details: string }[];
