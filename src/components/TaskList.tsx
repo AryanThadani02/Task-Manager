@@ -6,7 +6,7 @@ import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
 import { updateTask, deleteTask, removeTask } from "../redux/taskSlice";
 
-const TaskCard = ({ task }: { task: Task }) => {
+const TaskCard = ({ task }: { task: Task & { selected?: boolean; completed?: boolean } }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
