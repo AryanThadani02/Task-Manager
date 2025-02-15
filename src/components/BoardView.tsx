@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
@@ -104,7 +104,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
 export default function BoardView() {
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
-  const columns = ['Todo', 'In Progress', 'Completed'];
+  const dispatch = useDispatch<AppDispatch>();
 
   if (loading) {
     return <LoadingSpinner />;
