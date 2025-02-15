@@ -142,7 +142,9 @@ export default function BoardView() {
           await dispatch(modifyTask({
             ...task,
             status: newStatus,
-            completed: newStatus === "Completed"
+            completed: newStatus === "Completed",
+            category: task.category,
+            dueDate: task.dueDate
           } as Task) as any);
         } catch (error) {
           console.error("Failed to update task status:", error);
