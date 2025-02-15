@@ -183,20 +183,7 @@ export default function TaskView() {
     e.preventDefault();
   };
 
-  const getDragAfterElement = (container: Element, y: number) => {
-    const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
-
-    return draggableElements.reduce((closest, child) => {
-      const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
-
-      if (offset < 0 && offset > closest.offset) {
-        return { offset, element: child };
-      } else {
-        return closest;
-      }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-  };
+  // Removed unused function
 
   const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
     e.preventDefault();
@@ -213,7 +200,6 @@ export default function TaskView() {
       }));
 
       const container = e.currentTarget;
-      const taskElements = [...container.querySelectorAll('.task-card')];
       // Update order for all tasks in the section
       const tasksInSection = tasks.filter(t => t.status === newStatus);
       tasksInSection.forEach((t, index) => {
