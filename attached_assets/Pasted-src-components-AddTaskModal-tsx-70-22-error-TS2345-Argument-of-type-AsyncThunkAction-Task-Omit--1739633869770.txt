@@ -1,6 +1,7 @@
+src/components/AddTaskModal.tsx:70:22 - error TS2345: Argument of type 'AsyncThunkAction<Task, Omit<Task, "id" | "createdAt" | "activity">, { rejectValue: string; state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction> | undefined; ... 4 more ...; rejectedMeta?: unknown; }>' is not assignable to parameter of type 'UnknownAction'.
 
-> task-manager@0.0.0 build
-> tsc -b && vite build
+70       await dispatch(createTask(newTask));
+                        ~~~~~~~~~~~~~~~~~~~
 
 src/components/BoardView.tsx:112:53 - error TS2339: Property 'category' does not exist on type 'Task'.
 
@@ -12,19 +13,21 @@ src/components/BoardView.tsx:113:51 - error TS2339: Property 'dueDate' does not 
 113     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
                                                       ~~~~~~~
 
-src/components/BoardView.tsx:146:26 - error TS2339: Property 'category' does not exist on type 'Task'.
+src/components/BoardView.tsx:142:26 - error TS2345: Argument of type 'AsyncThunkAction<{ updatedAt: string; activity: { timestamp: string; action: string; details: string; }[]; id?: string | undefined; userId: string; title: string; description: string; status: string; fileUrl?: string | undefined; createdAt?: string | undefined; }, Task, AsyncThunkConfig>' is not assignable to parameter of type 'UnknownAction'.
 
-146           category: task.category,
-                             ~~~~~~~~
+142           await dispatch(modifyTask({
+                             ~~~~~~~~~~~~
+143             ...task,
+    ~~~~~~~~~~~~~~~~~~~~
+... 
+145             completed: newStatus === "Completed"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+146           } as Task));
+    ~~~~~~~~~~~~~~~~~~~~
 
-src/components/BoardView.tsx:147:25 - error TS2339: Property 'dueDate' does not exist on type 'Task'.
+src/components/BoardView.tsx:168:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
-147           dueDate: task.dueDate
-                            ~~~~~~~
-
-src/components/BoardView.tsx:170:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
-
-170                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+168                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                   ~~~~
 
   src/components/BoardView.tsx:10:3
@@ -32,9 +35,9 @@ src/components/BoardView.tsx:170:63 - error TS2739: Type 'Task' is missing the f
          ~~~~
     The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
 
-src/components/BoardView.tsx:186:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
+src/components/BoardView.tsx:184:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
-186                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+184                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                         ~~~~
 
   src/components/BoardView.tsx:10:3
@@ -42,9 +45,9 @@ src/components/BoardView.tsx:186:69 - error TS2739: Type 'Task' is missing the f
          ~~~~
     The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
 
-src/components/BoardView.tsx:202:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
+src/components/BoardView.tsx:200:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
-202                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+200                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                        ~~~~
 
   src/components/BoardView.tsx:10:3
@@ -97,7 +100,7 @@ src/components/TaskList.tsx:263:42 - error TS2339: Property 'selected' does not 
 263               {tasks.filter(task => task.selected).length} Tasks Selected
                                              ~~~~~~~~
 
-src/components/TaskList.tsx:297:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
+src/components/TaskList.tsx:297:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
 297                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                   ~~~~
@@ -107,7 +110,7 @@ src/components/TaskList.tsx:297:63 - error TS2739: Type 'Task' is missing the fo
          ~~~~
     The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
 
-src/components/TaskList.tsx:314:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
+src/components/TaskList.tsx:314:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
 314                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                         ~~~~
@@ -117,7 +120,7 @@ src/components/TaskList.tsx:314:69 - error TS2739: Type 'Task' is missing the fo
          ~~~~
     The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & TaskCardProps'
 
-src/components/TaskList.tsx:331:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate, completed
+src/components/TaskList.tsx:331:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
 
 331                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
                                                                        ~~~~
@@ -129,3 +132,67 @@ src/components/TaskList.tsx:331:68 - error TS2739: Type 'Task' is missing the fo
 
 
 Found 19 errors.
+
+~/workspace$ npm run build
+
+> task-manager@0.0.0 build
+> tsc -b && vite build
+
+src/components/BoardView.tsx:149:13 - error TS1128: Declaration or statement expected.
+
+149             ...task,
+                ~~~
+
+src/components/BoardView.tsx:150:19 - error TS1005: ';' expected.
+
+150             status: newStatus,
+                      ~
+
+src/components/BoardView.tsx:151:22 - error TS1005: ';' expected.
+
+151             completed: newStatus === "Completed"
+                         ~
+
+src/components/BoardView.tsx:152:13 - error TS1434: Unexpected keyword or identifier.
+
+152           } as Task));
+                ~~
+
+src/components/BoardView.tsx:152:16 - error TS1434: Unexpected keyword or identifier.
+
+152           } as Task));
+                   ~~~~
+
+src/components/BoardView.tsx:152:20 - error TS1128: Declaration or statement expected.
+
+152           } as Task));
+                       ~
+
+src/components/BoardView.tsx:152:21 - error TS1128: Declaration or statement expected.
+
+152           } as Task));
+                        ~
+
+src/components/BoardView.tsx:153:9 - error TS1128: Declaration or statement expected.
+
+153         } catch (error) {
+            ~
+
+src/components/BoardView.tsx:153:11 - error TS1005: 'try' expected.
+
+153         } catch (error) {
+              ~~~~~
+
+src/components/BoardView.tsx:156:5 - error TS1128: Declaration or statement expected.
+
+156     }
+        ~
+
+src/components/BoardView.tsx:157:3 - error TS1128: Declaration or statement expected.
+
+157   };
+      ~
+
+src/components/BoardView.tsx:216:1 - error TS1128: Declaration or statement expected.
+
+216 }

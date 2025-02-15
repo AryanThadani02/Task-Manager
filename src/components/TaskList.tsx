@@ -94,7 +94,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             const isCompleted = e.target.checked;
             dispatch(updateTask({ 
               ...task, 
-              completed: isCompleted || false,
+              completed: isCompleted,
               status: isCompleted ? "Completed" : "Todo"
             }));
           }}

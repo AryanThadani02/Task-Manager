@@ -7,7 +7,11 @@ export interface Task {
   status: "Todo" | "In Progress" | "Completed";
   category: "Work" | "Personal";
   dueDate: string;
-  completed: boolean;
+  fileUrl?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  activity?: { timestamp: string; action: string; details: string }[];
   selected?: boolean;
+  completed?: boolean;
   order?: number;
 }
