@@ -1,0 +1,92 @@
+174     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+                                                      ~~~~~~~
+
+src/components/TaskList.tsx:186:9 - error TS6133: 'getDragAfterElement' is declared but its value is never read.
+
+186   const getDragAfterElement = (container: Element, y: number) => {
+            ~~~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:198:46 - error TS2339: Property 'element' does not exist on type '{ offset: number; }'.
+
+198     }, { offset: Number.NEGATIVE_INFINITY }).element;
+                                                 ~~~~~~~
+
+src/components/TaskList.tsx:212:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+212         completed: isCompleted
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:216:13 - error TS6133: 'taskElements' is declared but its value is never read.
+
+216       const taskElements = [...container.querySelectorAll('.task-card')];
+                ~~~~~~~~~~~~
+
+src/components/TaskList.tsx:223:13 - error TS2353: Object literal may only specify known properties, and 'order' does not exist in type 'Task'.
+
+223             order: index
+                ~~~~~
+
+src/components/TaskList.tsx:231:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+231     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:239:16 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+239       if (task.selected) {
+                   ~~~~~~~~
+
+src/components/TaskList.tsx:240:40 - error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type 'Task'.
+
+240         dispatch(updateTask({ ...task, selected: false }));
+                                           ~~~~~~~~
+
+src/components/TaskList.tsx:246:53 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+246     const selectedTasks = tasks.filter(task => task.selected);
+                                                        ~~~~~~~~
+
+src/components/TaskList.tsx:251:9 - error TS2353: Object literal may only specify known properties, and 'completed' does not exist in type 'Task'.
+
+251         completed: newStatus === "Completed",
+            ~~~~~~~~~
+
+src/components/TaskList.tsx:271:34 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+271         {tasks.some(task => task.selected) && (
+                                     ~~~~~~~~
+
+src/components/TaskList.tsx:274:42 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+274               {tasks.filter(task => task.selected).length} Tasks Selected
+                                             ~~~~~~~~
+
+src/components/TaskList.tsx:308:63 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+308                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:325:69 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+325                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
+
+src/components/TaskList.tsx:342:68 - error TS2739: Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+342                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task; }'
