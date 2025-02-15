@@ -6,7 +6,7 @@ import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
 import { updateTask, deleteTask, removeTask } from "../redux/taskSlice";
 
-const TaskCard = ({ task }: { task: Task }) => {
+const TaskCard = ({ task }: { task: Task & { category: string; dueDate: string } }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -245,12 +245,14 @@ export default function TaskView() {
   const handleBulkStatusChange = (newStatus: string) => {
     const selectedTasks = tasks.filter(task => task.selected);
     selectedTasks.forEach(task => {
-      dispatch(updateTask({ 
-        ...task, 
-        status: newStatus,
-        completed: newStatus === "Completed",
-        selected: false 
-      }));
+      if (task.category && task.dueDate) {
+        dispatch(updateTask({ 
+          ...task, 
+          status: newStatus,
+          completed: newStatus === "Completed",
+          selected: false 
+        }));
+      }
     });
   };
 
