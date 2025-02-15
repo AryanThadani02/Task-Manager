@@ -92,11 +92,13 @@ const TaskCard = ({ task }: { task: Task }) => {
 export default function BoardView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
-  const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
+  const context = useOutletContext<{
     searchQuery: string;
     categoryFilter: string;
     dueDateFilter: string;
   }>();
+
+  const { searchQuery = '', categoryFilter = '', dueDateFilter = '' } = context || {};
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
