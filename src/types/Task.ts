@@ -5,7 +5,7 @@ export interface Task {
   title: string;
   description: string;
   status: "Todo" | "In Progress" | "Completed";
-  category: string;
+  category: "Work" | "Personal";
   dueDate: string;
   fileUrl?: string;
   createdAt?: string;
