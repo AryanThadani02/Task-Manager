@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createTask } from "../redux/taskSlice"; // Assumed action creator
-import { RootState } from "../redux/store"; // Assuming this is where the store is defined
+import { createTask } from "../redux/taskSlice";
+import { RootState, AppDispatch } from "../redux/store";
 
 interface AddTaskModalProps {
   onClose: () => void;
@@ -45,7 +45,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     }
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
