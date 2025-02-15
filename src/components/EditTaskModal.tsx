@@ -274,21 +274,13 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               />
 
               <div className="space-y-2">
-                <div id="toolbar-container-edit">
-                  <span className="ql-formats">
-                    <button className="ql-bold"></button>
-                    <button className="ql-italic"></button>
-                    <button className="ql-underline"></button>
-                  </span>
-                  <span className="ql-formats">
-                    <button className="ql-list" value="ordered"></button>
-                    <button className="ql-list" value="bullet"></button>
-                  </span>
-                  <span className="ql-formats">
-                    <button className="ql-clean"></button>
-                  </span>
-                </div>
-                <div id="quill-editor-edit" className="h-32 mb-4"></div>
+                <label className="block text-sm text-gray-600 mb-2">Description</label>
+                <textarea
+                  value={editedTask.description}
+                  onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
+                  className="w-full p-2 border rounded min-h-[100px] mb-4"
+                  placeholder="Enter description..."
+                />
               </div>
 
               <div className="flex gap-2">
