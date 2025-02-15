@@ -94,7 +94,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     };
 
     try {
-      await dispatch(modifyTask(updatedTask));
+      await dispatch(modifyTask(updatedTask) as any);
       onClose();
     } catch (error) {
       console.error("Failed to update task:", error);

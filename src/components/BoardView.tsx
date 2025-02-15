@@ -6,7 +6,11 @@ import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
 
-const TaskCard = ({ task }: { task: Task }) => {
+interface TaskCardProps {
+  task: Task;
+}
+
+const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
