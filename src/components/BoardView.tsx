@@ -6,6 +6,12 @@ import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
 
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+  </div>
+);
+
 interface TaskCardProps {
   task: Task;
 }
@@ -97,8 +103,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 };
 
 export default function BoardView() {
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
-  const dispatch = useDispatch();
+  const { tasks, loading } = useSelector((state: RootState) => state.tasks);
+  const columns = ['Todo', 'In Progress', 'Completed'];
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   const context = useOutletContext<{
     searchQuery: string;
     categoryFilter: string;

@@ -167,13 +167,19 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   );
 };
 
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center py-8">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+  </div>
+);
+
 export default function TaskView() {
   const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
     searchQuery: string;
     categoryFilter: string;
     dueDateFilter: string;
   }>();
-  const tasks = useSelector((state: RootState) => state.tasks.tasks);
+  const { tasks, loading } = useSelector((state: RootState) => state.tasks);
   const dispatch = useDispatch();
 
 
@@ -191,8 +197,6 @@ export default function TaskView() {
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
-
-  // Removed unused function
 
   const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
     e.preventDefault();
@@ -247,6 +251,10 @@ export default function TaskView() {
       }));
     });
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="p-2 sm:p-4 md:p-6 bg-gray-50 min-h-screen">
