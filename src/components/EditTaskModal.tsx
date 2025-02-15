@@ -27,36 +27,28 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [onClose]);
 
   React.useEffect(() => {
-    const editor = document.querySelector('#quill-editor-edit');
-    if (!editor) return;
-
     const quill = new (window as any).Quill('#quill-editor-edit', {
       theme: 'snow',
       placeholder: 'Enter description...',
       modules: {
-        toolbar: [
-          ['bold', 'italic', 'underline'],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['clean']
-        ]
+        toolbar: '#toolbar-container-edit'
       }
     });
 
-    if (editedTask.description) {
-      quill.root.innerHTML = editedTask.description;
-    }
+    quill.root.innerHTML = editedTask.description;
 
-    quill.on('text-change', () => {
+    const observer = new MutationObserver(() => {
       setEditedTask(prev => ({...prev, description: quill.root.innerHTML}));
     });
 
-    return () => {
-      const toolbar = document.querySelector('.ql-toolbar');
-      if (toolbar) {
-        toolbar.remove();
-      }
-    };
-  }, [editedTask.description]);
+    observer.observe(quill.root, {
+      characterData: true,
+      childList: true,
+      subtree: true
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
