@@ -62,10 +62,12 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         category,
         dueDate,
         status,
-        fileUrl: file ? file.name : null // Use null instead of undefined
+        fileUrl: file ? URL.createObjectURL(file) : null,
+        completed: status === "Completed",
+        selected: false
       };
 
-      await dispatch(createTask(newTask));
+      await dispatch(createTask(newTask) as any);
       console.log("Task created successfully");
       onClose();
     } catch (error) {

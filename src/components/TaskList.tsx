@@ -38,8 +38,10 @@ const TaskCard = ({ task }: { task: Task }) => {
   const handleDelete = async () => {
     console.log('DELETE OPERATION - TaskList - Starting delete for task:', task);
     try {
-      await dispatch(removeTask(task.id));
-      console.log('DELETE OPERATION - TaskList - Delete dispatch completed for task ID:', task.id);
+      if (task.id) {
+        await dispatch(removeTask(task.id) as any);
+        console.log('DELETE OPERATION - TaskList - Delete dispatch completed for task ID:', task.id);
+      }
     } catch (error) {
       console.error('DELETE OPERATION - TaskList - Delete failed:', error);
     }

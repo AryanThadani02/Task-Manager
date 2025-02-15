@@ -13,7 +13,9 @@ const TaskCard = ({ task }: { task: Task }) => {
 
   const handleDelete = async () => {
     try {
-      await dispatch(removeTask(task.id));
+      if (task.id) {
+        await dispatch(removeTask(task.id) as any);
+      }
     } catch (error) {
       console.error("Failed to delete task:", error);
     }
