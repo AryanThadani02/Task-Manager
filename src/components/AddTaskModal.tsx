@@ -59,15 +59,15 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         userId: user.uid,
         title,
         description,
-        category,
+        category: category as "Work" | "Personal",
         dueDate,
-        status,
+        status: status as "Todo" | "In Progress" | "Completed",
         fileUrl: file ? URL.createObjectURL(file) : undefined,
         completed: status === "Completed",
         selected: false
       };
 
-      await dispatch(createTask(newTask) as any);
+      await dispatch(createTask(newTask));
       console.log("Task created successfully");
       onClose();
     } catch (error) {

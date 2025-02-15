@@ -241,7 +241,7 @@ export default function TaskView() {
     selectedTasks.forEach(task => {
       dispatch(updateTask({ 
         ...task, 
-        status: newStatus,
+        status: newStatus as "Todo" | "In Progress" | "Completed",
         completed: newStatus === "Completed",
         selected: false 
       }));
