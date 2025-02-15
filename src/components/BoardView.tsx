@@ -142,6 +142,12 @@ export default function BoardView() {
           await dispatch(modifyTask({
             ...task,
             status: newStatus,
+            completed: newStatus === "Completed",
+            category: task.category,
+            dueDate: task.dueDate
+          } as Task) as any);
+            ...task,
+            status: newStatus,
             completed: newStatus === "Completed"
           } as Task));
         } catch (error) {

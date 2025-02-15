@@ -144,21 +144,21 @@ export const fetchTasks = createAsyncThunk(
     }
 );
 
-export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' | 'activity'>, { rejectValue: string }>(
+export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' | 'activity'>>(
     'tasks/createTask',
-    async (task) => {
+    async (taskData) => {
       try {
-        console.log("Creating task:", task);
+        console.log("Creating task:", taskData);
         const tasksCollection = collection(db, 'tasks');
-        const { fileUrl, ...taskData } = task;
+        const { fileUrl, ...taskDataWithoutFileUrl } = taskData;
         const taskWithActivity = {
-          ...taskData,
+          ...taskDataWithoutFileUrl,
           fileUrl: fileUrl ?? undefined,
           createdAt: new Date().toISOString(),
           activity: [{
             timestamp: new Date().toISOString(),
             action: 'created',
-            details: `Task "${task.title}" created with status "${task.status}"`
+            details: `Task "${taskData.title}" created with status "${taskData.status}"`
           }]
         } as Task;
         const docRef = await addDoc(tasksCollection, taskWithActivity);
@@ -173,21 +173,21 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
 );
 
 
-export const modifyTask = createAsyncThunk(
+export const modifyTask = createAsyncThunk<Task, Task>(
     'tasks/modifyTask',
-    async (task: Task) => {
+    async (taskData) => {
       try {
-        console.log("Modifying task:", task);
-        const taskRef = doc(db, 'tasks', task.id || '');
+        console.log("Modifying task:", taskData);
+        const taskRef = doc(db, 'tasks', taskData.id || '');
         const updatedTask = {
-          ...task,
+          ...taskData,
           updatedAt: new Date().toISOString(),
           activity: [
-            ...(task.activity || []),
+            ...(taskData.activity || []),
             {
               timestamp: new Date().toISOString(),
               action: 'updated',
-              details: `Task "${task.title}" updated - New Status: ${task.status}`
+              details: `Task "${taskData.title}" updated - New Status: ${taskData.status}`
             }
           ]
         };

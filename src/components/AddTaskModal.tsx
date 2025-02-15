@@ -67,7 +67,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         selected: false
       };
 
-      await dispatch(createTask(newTask));
+      await dispatch(createTask(newTask) as any);
       console.log("Task created successfully");
       onClose();
     } catch (error) {
