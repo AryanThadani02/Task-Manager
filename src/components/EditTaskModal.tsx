@@ -276,7 +276,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               <div className="space-y-2">
                 <label className="block text-sm text-gray-600 mb-2">Description</label>
                 <textarea
-                  value={editedTask.description}
+                  value={editedTask.description?.replace(/<[^>]+>/g, '') || ''}
                   onChange={(e) => setEditedTask({...editedTask, description: e.target.value})}
                   className="w-full p-2 border rounded min-h-[100px] mb-4"
                   placeholder="Enter description..."
