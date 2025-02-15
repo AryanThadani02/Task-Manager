@@ -1,0 +1,42 @@
+src/components/TaskList.tsx:271:34 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+271         {tasks.some(task => task.selected) && (
+                                     ~~~~~~~~
+
+src/components/TaskList.tsx:274:42 - error TS2339: Property 'selected' does not exist on type 'Task'.
+
+274               {tasks.filter(task => task.selected).length} Tasks Selected
+                                             ~~~~~~~~
+
+src/components/TaskList.tsx:308:63 - error TS2322: Type 'Task' is not assignable to type 'Task & { selected?: boolean | undefined; completed?: boolean | undefined; }'.
+  Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+308                 todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                  ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task & { selected?: boolean; completed?: boolean } }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task & { selected?: boolean | undefined; completed?: boolean | undefined; }; }'
+
+src/components/TaskList.tsx:325:69 - error TS2322: Type 'Task' is not assignable to type 'Task & { selected?: boolean | undefined; completed?: boolean | undefined; }'.
+  Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+325                 inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                        ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task & { selected?: boolean; completed?: boolean } }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task & { selected?: boolean | undefined; completed?: boolean | undefined; }; }'
+
+src/components/TaskList.tsx:342:68 - error TS2322: Type 'Task' is not assignable to type 'Task & { selected?: boolean | undefined; completed?: boolean | undefined; }'.
+  Type 'Task' is missing the following properties from type 'Task': category, dueDate
+
+342                 completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                                                                       ~~~~
+
+  src/components/TaskList.tsx:9:31
+    9 const TaskCard = ({ task }: { task: Task & { selected?: boolean; completed?: boolean } }) => {
+                                    ~~~~
+    The expected type comes from property 'task' which is declared here on type 'IntrinsicAttributes & { task: Task & { selected?: boolean | undefined; completed?: boolean | undefined; }; }'
