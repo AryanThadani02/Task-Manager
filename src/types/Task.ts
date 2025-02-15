@@ -9,9 +9,5 @@ export interface Task {
   dueDate: string;
   completed: boolean;
   selected?: boolean;
-  fileUrl?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  activity?: { timestamp: string; action: string; details: string }[];
   order?: number;
 }
