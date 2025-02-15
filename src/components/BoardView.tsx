@@ -35,7 +35,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       onDragEnd={handleDragEnd}
     >
       <div className="flex justify-between items-start">
-        <h3 className="font-semibold">{task.title}</h3>
+        <h3 className={`font-semibold ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</h3>
         <div className="flex gap-2">
           <span className={`px-2 py-1 rounded text-sm ${
             task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
@@ -92,10 +92,22 @@ const TaskCard = ({ task }: { task: Task }) => {
 export default function BoardView() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
+  const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
+    searchQuery: string;
+    categoryFilter: string;
+    dueDateFilter: string;
+  }>();
 
-  const todoTasks = tasks.filter(task => task.status === "Todo");
-  const inProgressTasks = tasks.filter(task => task.status === "In Progress");
-  const completedTasks = tasks.filter(task => task.status === "Completed");
+  const filteredTasks = tasks.filter(task => {
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !categoryFilter || task.category === categoryFilter;
+    const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
+    return matchesSearch && matchesCategory && matchesDueDate;
+  });
+
+  const todoTasks = filteredTasks.filter(task => task.status === "Todo");
+  const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
+  const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
