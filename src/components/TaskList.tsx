@@ -197,9 +197,8 @@ export default function TaskView() {
         ...task,
         status: newStatus,
         completed: isCompleted
-      }));
+      } as Task));
 
-      const container = e.currentTarget;
       // Update order for all tasks in the section
       const tasksInSection = tasks.filter(t => t.status === newStatus);
       tasksInSection.forEach((t, index) => {
@@ -207,7 +206,7 @@ export default function TaskView() {
           dispatch(updateTask({
             ...t,
             order: index
-          }));
+          } as Task));
         }
       });
     }
@@ -223,7 +222,7 @@ export default function TaskView() {
     // Reset all selected states after bulk delete
     tasks.forEach(task => {
       if (task.selected) {
-        dispatch(updateTask({ ...task, selected: false }));
+        dispatch(updateTask({ ...task, selected: false } as Task));
       }
     });
   };
