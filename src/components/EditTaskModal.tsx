@@ -233,7 +233,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               <div className="mb-6">
                 <label className="block text-sm text-gray-600 mb-2">Attachment</label>
                 <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
-                  <p className="text-sm text-gray-500">Drop your files here or <span className="text-purple-600">Upload</span></p>
+                  <p className="text-sm text-gray-500">Drop your files here or <label htmlFor="file-upload" className="text-purple-600 cursor-pointer">Upload</label></p>
                   <input
                     type="file"
                     accept="image/*"
@@ -241,6 +241,11 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     className="hidden"
                     id="file-upload"
                   />
+                  {(file || editedTask.fileUrl) && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      📎 {file ? file.name : editedTask.fileUrl}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
@@ -328,7 +333,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
               <div className="mb-6">
                 <label className="block text-sm text-gray-600 mb-2">Attachment</label>
                 <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
-                  <p className="text-sm text-gray-500">Drop your files here or <span className="text-purple-600">Upload</span></p>
+                  <p className="text-sm text-gray-500">Drop your files here or <label htmlFor="file-upload" className="text-purple-600 cursor-pointer">Upload</label></p>
                   <input
                     type="file"
                     accept="image/*"
@@ -336,6 +341,11 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     className="hidden"
                     id="file-upload"
                   />
+                  {(file || editedTask.fileUrl) && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      📎 {file ? file.name : editedTask.fileUrl}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
