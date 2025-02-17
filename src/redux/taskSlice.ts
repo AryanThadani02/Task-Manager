@@ -140,10 +140,9 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
       try {
         console.log("Creating task:", taskData);
         const tasksCollection = collection(db, 'tasks');
-        const { fileUrl, ...taskDataWithoutFileUrl } = taskData;
         const taskWithActivity = {
-          ...taskDataWithoutFileUrl,
-          fileUrl: fileUrl || null,
+          ...taskData,
+          fileUrl: taskData.fileUrl || null,
           createdAt: new Date().toISOString(),
           activity: [{
             timestamp: new Date().toISOString(),
