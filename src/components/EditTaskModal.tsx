@@ -112,7 +112,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
     const updatedTask = {
       ...editedTask,
-      fileUrl: file ? URL.createObjectURL(file) : editedTask.fileUrl,
+      fileUrl: file ? file.name : editedTask.fileUrl,
       activity: [
         ...(editedTask.activity || []),
         {
