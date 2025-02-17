@@ -58,7 +58,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         category: category as "Work" | "Personal",
         dueDate,
         status: status as "Todo" | "In Progress" | "Completed",
-        fileUrl: file ? URL.createObjectURL(file) : undefined,
+        fileUrl: file ? URL.createObjectURL(file) : null,
         completed: status === "Completed",
         selected: false
       };

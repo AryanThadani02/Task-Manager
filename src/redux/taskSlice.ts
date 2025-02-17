@@ -143,7 +143,7 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
         const { fileUrl, ...taskDataWithoutFileUrl } = taskData;
         const taskWithActivity = {
           ...taskDataWithoutFileUrl,
-          fileUrl: fileUrl ?? undefined,
+          fileUrl: fileUrl || null,
           createdAt: new Date().toISOString(),
           activity: [{
             timestamp: new Date().toISOString(),
