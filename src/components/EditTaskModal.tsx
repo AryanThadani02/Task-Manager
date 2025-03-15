@@ -211,6 +211,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                   type="date"
                   value={editedTask.dueDate}
                   onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+                  min={new Date().toISOString().split('T')[0]}
                   className="w-full p-2 mt-1 border rounded"
                   required
                 />
@@ -311,6 +312,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                   type="date"
                   value={editedTask.dueDate}
                   onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+                  min={new Date().toISOString().split('T')[0]}
                   className="w-full p-2 mt-1 border rounded"
                   required
                 />
