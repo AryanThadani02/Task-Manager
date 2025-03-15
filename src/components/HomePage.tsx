@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, setTasks } from "../redux/taskSlice";
@@ -5,15 +6,15 @@ import { useNavigate, Link, Outlet, useLocation } from "react-router-dom";
 import { signOutUser } from "../firebase/firebaseConfig";
 import { clearUser } from "../redux/userSlice";
 import { RootState } from "../redux/store";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaListUl, FaThLarge } from "react-icons/fa";
 import AddTaskModal from "./AddTaskModal";
 
 export default function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useSelector((state: RootState) => state.user.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dueDateFilter, setDueDateFilter] = useState("");
@@ -38,48 +39,58 @@ export default function HomePage() {
     setDueDateFilter("");
   };
 
-  const location = useLocation();
-
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg shadow-md space-y-4 md:space-y-0">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-gray-800">📋 TaskBuddy</span>
-        </div>
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
-          {user && (
-            <div className="flex items-center gap-3">
-              <img
-                src={user.photoURL ?? ""}
-                alt="Profile"
-                className="w-10 h-10 rounded-full border border-gray-300"
-              />
-              <span className="text-gray-700 font-medium">{user.displayName}</span>
-            </div>
-          )}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all"
-          >
-            <FaSignOutAlt className="text-gray-600" />
-            Logout
-          </button>
+      {/* First Row */}
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
+        <div className="flex items-center gap-3">
+          <img
+            src={user?.photoURL ?? ""}
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+          />
+          <span className="text-gray-700 font-medium">{user?.displayName}</span>
         </div>
       </div>
 
-      {/* Task Management Section */}
-      <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      {/* Second Row */}
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center gap-4">
+          <Link
+            to="/home/tasks"
+            className={`flex items-center gap-2 ${
+              location.pathname === '/home/tasks'
+                ? 'text-purple-600'
+                : 'text-gray-600'
+            }`}
+          >
+            <FaListUl /> List
+          </Link>
+          <Link
+            to="/home/board"
+            className={`flex items-center gap-2 ${
+              location.pathname === '/home/board'
+                ? 'text-purple-600'
+                : 'text-gray-600'
+            }`}
+          >
+            <FaThLarge /> Board
+          </Link>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+        >
+          <FaSignOutAlt /> Logout
+        </button>
+      </div>
+
+      {/* Third Row */}
+      <div className="flex justify-between items-center mt-6">
+        <div className="flex items-center gap-4">
           <select
-            className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2 rounded-lg bg-white"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
@@ -89,23 +100,30 @@ export default function HomePage() {
           </select>
           <input
             type="date"
-            className="w-full sm:w-auto px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-2 rounded-lg bg-white"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
-        </div>
-        <div className="flex justify-between gap-4">
-          {(searchQuery || categoryFilter || dueDateFilter) && (
+          {(categoryFilter || dueDateFilter) && (
             <button
               onClick={clearFilters}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              className="text-gray-600 hover:text-gray-800"
             >
               Clear
             </button>
           )}
+        </div>
+        <div className="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="px-4 py-2 rounded-lg bg-white"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md hover:bg-purple-600 transition-all"
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
           >
             + Add Task
           </button>
@@ -113,7 +131,9 @@ export default function HomePage() {
       </div>
 
       {/* Render Task or Board View */}
-      <Outlet context={{ searchQuery, categoryFilter, dueDateFilter }} />
+      <div className="mt-6">
+        <Outlet context={{ searchQuery, categoryFilter, dueDateFilter }} />
+      </div>
 
       {/* Task Modal */}
       {isModalOpen && <AddTaskModal onClose={() => setIsModalOpen(false)} />}
