@@ -100,7 +100,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               category: task.category,
               dueDate: task.dueDate,
               status: isCompleted ? "Completed" : "Todo",
-              selected: task.selected || false
+              selected: task.selected || false,
+              activity: [
+                ...(task.activity || []),
+                {
+                  timestamp: new Date().toISOString(),
+                  action: "status_change",
+                  details: `Task marked as ${isCompleted ? 'completed' : 'incomplete'} via checkbox`
+                }
+              ]
             } as Task));
           }}
           className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
@@ -220,7 +228,15 @@ export default function TaskView() {
         status: newStatus,
         completed: newStatus === "Completed",
         category: task.category,
-        dueDate: task.dueDate
+        dueDate: task.dueDate,
+        activity: [
+          ...(task.activity || []),
+          {
+            timestamp: new Date().toISOString(),
+            action: "status_change",
+            details: `Task status changed to ${newStatus} via drag and drop`
+          }
+        ]
       };
       
       await dispatch(modifyTask(updatedTask) as any);
