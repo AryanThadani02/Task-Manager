@@ -14,7 +14,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const taskRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,10 +65,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   return (
     <div 
-      ref={taskRef}
       id={`task-${task.id}`}
-      data-task-id={task.id}
-      data-order={task.order}
       draggable
       onDragStart={(e) => {
         handleDragStart(e);
@@ -206,50 +202,19 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
-    
+
     if (!task) return;
 
     try {
-      const dropTarget = e.target as HTMLElement;
-      const taskContainer = dropTarget.closest('[data-task-id]') as HTMLElement;
-      const tasksInSection = tasks.filter(t => t.status === newStatus);
-      
-      let newOrder = tasksInSection.length;
-
-      if (taskContainer) {
-        const targetTaskId = taskContainer.getAttribute('data-task-id');
-        const targetTask = tasks.find(t => t.id === targetTaskId);
-        
-        if (targetTask && targetTaskId !== taskId) {
-          const rect = taskContainer.getBoundingClientRect();
-          const dropPosition = e.clientY;
-          const isDroppedBelow = dropPosition > rect.top + rect.height / 2;
-          
-          newOrder = targetTask.order || 0;
-          if (isDroppedBelow) {
-            newOrder += 1;
-          }
-
-          // Update orders of other tasks
-          for (const t of tasksInSection) {
-            if (t.id !== taskId && (t.order || 0) >= newOrder) {
-              await dispatch(modifyTask({
-                ...t,
-                order: (t.order || 0) + 1
-              }) as any);
-            }
-          }
-        }
-      }
-
-      await dispatch(modifyTask({
+      const updatedTask: Task = {
         ...task,
         status: newStatus,
         completed: newStatus === "Completed",
-        order: newOrder,
         category: task.category,
         dueDate: task.dueDate
-      }) as any);
+      };
+      
+      await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
     }
