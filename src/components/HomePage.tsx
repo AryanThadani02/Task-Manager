@@ -40,7 +40,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-50 min-h-screen mx-3">
       {/* First Row */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
@@ -55,7 +55,7 @@ export default function HomePage() {
       </div>
 
       {/* Second Row */}
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center mt-2 mx-3">
         <div className="flex items-center gap-4">
           <Link
             to="/home/tasks"
@@ -87,10 +87,10 @@ export default function HomePage() {
       </div>
 
       {/* Third Row */}
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center mt-3 mx-3">
         <div className="flex items-center gap-4">
           <select
-            className="px-4 py-2 rounded-lg bg-white"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
@@ -100,7 +100,7 @@ export default function HomePage() {
           </select>
           <input
             type="date"
-            className="px-4 py-2 rounded-lg bg-white"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
@@ -113,11 +113,11 @@ export default function HomePage() {
             </button>
           )}
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <input
             type="text"
             placeholder="Search tasks..."
-            className="px-4 py-2 rounded-lg bg-white"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
