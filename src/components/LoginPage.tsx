@@ -36,7 +36,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen">
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-r from-purple-50 to-gray-100 p-6">
+      <div className="flex-1 flex items-center justify-center bg-purple-50 p-6">
         <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center">
         <h1 className="text-4xl font-bold text-purple-600 mb-10">TaskBuddy</h1>
         <p className="text-gray-600 mb-6">
@@ -74,7 +74,7 @@ export default function LoginPage() {
         )}
       </div>
       </div>
-      <div className="flex-1 bg-black relative overflow-hidden">
+      <div className="flex-1 bg-purple-50 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0">
             <svg viewBox="0 0 200 200" className="w-full h-full">
