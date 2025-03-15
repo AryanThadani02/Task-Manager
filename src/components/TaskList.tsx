@@ -202,19 +202,45 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
+    const dropTarget = e.target as HTMLElement;
+    const dropTargetTask = dropTarget.closest('[data-task-id]');
+    const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
 
     if (!task) return;
 
     try {
-      const updatedTask: Task = {
+      const tasksInSection = tasks
+        .filter(t => t.status === newStatus)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      let newOrder = 0;
+      
+      if (dropTargetId) {
+        const targetTask = tasksInSection.find(t => t.id === dropTargetId);
+        if (targetTask) {
+          newOrder = targetTask.order || 0;
+          // Reorder tasks
+          for (const t of tasksInSection) {
+            if (t.id !== taskId && (t.order || 0) >= newOrder) {
+              await dispatch(modifyTask({
+                ...t,
+                order: (t.order || 0) + 1
+              }) as any);
+            }
+          }
+        }
+      } else {
+        newOrder = tasksInSection.length;
+      }
+
+      await dispatch(modifyTask({
         ...task,
         status: newStatus,
         completed: newStatus === "Completed",
+        order: newOrder,
         category: task.category,
         dueDate: task.dueDate
-      };
-      
-      await dispatch(modifyTask(updatedTask) as any);
+      }) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
     }
