@@ -10,7 +10,7 @@ export default defineConfig({
     strictPort: true,
     allowedHosts: [
       "https://task-manager-xktj.vercel.app/",
-      "1002e4eb-ad3e-42a9-9200-bd88ff0b5bbd-00-3odt6vlogpu14.pike.replit.dev"
+      "11b0aa01-58d4-459f-853d-3b18d94216d7-00-pmpbjmr4rdud.pike.replit.dev"
     ],
   },
 });
