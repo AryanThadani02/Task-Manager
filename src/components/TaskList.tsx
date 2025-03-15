@@ -206,35 +206,42 @@ export default function TaskView() {
     const dropTargetTask = dropTarget.closest('[data-task-id]');
     const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
 
-    if (task) {
-      const tasksInSection = tasks.filter(t => t.status === newStatus);
-      let newOrder = tasksInSection.length;
+    if (!task) return;
 
-      if (dropTargetId) {
-        const targetTask = tasks.find(t => t.id === dropTargetId);
-        if (targetTask) {
-          newOrder = targetTask.order || 0;
-          // Update orders of tasks after the drop target
-          tasksInSection.forEach(t => {
-            if ((t.order || 0) >= newOrder && t.id !== taskId) {
-              dispatch(updateTask({
-                ...t,
-                order: (t.order || 0) + 1
-              } as Task));
-            }
-          });
+    const tasksInSection = tasks.filter(t => t.status === newStatus)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+    
+    let newOrder: number;
+    
+    if (!dropTargetId) {
+      // If dropped in empty space, add to end
+      newOrder = tasksInSection.length;
+    } else {
+      const targetTask = tasks.find(t => t.id === dropTargetId);
+      if (!targetTask) return;
+      
+      const targetOrder = targetTask.order || 0;
+      newOrder = targetOrder;
+
+      // Update orders of tasks after drop position
+      tasksInSection.forEach(t => {
+        if ((t.order || 0) >= targetOrder && t.id !== task.id) {
+          dispatch(updateTask({
+            ...t,
+            order: (t.order || 0) + 1
+          } as Task));
         }
-      }
-
-      // Update the dragged task with new status and order
-      const isCompleted = newStatus === "Completed";
-      dispatch(updateTask({
-        ...task,
-        status: newStatus,
-        completed: isCompleted,
-        order: newOrder
-      } as Task));
+      });
     }
+
+    // Update the dragged task
+    const isCompleted = newStatus === "Completed";
+    dispatch(updateTask({
+      ...task,
+      status: newStatus,
+      completed: isCompleted,
+      order: newOrder
+    } as Task));
   };
 
   const handleBulkDelete = () => {
