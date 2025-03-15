@@ -74,7 +74,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
       onDragEnd={(e) => {
         e.currentTarget.classList.remove('dragging');
       }}
-      className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
+      className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2"
     >
       <div className="grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 items-center">
         <div className="flex items-center space-x-2">
@@ -238,7 +238,7 @@ export default function TaskView() {
           }
         ]
       };
-      
+
       await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
@@ -278,7 +278,7 @@ export default function TaskView() {
 
   return (
     <div className="p-2 sm:p-4 md:p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md max-w-full overflow-x-auto">
+      <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg  max-w-full overflow-x-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
@@ -291,7 +291,7 @@ export default function TaskView() {
           <div>Task Category</div>
         </div>
         {tasks.some(task => task.selected) && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg  flex items-center gap-4 z-50">
             <span className="text-sm">
               {tasks.filter(task => task.selected).length} Tasks Selected
             </span>
@@ -300,7 +300,7 @@ export default function TaskView() {
               <button className="text-sm hover:text-gray-300">
                 Status ▾
               </button>
-              <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg  opacity-0 group-hover:opacity-100 transition-opacity">
                 <div className="py-1">
                   <button onClick={() => handleBulkStatusChange('Todo')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Todo</button>
                   <button onClick={() => handleBulkStatusChange('In Progress')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In Progress</button>
@@ -317,7 +317,7 @@ export default function TaskView() {
           </div>
         )}
         <div className="flex flex-col gap-4">
-          <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
+          <div className=" rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
             <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
               Todo ({todoTasks.length})
             </div>
@@ -334,7 +334,7 @@ export default function TaskView() {
             </div>
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
+          <div className=" rounded-lg overflow-hidden">
             <div className="bg-blue-200 p-3 font-medium">
               In-Progress ({inProgressTasks.length})
             </div>
@@ -351,7 +351,7 @@ export default function TaskView() {
             </div>
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
+          <div className=" rounded-lg overflow-hidden">
             <div className="bg-green-200 p-3 font-medium">
               Completed ({completedTasks.length})
             </div>
