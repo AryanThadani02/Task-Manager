@@ -317,56 +317,62 @@ export default function TaskView() {
           </div>
         )}
         <div className="flex flex-col gap-4">
-          <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
-            <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
-              Todo ({todoTasks.length})
+          {(!searchQuery || todoTasks.length > 0) && (
+            <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
+              <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
+                Todo ({todoTasks.length})
+              </div>
+              <div 
+                className="p-4 min-h-[50px]"
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "Todo")}
+              >
+                {todoTasks.length > 0 ? (
+                  todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                ) : (
+                  <div className="text-gray-600">No Tasks In To-Do</div>
+                )}
+              </div>
             </div>
-            <div 
-              className="p-4 min-h-[50px]"
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, "Todo")}
-            >
-              {todoTasks.length > 0 ? (
-                todoTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Tasks In To-Do</div>
-              )}
-            </div>
-          </div>
+          )}
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-200 p-3 font-medium">
-              In-Progress ({inProgressTasks.length})
+          {(!searchQuery || inProgressTasks.length > 0) && (
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-200 p-3 font-medium">
+                In-Progress ({inProgressTasks.length})
+              </div>
+              <div 
+                className="p-4 min-h-[100px]"
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "In Progress")}
+              >
+                {inProgressTasks.length > 0 ? (
+                  inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                ) : (
+                  <div className="text-gray-600">No Tasks In Progress</div>
+                )}
+              </div>
             </div>
-            <div 
-              className="p-4 min-h-[100px]"
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, "In Progress")}
-            >
-              {inProgressTasks.length > 0 ? (
-                inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Tasks In Progress</div>
-              )}
-            </div>
-          </div>
+          )}
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-green-200 p-3 font-medium">
-              Completed ({completedTasks.length})
+          {(!searchQuery || completedTasks.length > 0) && (
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-green-200 p-3 font-medium">
+                Completed ({completedTasks.length})
+              </div>
+              <div 
+                className="p-4 min-h-[100px]"
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "Completed")}
+              >
+                {completedTasks.length > 0 ? (
+                  completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                ) : (
+                  <div className="text-gray-600">No Completed Tasks</div>
+                )}
+              </div>
             </div>
-            <div 
-              className="p-4 min-h-[100px]"
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, "Completed")}
-            >
-              {completedTasks.length > 0 ? (
-                completedTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Completed Tasks</div>
-              )}
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
