@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -37,7 +38,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white">
+      <div className="bg-white shadow">
         <div className="max-w-7xl mx-auto px-4">
           {/* First Row */}
           <div className="flex items-center justify-between py-4">
@@ -55,7 +56,7 @@ export default function HomePage() {
           </div>
 
           {/* Second Row */}
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-3 border-t">
             <div className="flex items-center space-x-4">
               <Link
                 to="/home/tasks"
@@ -86,13 +87,13 @@ export default function HomePage() {
           </div>
 
           {/* Third Row */}
-          <div className="flex items-center justify-between py-3">
+          <div className="flex items-center justify-between py-3 border-t">
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">Filter by:</span>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className=" px-3 py-1.5 text-sm rounded"
+                className="border rounded px-3 py-1.5 text-sm"
               >
                 <option value="">Category</option>
                 <option value="Work">Work</option>
@@ -104,7 +105,7 @@ export default function HomePage() {
               <select
                 value={dueDateFilter}
                 onChange={(e) => setDueDateFilter(e.target.value)}
-                className=" px-3 py-1.5 text-sm rounded"
+                className="border rounded px-3 py-1.5 text-sm"
               >
                 <option value="">Due Date</option>
                 <option value="today">Today</option>
@@ -121,7 +122,7 @@ export default function HomePage() {
                   placeholder="Search tasks..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-3 py-1.5  rounded text-sm w-64"
+                  className="pl-9 pr-3 py-1.5 border rounded text-sm w-64"
                 />
               </div>
               <button
