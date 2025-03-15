@@ -316,8 +316,11 @@ export default function TaskView() {
             </button>
           </div>
         )}
-        <div className="flex flex-col gap-4">
-          {(!searchQuery || todoTasks.length > 0) && (
+        {filteredTasks.length === 0 && searchQuery ? (
+          <NoResultsFound />
+        ) : (
+          <div className="flex flex-col gap-4">
+            {(!searchQuery || todoTasks.length > 0) && (
             <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
               <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
                 Todo ({todoTasks.length})
@@ -373,7 +376,8 @@ export default function TaskView() {
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
