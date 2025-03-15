@@ -169,70 +169,63 @@ export default function BoardView() {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
-
-        <div className="grid grid-cols-3 gap-4">
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-purple-200 p-3 font-medium">Todo</div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {(!searchQuery || todoTasks.length > 0) && (
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="bg-purple-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, "Todo")}
             >
-              {todoTasks.length > 0 ? (
-                <div className="w-full">
-                  {todoTasks.map(task => <TaskCard key={task.id} task={task} />)}
-                </div>
-              ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No tasks in Todo</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
-                </div>
-              )}
+              <h3 className="font-medium mb-3">Todo ({todoTasks.length})</h3>
+              <div className="space-y-2">
+                {todoTasks.map(task => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+                {todoTasks.length === 0 && !searchQuery && (
+                  <div className="text-gray-500 text-sm">No tasks in Todo</div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
+          {(!searchQuery || inProgressTasks.length > 0) && (
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="bg-blue-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, "In Progress")}
             >
-              {inProgressTasks.length > 0 ? (
-                <div className="w-full">
-                  {inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)}
-                </div>
-              ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No tasks in progress</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
-                </div>
-              )}
+              <h3 className="font-medium mb-3">In Progress ({inProgressTasks.length})</h3>
+              <div className="space-y-2">
+                {inProgressTasks.map(task => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+                {inProgressTasks.length === 0 && !searchQuery && (
+                  <div className="text-gray-500 text-sm">No tasks in progress</div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-green-200 p-3 font-medium">Completed</div>
+          {(!searchQuery || completedTasks.length > 0) && (
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="bg-green-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, "Completed")}
             >
-              {completedTasks.length > 0 ? (
-                <div className="w-full">
-                  {completedTasks.map(task => <TaskCard key={task.id} task={task} />)}
-                </div>
-              ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No completed tasks</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
-                </div>
-              )}
+              <h3 className="font-medium mb-3">Completed ({completedTasks.length})</h3>
+              <div className="space-y-2">
+                {completedTasks.map(task => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+                {completedTasks.length === 0 && !searchQuery && (
+                  <div className="text-gray-500 text-sm">No completed tasks</div>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
