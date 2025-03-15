@@ -1,8 +1,7 @@
-import React from "react";
+
 import { useSelector, useDispatch } from "react-redux";
-import { useOutletContext } from "react-router-dom";
 import { RootState, AppDispatch } from "../redux/store";
-import { Task } from "../types/Task";
+import { useOutletContext } from "react-router-dom";
 import { modifyTask } from "../redux/taskSlice";
 
 const LoadingSpinner = () => (
@@ -15,17 +14,15 @@ export default function BoardView() {
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
   const dispatch = useDispatch<AppDispatch>();
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
-  const context = useOutletContext<{
+  const { searchQuery = '', categoryFilter = '', dueDateFilter = '' } = useOutletContext<{
     searchQuery: string;
     categoryFilter: string;
     dueDateFilter: string;
   }>();
 
-  const { searchQuery = '', categoryFilter = '', dueDateFilter = '' } = context || {};
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -39,27 +36,20 @@ export default function BoardView() {
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.add('bg-gray-50');
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.remove('bg-gray-50');
+    if (!searchQuery) {
+      e.preventDefault();
+    }
   };
 
   const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
-    e.preventDefault();
-    const taskId = e.dataTransfer.getData("taskId");
-    const task = tasks.find(t => t.id === taskId);
-
-    if (!task) return;
-
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.remove('bg-gray-50');
-
-    await dispatch(modifyTask({ ...task, status: newStatus }));
+    if (!searchQuery) {
+      e.preventDefault();
+      const taskId = e.dataTransfer.getData("taskId");
+      const task = tasks.find(t => t.id === taskId);
+      if (task && task.status !== newStatus) {
+        dispatch(modifyTask({ ...task, status: newStatus }));
+      }
+    }
   };
 
   return (
@@ -67,76 +57,79 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div 
-            className="bg-purple-50 p-4 rounded-lg"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, "Todo")}
-          >
+          <div>
             <h3 className="font-medium mb-3">Todo ({todoTasks.length})</h3>
-            <div className="space-y-2">
-              {todoTasks.map(task => (
-                <div
-                  key={task.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData("taskId", task.id);
-                  }}
-                  className="bg-white p-3 rounded shadow-sm border border-gray-200"
-                >
-                  <div className="font-medium">{task.title}</div>
-                  <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
-                </div>
-              ))}
-            </div>
+            {todoTasks.length > 0 && (
+              <div 
+                className={`space-y-2 ${!searchQuery ? 'bg-purple-50 p-4 rounded-lg' : ''}`}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "Todo")}
+              >
+                {todoTasks.map(task => (
+                  <div
+                    key={task.id}
+                    draggable={!searchQuery}
+                    onDragStart={!searchQuery ? (e) => {
+                      e.dataTransfer.setData("taskId", task.id);
+                    } : undefined}
+                    className="bg-white p-3 rounded shadow-sm border border-gray-200"
+                  >
+                    <div className="font-medium">{task.title}</div>
+                    <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div 
-            className="bg-blue-50 p-4 rounded-lg"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, "In Progress")}
-          >
+          <div>
             <h3 className="font-medium mb-3">In Progress ({inProgressTasks.length})</h3>
-            <div className="space-y-2">
-              {inProgressTasks.map(task => (
-                <div
-                  key={task.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData("taskId", task.id);
-                  }}
-                  className="bg-white p-3 rounded shadow-sm border border-gray-200"
-                >
-                  <div className="font-medium">{task.title}</div>
-                  <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
-                </div>
-              ))}
-            </div>
+            {inProgressTasks.length > 0 && (
+              <div 
+                className={`space-y-2 ${!searchQuery ? 'bg-blue-50 p-4 rounded-lg' : ''}`}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "In Progress")}
+              >
+                {inProgressTasks.map(task => (
+                  <div
+                    key={task.id}
+                    draggable={!searchQuery}
+                    onDragStart={!searchQuery ? (e) => {
+                      e.dataTransfer.setData("taskId", task.id);
+                    } : undefined}
+                    className="bg-white p-3 rounded shadow-sm border border-gray-200"
+                  >
+                    <div className="font-medium">{task.title}</div>
+                    <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          <div 
-            className="bg-green-50 p-4 rounded-lg"
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={(e) => handleDrop(e, "Completed")}
-          >
+          <div>
             <h3 className="font-medium mb-3">Completed ({completedTasks.length})</h3>
-            <div className="space-y-2">
-              {completedTasks.map(task => (
-                <div
-                  key={task.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.setData("taskId", task.id);
-                  }}
-                  className="bg-white p-3 rounded shadow-sm border border-gray-200"
-                >
-                  <div className="font-medium">{task.title}</div>
-                  <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
-                </div>
-              ))}
-            </div>
+            {completedTasks.length > 0 && (
+              <div 
+                className={`space-y-2 ${!searchQuery ? 'bg-green-50 p-4 rounded-lg' : ''}`}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, "Completed")}
+              >
+                {completedTasks.map(task => (
+                  <div
+                    key={task.id}
+                    draggable={!searchQuery}
+                    onDragStart={!searchQuery ? (e) => {
+                      e.dataTransfer.setData("taskId", task.id);
+                    } : undefined}
+                    className="bg-white p-3 rounded shadow-sm border border-gray-200"
+                  >
+                    <div className="font-medium">{task.title}</div>
+                    <div className="text-sm text-gray-600 mt-1">Due: {task.dueDate}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
