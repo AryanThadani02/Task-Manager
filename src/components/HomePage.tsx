@@ -38,6 +38,8 @@ export default function HomePage() {
     setDueDateFilter("");
   };
 
+  const location = useLocation();
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header Section */}
@@ -66,29 +68,72 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation and Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-4">
-        <div className="hidden md:flex gap-2">
-          <Link 
-            to="/home/tasks" 
-            className={`px-3 py-1 rounded transition-colors ${
-              location.pathname === '/home/tasks' 
-                ? 'bg-purple-500 text-white' 
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-            }`}
-          >
-            📋 List View
-          </Link>
-          <Link 
-            to="/home/board" 
-            className={`px-3 py-1 rounded transition-colors ${
-              location.pathname === '/home/board' 
-                ? 'bg-purple-500 text-white' 
-                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-            }`}
-          >
-            📌 Board View
-          </Link>
+      {/* New Header and Navigation */}
+      <div className="border-b bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Logo and View Toggles */}
+            <div className="flex items-center gap-8">
+              <h1 className="text-xl font-semibold">📋 TaskBuddy</h1>
+              <div className="flex items-center gap-4">
+                <Link 
+                  to="/home/tasks"
+                  className={`flex items-center gap-2 ${
+                    location.pathname === '/home/tasks' 
+                      ? 'text-purple-600 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  List
+                </Link>
+                <Link 
+                  to="/home/board"
+                  className={`flex items-center gap-2 ${
+                    location.pathname === '/home/board' 
+                      ? 'text-purple-600 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  Board
+                </Link>
+              </div>
+            </div>
+
+            {/* Search, Add Task, and Profile */}
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8 pr-4 py-1.5 rounded-md border border-gray-300 w-64 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                />
+                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+              </div>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-purple-600 text-white px-4 py-1.5 rounded-md hover:bg-purple-700 transition-colors"
+              >
+                ADD TASK
+              </button>
+              <div className="flex items-center gap-2">
+                <img 
+                  src={user?.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user?.email} 
+                  alt="Profile" 
+                  className="w-8 h-8 rounded-full"
+                />
+                <button 
+                  onClick={handleLogout}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
         </div>
 
         {/* Add Task Button */}
