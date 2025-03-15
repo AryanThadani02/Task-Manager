@@ -75,13 +75,12 @@ export default function LoginPage() {
       </div>
       </div>
       <div className="flex-1 bg-purple-50 relative overflow-hidden">
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <img src="/image_1742060547495.png" alt="Task Overview" className="w-[80%] z-10 mb-8" />
-          <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0">
             <svg viewBox="0 0 200 200" className="w-full h-full">
-              <circle cx="100" cy="100" r="80" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.2" className="animate-[spin_8s_linear_infinite]"/>
-              <circle cx="100" cy="100" r="60" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.4" className="animate-[spin_6s_linear_infinite_reverse]"/>
-              <circle cx="100" cy="100" r="40" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.6" className="animate-[spin_4s_linear_infinite]"/>
+              <circle cx="100" cy="100" r="80" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.2"/>
+              <circle cx="100" cy="100" r="60" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.4"/>
+              <circle cx="100" cy="100" r="40" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.6"/>
             </svg>
           </div>
         </div>
