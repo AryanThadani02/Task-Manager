@@ -198,7 +198,7 @@ export default function TaskView() {
     e.preventDefault();
   };
 
-  const handleDrop = (e: React.DragEvent, newStatus: Task['status']) => {
+  const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
