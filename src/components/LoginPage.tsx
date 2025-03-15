@@ -78,15 +78,9 @@ export default function LoginPage() {
         <div className="absolute inset-0">
           <div className="absolute inset-0">
             <svg viewBox="0 0 200 200" className="w-full h-full">
-              <g className="animate-[spin_20s_linear_infinite]">
-                <circle cx="100" cy="100" r="80" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.2"/>
-              </g>
-              <g className="animate-[spin_15s_linear_infinite]">
-                <circle cx="100" cy="100" r="60" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.4"/>
-              </g>
-              <g className="animate-[spin_10s_linear_infinite]">
-                <circle cx="100" cy="100" r="40" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.6"/>
-              </g>
+              <circle cx="100" cy="100" r="80" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.2"/>
+              <circle cx="100" cy="100" r="60" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.4"/>
+              <circle cx="100" cy="100" r="40" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.6"/>
             </svg>
           </div>
         </div>
