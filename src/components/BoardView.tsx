@@ -171,52 +171,46 @@ export default function BoardView() {
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
         <div className="grid grid-cols-3 gap-4">
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-purple-200 p-3 font-medium">Todo</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Todo")}
-            >
-              {todoTasks.length > 0 ? (
-                todoTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Tasks In To-Do</div>
-              )}
-            </div>
+          <div>
+            <div className="bg-purple-200 p-3 font-medium rounded-t-lg">Todo</div>
+            {todoTasks.length > 0 && (
+              <div 
+                className="bg-white border border-gray-200 rounded-b-lg p-4"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "Todo")}
+              >
+                {todoTasks.map(task => <TaskCard key={task.id} task={task} />)}
+              </div>
+            )}
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "In Progress")}
-            >
-              {inProgressTasks.length > 0 ? (
-                inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Tasks In Progress</div>
-              )}
-            </div>
+          <div>
+            <div className="bg-blue-200 p-3 font-medium rounded-t-lg">In-Progress</div>
+            {inProgressTasks.length > 0 && (
+              <div 
+                className="bg-white border border-gray-200 rounded-b-lg p-4"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "In Progress")}
+              >
+                {inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)}
+              </div>
+            )}
           </div>
 
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-green-200 p-3 font-medium">Completed</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Completed")}
-            >
-              {completedTasks.length > 0 ? (
-                completedTasks.map(task => <TaskCard key={task.id} task={task} />)
-              ) : (
-                <div className="text-gray-600">No Completed Tasks</div>
-              )}
-            </div>
+          <div>
+            <div className="bg-green-200 p-3 font-medium rounded-t-lg">Completed</div>
+            {completedTasks.length > 0 && (
+              <div 
+                className="bg-white border border-gray-200 rounded-b-lg p-4"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "Completed")}
+              >
+                {completedTasks.map(task => <TaskCard key={task.id} task={task} />)}
+              </div>
+            )}
           </div>
         </div>
       </div>
