@@ -35,8 +35,9 @@ export default function LoginPage() {
   
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-50 to-gray-100 p-6">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center">
+    <div className="flex min-h-screen">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-r from-purple-50 to-gray-100 p-6">
+        <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center">
         <h1 className="text-4xl font-bold text-purple-600 mb-10">TaskBuddy</h1>
         <p className="text-gray-600 mb-6">
           Streamline your workflow and track progress effortlessly.
@@ -71,6 +72,18 @@ export default function LoginPage() {
             <span className="text-gray-700 font-medium">Continue with Google</span>
           </button>
         )}
+      </div>
+      </div>
+      <div className="flex-1 bg-black relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0">
+            <svg viewBox="0 0 200 200" className="w-full h-full">
+              <circle cx="100" cy="100" r="80" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.2"/>
+              <circle cx="100" cy="100" r="60" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.4"/>
+              <circle cx="100" cy="100" r="40" stroke="#8B5CF6" strokeWidth="0.5" fill="none" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
   );
