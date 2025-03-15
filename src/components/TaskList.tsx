@@ -110,7 +110,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
         </div>
         <div className="hidden md:block"> {/* Hide due date in mobile view */}
-          <span className="text-sm text-gray-500">{task.dueDate}</span>
+          <span className="text-sm text-gray-500">
+            {task.dueDate === new Date().toISOString().split('T')[0] 
+              ? "Today"
+              : new Date(task.dueDate).toLocaleDateString('en-US', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric'
+                }).replace(',', '')
+            }
+          </span>
         </div>
         <div className="hidden md:block"> {/* Hide status select in mobile view */}
           <select
