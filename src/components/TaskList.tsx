@@ -202,39 +202,29 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
+    const dropTarget = e.target as HTMLElement;
+    const dropTargetTask = dropTarget.closest('[data-task-id]');
+    const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
 
     if (!task) return;
 
-    // Find the drop target task
-    let dropTarget = e.target as HTMLElement;
-    while (dropTarget && !dropTarget.dataset.taskId && dropTarget.parentElement) {
-      dropTarget = dropTarget.parentElement;
-    }
-    const dropTargetId = dropTarget?.dataset?.taskId;
-
-    // Get tasks in the target section
-    const tasksInSection = tasks
-      .filter(t => t.status === newStatus)
+    const tasksInSection = tasks.filter(t => t.status === newStatus && t.id !== taskId)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-    let newOrder: number;
-
+    
+    let newOrder = 0;
+    
     if (dropTargetId) {
-      const targetTask = tasksInSection.find(t => t.id === dropTargetId);
-      if (targetTask) {
-        newOrder = targetTask.order || 0;
-
-        // Update orders for tasks after the drop position
-        tasksInSection.forEach(t => {
-          if (t.id !== taskId && (t.order || 0) >= newOrder) {
-            dispatch(updateTask({
-              ...t,
-              order: (t.order || 0) + 1
-            } as Task));
-          }
+      const targetIndex = tasksInSection.findIndex(t => t.id === dropTargetId);
+      if (targetIndex !== -1) {
+        newOrder = targetIndex;
+        
+        // Shift tasks after the drop position
+        tasksInSection.slice(targetIndex).forEach(t => {
+          dispatch(updateTask({
+            ...t,
+            order: (t.order || 0) + 1
+          } as Task));
         });
-      } else {
-        newOrder = tasksInSection.length;
       }
     } else {
       newOrder = tasksInSection.length;
@@ -245,9 +235,7 @@ export default function TaskView() {
       ...task,
       status: newStatus,
       completed: newStatus === "Completed",
-      order: newOrder,
-      category: task.category,
-      dueDate: task.dueDate
+      order: newOrder
     } as Task));
   };
 
