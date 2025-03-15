@@ -1,4 +1,29 @@
 
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-circle-slow {
+  transform-origin: center;
+  animation: rotate 20s linear infinite;
+}
+
+.rotate-circle-medium {
+  transform-origin: center;
+  animation: rotate 15s linear infinite;
+}
+
+.rotate-circle-fast {
+  transform-origin: center;
+  animation: rotate 10s linear infinite;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
