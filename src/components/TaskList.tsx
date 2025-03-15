@@ -14,6 +14,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const taskRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,7 +66,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   return (
     <div 
+      ref={taskRef}
       id={`task-${task.id}`}
+      data-task-id={task.id}
+      data-order={task.order}
       draggable
       onDragStart={(e) => {
         handleDragStart(e);
@@ -213,13 +217,15 @@ export default function TaskView() {
         .filter(t => t.status === newStatus)
         .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-      let newOrder = 0;
+      let newOrder: number;
       
-      if (dropTargetId) {
-        const targetTask = tasksInSection.find(t => t.id === dropTargetId);
+      if (dropTargetId && dropTargetId !== taskId) {
+        const targetTask = tasks.find(t => t.id === dropTargetId);
         if (targetTask) {
-          newOrder = targetTask.order || 0;
-          // Reorder tasks
+          const isBefore = dropTarget.compareDocumentPosition(document.getElementById(`task-${taskId}`)!) & Node.DOCUMENT_POSITION_FOLLOWING;
+          newOrder = isBefore ? targetTask.order! : targetTask.order! + 1;
+          
+          // Update orders of other tasks
           for (const t of tasksInSection) {
             if (t.id !== taskId && (t.order || 0) >= newOrder) {
               await dispatch(modifyTask({
@@ -228,11 +234,14 @@ export default function TaskView() {
               }) as any);
             }
           }
+        } else {
+          newOrder = tasksInSection.length;
         }
       } else {
         newOrder = tasksInSection.length;
       }
 
+      // Update the dragged task
       await dispatch(modifyTask({
         ...task,
         status: newStatus,
@@ -241,6 +250,7 @@ export default function TaskView() {
         category: task.category,
         dueDate: task.dueDate
       }) as any);
+
     } catch (error) {
       console.error("Failed to update task:", error);
     }
