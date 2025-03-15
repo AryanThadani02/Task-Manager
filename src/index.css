@@ -1,17 +1,22 @@
 
-@keyframes rotateOuter {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-@keyframes rotateMiddle {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+.circle-outer {
+  animation: rotate 20s linear infinite;
+  transform-origin: center;
 }
 
-@keyframes rotateInner {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+.circle-middle {
+  animation: rotate 15s linear infinite reverse;
+  transform-origin: center;
+}
+
+.circle-inner {
+  animation: rotate 10s linear infinite;
+  transform-origin: center;
 }
 
 @tailwind base;
