@@ -208,38 +208,33 @@ export default function TaskView() {
 
     if (!task) return;
 
-    const tasksInSection = tasks.filter(t => t.status === newStatus)
+    const tasksInSection = tasks.filter(t => t.status === newStatus && t.id !== taskId)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
     
-    let newOrder: number;
+    let newOrder = 0;
     
-    if (!dropTargetId) {
-      // If dropped in empty space, add to end
-      newOrder = tasksInSection.length;
-    } else {
-      const targetTask = tasks.find(t => t.id === dropTargetId);
-      if (!targetTask) return;
-      
-      const targetOrder = targetTask.order || 0;
-      newOrder = targetOrder;
-
-      // Update orders of tasks after drop position
-      tasksInSection.forEach(t => {
-        if ((t.order || 0) >= targetOrder && t.id !== task.id) {
+    if (dropTargetId) {
+      const targetIndex = tasksInSection.findIndex(t => t.id === dropTargetId);
+      if (targetIndex !== -1) {
+        newOrder = targetIndex;
+        
+        // Shift tasks after the drop position
+        tasksInSection.slice(targetIndex).forEach(t => {
           dispatch(updateTask({
             ...t,
             order: (t.order || 0) + 1
           } as Task));
-        }
-      });
+        });
+      }
+    } else {
+      newOrder = tasksInSection.length;
     }
 
     // Update the dragged task
-    const isCompleted = newStatus === "Completed";
     dispatch(updateTask({
       ...task,
       status: newStatus,
-      completed: isCompleted,
+      completed: newStatus === "Completed",
       order: newOrder
     } as Task));
   };
