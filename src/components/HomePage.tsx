@@ -19,8 +19,6 @@ export default function HomePage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dueDateFilter, setDueDateFilter] = useState("");
 
-  const isListView = location.pathname.includes('/tasks');
-
   useEffect(() => {
     if (user?.uid) {
       dispatch(fetchTasks(user.uid) as any);
@@ -43,78 +41,71 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="border-b bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
-              <Link to="/home" className="flex items-center text-xl font-semibold text-gray-900">
-                <span className="mr-2">📋</span> TaskBuddy
-              </Link>
-              <div className="flex items-center space-x-6">
-                <Link
+              <h1 className="text-xl font-semibold">📋 TaskBuddy</h1>
+              <div className="flex items-center gap-4">
+                <Link 
                   to="/home/tasks"
-                  className={`flex items-center ${
-                    isListView ? 'text-purple-600' : 'text-gray-600 hover:text-gray-900'
+                  className={`flex items-center gap-2 ${
+                    location.pathname === '/home/tasks' 
+                      ? 'text-purple-600 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  <i className="fas fa-list-ul mr-2"></i>
                   List
                 </Link>
-                <Link
+                <Link 
                   to="/home/board"
-                  className={`flex items-center ${
-                    !isListView ? 'text-purple-600' : 'text-gray-600 hover:text-gray-900'
+                  className={`flex items-center gap-2 ${
+                    location.pathname === '/home/board' 
+                      ? 'text-purple-600 font-medium' 
+                      : 'text-gray-600 hover:text-gray-900'
                   }`}
                 >
-                  <i className="fas fa-columns mr-2"></i>
                   Board
                 </Link>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center">
-                <span className="text-sm mr-2">Filter by:</span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Search tasks..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="border rounded px-3 py-1.5 text-sm"
+                  className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Category</option>
-                  <option value="Work">Work</option>
-                  <option value="Personal">Personal</option>
-                  <option value="Shopping">Shopping</option>
-                  <option value="Health">Health</option>
-                  <option value="Finance">Finance</option>
+                  <option value="work">Work</option>
+                  <option value="personal">Personal</option>
+                  <option value="shopping">Shopping</option>
                 </select>
                 <select
                   value={dueDateFilter}
                   onChange={(e) => setDueDateFilter(e.target.value)}
-                  className="border rounded px-3 py-1.5 ml-2 text-sm"
+                  className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Due Date</option>
                   <option value="today">Today</option>
-                  <option value="tomorrow">Tomorrow</option>
                   <option value="week">This Week</option>
                   <option value="month">This Month</option>
                 </select>
               </div>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border rounded pl-8 pr-3 py-1.5 w-48 text-sm"
-                />
-                <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-              </div>
 
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-purple-600 text-white px-4 py-1.5 rounded text-sm hover:bg-purple-700"
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
               >
-                ADD TASK
+                Add Task
               </button>
 
               <div className="flex items-center gap-4">
@@ -136,7 +127,7 @@ export default function HomePage() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 py-6">
-        <Outlet context={{ searchQuery, categoryFilter, dueDateFilter }} />
+        <Outlet />
       </main>
 
       {isModalOpen && (
