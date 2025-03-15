@@ -127,7 +127,7 @@ export default function HomePage() {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 py-6">
-        <Outlet />
+        <Outlet context={{ searchQuery, categoryFilter, dueDateFilter }} />
       </main>
 
       {isModalOpen && (
