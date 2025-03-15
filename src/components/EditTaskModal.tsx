@@ -188,47 +188,52 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 <div id="quill-editor-edit" className="h-32 mb-4"></div>
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Work' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
-                  onClick={() => setEditedTask({...editedTask, category: 'Work'})}
-                >
-                  Work
-                </button>
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Personal' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
-                  onClick={() => setEditedTask({...editedTask, category: 'Personal'})}
-                >
-                  Personal
-                </button>
-              </div>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Task Category*</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      className={`px-3 py-1 rounded ${editedTask.category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+                      onClick={() => setEditedTask({...editedTask, category: "Work"})}
+                    >
+                      Work
+                    </button>
+                    <button
+                      type="button"
+                      className={`px-3 py-1 rounded ${editedTask.category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+                      onClick={() => setEditedTask({...editedTask, category: "Personal"})}
+                    >
+                      Personal
+                    </button>
+                  </div>
+                </div>
 
-              <div>
-                <label className="text-sm text-gray-600">Due on*</label>
-                <input
-                  type="date"
-                  value={editedTask.dueDate}
-                  onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="w-full p-2 mt-1 border rounded"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Due Date*</label>
+                  <input
+                    type="date"
+                    value={editedTask.dueDate}
+                    onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="text-sm text-gray-600">Task Status*</label>
-                <select
-                  value={editedTask.status}
-                  onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
-                  className="w-full p-2 mt-1 border rounded"
-                  required
-                >
-                  <option value="Todo">To-Do</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Task Status*</label>
+                  <select
+                    value={editedTask.status}
+                    onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
+                    className="w-full p-2 border rounded"
+                    required
+                  >
+                    <option value="Todo">To-Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
               </div>
 
               <div className="mb-6">
@@ -289,47 +294,52 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 />
               </div>
 
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Work' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
-                  onClick={() => setEditedTask({...editedTask, category: 'Work'})}
-                >
-                  Work
-                </button>
-                <button
-                  type="button"
-                  className={`px-4 py-2 rounded-full text-sm ${editedTask.category === 'Personal' ? 'bg-purple-600 text-white' : 'bg-gray-100'}`}
-                  onClick={() => setEditedTask({...editedTask, category: 'Personal'})}
-                >
-                  Personal
-                </button>
-              </div>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Task Category*</label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      className={`px-3 py-1 rounded ${editedTask.category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+                      onClick={() => setEditedTask({...editedTask, category: "Work"})}
+                    >
+                      Work
+                    </button>
+                    <button
+                      type="button"
+                      className={`px-3 py-1 rounded ${editedTask.category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
+                      onClick={() => setEditedTask({...editedTask, category: "Personal"})}
+                    >
+                      Personal
+                    </button>
+                  </div>
+                </div>
 
-              <div>
-                <label className="text-sm text-gray-600">Due on*</label>
-                <input
-                  type="date"
-                  value={editedTask.dueDate}
-                  onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
-                  min={new Date().toISOString().split('T')[0]}
-                  className="w-full p-2 mt-1 border rounded"
-                  required
-                />
-              </div>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Due Date*</label>
+                  <input
+                    type="date"
+                    value={editedTask.dueDate}
+                    onChange={(e) => setEditedTask({...editedTask, dueDate: e.target.value})}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full p-2 border rounded"
+                    required
+                  />
+                </div>
 
-              <div>
-                <label className="text-sm text-gray-600">Task Status*</label>
-                <select
-                  value={editedTask.status}
-                  onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
-                  className="w-full p-2 mt-1 border rounded"
-                  required
-                >
-                  <option value="Todo">To-Do</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
+                <div>
+                  <label className="text-sm text-gray-600 mb-1 block">Task Status*</label>
+                  <select
+                    value={editedTask.status}
+                    onChange={(e) => setEditedTask({...editedTask, status: e.target.value as Task['status']})}
+                    className="w-full p-2 border rounded"
+                    required
+                  >
+                    <option value="Todo">To-Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
               </div>
 
               <div className="mb-6">
