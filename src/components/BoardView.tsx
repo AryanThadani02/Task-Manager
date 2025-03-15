@@ -170,7 +170,6 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(!searchQuery || todoTasks.length > 0) && (
             <div 
               className="bg-purple-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
@@ -189,7 +188,7 @@ export default function BoardView() {
             </div>
           )}
 
-          {(!searchQuery || inProgressTasks.length > 0) && (
+          
             <div 
               className="bg-blue-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
@@ -208,7 +207,7 @@ export default function BoardView() {
             </div>
           )}
 
-          {(!searchQuery || completedTasks.length > 0) && (
+          
             <div 
               className="bg-green-50 p-4 rounded-lg"
               onDragOver={handleDragOver}
