@@ -39,30 +39,75 @@ export default function HomePage() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg shadow-md space-y-4 md:space-y-0">
+      <div className="flex justify-between items-center bg-white px-4 py-2 shadow-sm">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-gray-800">📋 TaskBuddy</span>
+          <span className="text-xl font-medium">📋 TaskBuddy</span>
         </div>
-        <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full md:w-auto">
+        <div className="flex items-center gap-3">
           {user && (
-            <div className="flex items-center gap-3">
+            <>
               <img
                 src={user.photoURL ?? ""}
                 alt="Profile"
-                className="w-10 h-10 rounded-full border border-gray-300"
+                className="w-8 h-8 rounded-full"
               />
-              <span className="text-gray-700 font-medium">{user.displayName}</span>
-            </div>
+              <span className="text-sm text-gray-600">{user.displayName}</span>
+              <button
+                onClick={handleLogout}
+                className="text-sm text-gray-600 hover:text-gray-800"
+              >
+                Logout
+              </button>
+            </>
           )}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-all"
-          >
-            <FaSignOutAlt className="text-gray-600" />
-            Logout
-          </button>
+        </div>
+      </div>
+
+      {/* Navigation Bar */}
+      <div className="bg-white border-b px-4 py-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link 
+              to="/home/tasks" 
+              className={`text-sm ${
+                location.pathname === '/home/tasks' 
+                  ? 'text-gray-900' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              📋 List
+            </Link>
+            <Link 
+              to="/home/board" 
+              className={`text-sm ${
+                location.pathname === '/home/board' 
+                  ? 'text-gray-900' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              📌 Board
+            </Link>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Search"
+                className="px-3 py-1 text-sm border rounded-md w-[200px] focus:outline-none focus:border-purple-500"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <button
+              onClick={() => setIsAddTaskModalOpen(true)}
+              className="px-4 py-1.5 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700"
+            >
+              ADD TASK
+            </button>
+          </div>
         </div>
       </div>
 
