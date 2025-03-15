@@ -177,9 +177,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               </div>
             )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
     </div>
   );
@@ -283,9 +282,6 @@ export default function TaskView() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
-        {filteredTasks.length === 0 ? (
-          <NoResultsFound />
-        ) : (
 
         <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="w-12"></div>
