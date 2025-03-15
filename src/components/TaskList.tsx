@@ -208,35 +208,45 @@ export default function TaskView() {
 
     if (!task) return;
 
-    const tasksInSection = tasks.filter(t => t.status === newStatus && t.id !== taskId)
-      .sort((a, b) => (a.order || 0) - (b.order || 0));
-    
-    let newOrder = 0;
-    
-    if (dropTargetId) {
-      const targetIndex = tasksInSection.findIndex(t => t.id === dropTargetId);
-      if (targetIndex !== -1) {
-        newOrder = targetIndex;
-        
-        // Shift tasks after the drop position
-        tasksInSection.slice(targetIndex).forEach(t => {
-          dispatch(updateTask({
-            ...t,
-            order: (t.order || 0) + 1
-          } as Task));
-        });
-      }
-    } else {
-      newOrder = tasksInSection.length;
-    }
+    try {
+      const tasksInSection = tasks
+        .filter(t => t.status === newStatus)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-    // Update the dragged task
-    dispatch(updateTask({
-      ...task,
-      status: newStatus,
-      completed: newStatus === "Completed",
-      order: newOrder
-    } as Task));
+      let newOrder: number;
+      
+      if (dropTargetId) {
+        const targetTask = tasksInSection.find(t => t.id === dropTargetId);
+        if (targetTask) {
+          newOrder = targetTask.order || 0;
+          // Update orders of other tasks
+          for (const t of tasksInSection) {
+            if (t.id !== taskId && (t.order || 0) >= newOrder) {
+              await dispatch(modifyTask({
+                ...t,
+                order: (t.order || 0) + 1
+              } as Task) as any);
+            }
+          }
+        } else {
+          newOrder = tasksInSection.length;
+        }
+      } else {
+        newOrder = tasksInSection.length;
+      }
+
+      // Update the dragged task last
+      await dispatch(modifyTask({
+        ...task,
+        status: newStatus,
+        completed: newStatus === "Completed",
+        order: newOrder,
+        category: task.category,
+        dueDate: task.dueDate
+      } as Task) as any);
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    }
   };
 
   const handleBulkDelete = () => {
