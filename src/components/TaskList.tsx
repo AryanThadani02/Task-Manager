@@ -208,40 +208,34 @@ export default function TaskView() {
 
     if (!task) return;
 
-    const tasksInSection = tasks
-      .filter(t => t.status === newStatus)
+    const tasksInSection = tasks.filter(t => t.status === newStatus && t.id !== taskId)
       .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-    let newOrder: number;
+    
+    let newOrder = 0;
     
     if (dropTargetId) {
-      const targetTask = tasksInSection.find(t => t.id === dropTargetId);
-      if (targetTask) {
-        newOrder = targetTask.order || 0;
-        // Update orders of other tasks
-        tasksInSection.forEach(t => {
-          if (t.id !== taskId && (t.order || 0) >= newOrder) {
-            dispatch(updateTask({
-              ...t,
-              order: (t.order || 0) + 1
-            } as Task));
-          }
+      const targetIndex = tasksInSection.findIndex(t => t.id === dropTargetId);
+      if (targetIndex !== -1) {
+        newOrder = targetIndex;
+        
+        // Shift tasks after the drop position
+        tasksInSection.slice(targetIndex).forEach(t => {
+          dispatch(updateTask({
+            ...t,
+            order: (t.order || 0) + 1
+          } as Task));
         });
-      } else {
-        newOrder = tasksInSection.length;
       }
     } else {
       newOrder = tasksInSection.length;
     }
 
-    // Update the dragged task last
+    // Update the dragged task
     dispatch(updateTask({
       ...task,
       status: newStatus,
       completed: newStatus === "Completed",
-      order: newOrder,
-      category: task.category,
-      dueDate: task.dueDate
+      order: newOrder
     } as Task));
   };
 
