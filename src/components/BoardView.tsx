@@ -68,7 +68,10 @@ export default function BoardView() {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {searchQuery && filteredTasks.length === 0 ? (
+          <NoResultsFound />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-purple-50 p-4 rounded-lg">
             <h3 className="font-medium mb-3">Todo ({todoTasks.length})</h3>
             {todoTasks.length > 0 && (

@@ -190,6 +190,10 @@ const LoadingSpinner = () => (
   </div>
 );
 
+const NoResultsFound = () => (
+  <div className="p-4 text-center text-gray-600">No Results Found</div>
+);
+
 export default function TaskView() {
   const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
     searchQuery: string;
@@ -238,7 +242,7 @@ export default function TaskView() {
           }
         ]
       };
-      
+
       await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
@@ -282,98 +286,103 @@ export default function TaskView() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
         </div>
-
-        <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
-          <div className="w-12"></div>
-          <div>Task name</div>
-          <div>Due on</div>
-          <div>Task Status</div>
-          <div>Task Category</div>
-        </div>
-        {tasks.some(task => task.selected) && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
-            <span className="text-sm">
-              {tasks.filter(task => task.selected).length} Tasks Selected
-            </span>
-            <span className="text-gray-400">|</span>
-            <div className="relative group">
-              <button className="text-sm hover:text-gray-300">
-                Status ▾
-              </button>
-              <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="py-1">
-                  <button onClick={() => handleBulkStatusChange('Todo')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Todo</button>
-                  <button onClick={() => handleBulkStatusChange('In Progress')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In Progress</button>
-                  <button onClick={() => handleBulkStatusChange('Completed')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
+        {searchQuery && filteredTasks.length === 0 ? (
+          <NoResultsFound />
+        ) : (
+          <>
+            <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
+              <div className="w-12"></div>
+              <div>Task name</div>
+              <div>Due on</div>
+              <div>Task Status</div>
+              <div>Task Category</div>
+            </div>
+            {tasks.some(task => task.selected) && (
+              <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
+                <span className="text-sm">
+                  {tasks.filter(task => task.selected).length} Tasks Selected
+                </span>
+                <span className="text-gray-400">|</span>
+                <div className="relative group">
+                  <button className="text-sm hover:text-gray-300">
+                    Status ▾
+                  </button>
+                  <div className="absolute bottom-full mb-2 left-0 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="py-1">
+                      <button onClick={() => handleBulkStatusChange('Todo')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Todo</button>
+                      <button onClick={() => handleBulkStatusChange('In Progress')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">In Progress</button>
+                      <button onClick={() => handleBulkStatusChange('Completed')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
+                    </div>
+                  </div>
                 </div>
+                <button 
+                  onClick={handleBulkDelete}
+                  className="text-red-400 hover:text-red-300 text-sm"
+                >
+                  Delete
+                </button>
               </div>
+            )}
+            <div className="flex flex-col gap-4">
+              {(!searchQuery || todoTasks.length > 0) && (
+                <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
+                  <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
+                    Todo ({todoTasks.length})
+                  </div>
+                  <div 
+                    className="p-4 min-h-[50px]"
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, "Todo")}
+                  >
+                    {todoTasks.length > 0 ? (
+                      todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    ) : (
+                      <div className="text-gray-600">No Tasks In To-Do</div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {(!searchQuery || inProgressTasks.length > 0) && (
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-blue-200 p-3 font-medium">
+                    In-Progress ({inProgressTasks.length})
+                  </div>
+                  <div 
+                    className="p-4 min-h-[100px]"
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, "In Progress")}
+                  >
+                    {inProgressTasks.length > 0 ? (
+                      inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    ) : (
+                      <div className="text-gray-600">No Tasks In Progress</div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {(!searchQuery || completedTasks.length > 0) && (
+                <div className="border rounded-lg overflow-hidden">
+                  <div className="bg-green-200 p-3 font-medium">
+                    Completed ({completedTasks.length})
+                  </div>
+                  <div 
+                    className="p-4 min-h-[100px]"
+                    onDragOver={handleDragOver}
+                    onDrop={(e) => handleDrop(e, "Completed")}
+                  >
+                    {completedTasks.length > 0 ? (
+                      completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    ) : (
+                      <div className="text-gray-600">No Completed Tasks</div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
-            <button 
-              onClick={handleBulkDelete}
-              className="text-red-400 hover:text-red-300 text-sm"
-            >
-              Delete
-            </button>
-          </div>
+          </>
         )}
-        <div className="flex flex-col gap-4">
-          {(!searchQuery || todoTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
-              <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
-                Todo ({todoTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[50px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "Todo")}
-              >
-                {todoTasks.length > 0 ? (
-                  todoTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Tasks In To-Do</div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {(!searchQuery || inProgressTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-200 p-3 font-medium">
-                In-Progress ({inProgressTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[100px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "In Progress")}
-              >
-                {inProgressTasks.length > 0 ? (
-                  inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Tasks In Progress</div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {(!searchQuery || completedTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-green-200 p-3 font-medium">
-                Completed ({completedTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[100px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "Completed")}
-              >
-                {completedTasks.length > 0 ? (
-                  completedTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Completed Tasks</div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
