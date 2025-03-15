@@ -1,106 +1,11 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useOutletContext } from "react-router-dom";
-import { RootState, AppDispatch } from "../redux/store";
-import { Task } from "../types/Task";
-import { removeTask, modifyTask } from "../redux/taskSlice";
-import EditTaskModal from "./EditTaskModal";
-
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center h-full">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-  </div>
-);
-
-interface TaskCardProps {
-  task: Task;
-}
-
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const dispatch = useDispatch();
-
-  const handleDelete = async () => {
-    try {
-      if (task.id) {
-        await dispatch(removeTask(task.id) as any);
-      }
-    } catch (error) {
-      console.error("Failed to delete task:", error);
-    }
-  };
-
-  const handleDragStart = (e: React.DragEvent) => {
-    e.dataTransfer.setData("taskId", task.id || '');
-    e.currentTarget.classList.add('opacity-50');
-  };
-
-  const handleDragEnd = (e: React.DragEvent) => {
-    e.currentTarget.classList.remove('opacity-50');
-  };
-
-  return (
-    <div 
-      className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
-      draggable={!isEditModalOpen}
-      onDragStart={!isEditModalOpen ? handleDragStart : undefined}
-      onDragEnd={!isEditModalOpen ? handleDragEnd : undefined}
-    >
-      <div className="flex justify-between items-start">
-        <h3 className={`font-semibold ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</h3>
-        <div className="flex gap-2">
-          <span className={`px-2 py-1 rounded text-sm ${
-            task.category === 'Work' ? 'bg-purple-100' : 'bg-blue-100'
-          }`}>
-            {task.category}
-          </span>
-          <div className="relative">
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              ⋮
-            </button>
-            {showMenu && (
-              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
-                <button
-                  onClick={() => {
-                    setIsEditModalOpen(true);
-                    setShowMenu(false);
-                  }}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => {
-                    handleDelete();
-                    setShowMenu(false);
-                  }}
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
-                >
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      <div 
-        className="text-gray-600 mt-2"
-        dangerouslySetInnerHTML={{ __html: task.description }}
-      />
-      <div className="mt-3 flex justify-between items-center">
-        <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-        {task.fileUrl && (
-          <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
-        )}
-      </div>
-      {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
-    </div>
-  );
-};
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useOutletContext } from 'react-router-dom';
+import { RootState, AppDispatch } from '../redux/store';
+import { Task } from '../types';
+import { modifyTask } from '../redux/taskSlice';
+import TaskCard from './TaskCard';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function BoardView() {
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
@@ -140,28 +45,31 @@ export default function BoardView() {
     draggedOverElement.classList.remove('bg-gray-50');
   };
 
-  const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
+  const handleDrop = async (e: React.DragEvent, newStatus: string) => {
     e.preventDefault();
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.remove('bg-gray-50');
-
-    const taskId = e.dataTransfer.getData("taskId");
+    const taskId = e.dataTransfer.getData('text/plain');
     const task = tasks.find(t => t.id === taskId);
 
-    if (task && task.status !== newStatus) {
-      try {
-        const updatedTask: Task = {
-          ...task,
-          status: newStatus,
-          completed: newStatus === "Completed",
-          selected: task.selected || false,
-          category: task.category,
-          dueDate: task.dueDate
-        };
-        await dispatch(modifyTask(updatedTask) as any);
-      } catch (error) {
-        console.error("Failed to update task status:", error);
-      }
+    if (!task) return;
+
+    try {
+      const updatedTask: Task = {
+        ...task,
+        status: newStatus as "Todo" | "In Progress" | "Completed",
+        completed: newStatus === "Completed",
+        activity: [
+          ...(task.activity || []),
+          {
+            timestamp: new Date().toISOString(),
+            action: "status_change",
+            details: `Task status changed to ${newStatus} via drag and drop`
+          }
+        ]
+      };
+
+      await dispatch(modifyTask(updatedTask));
+    } catch (error) {
+      console.error("Failed to update task:", error);
     }
   };
 
@@ -170,61 +78,56 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div 
-              className="bg-purple-50 p-4 rounded-lg"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Todo")}
-            >
-              <h3 className="font-medium mb-3">Todo ({todoTasks.length})</h3>
-              <div className="space-y-2">
-                {todoTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-                {todoTasks.length === 0 && !searchQuery && (
-                  <div className="text-gray-500 text-sm">No tasks in Todo</div>
-                )}
-              </div>
+          <div 
+            className="bg-purple-50 p-4 rounded-lg"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => handleDrop(e, "Todo")}
+          >
+            <h3 className="font-medium mb-3">Todo ({todoTasks.length})</h3>
+            <div className="space-y-2">
+              {todoTasks.map(task => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+              {todoTasks.length === 0 && !searchQuery && (
+                <div className="text-gray-500 text-sm">No tasks in Todo</div>
+              )}
             </div>
-          )}
+          </div>
 
-          
-            <div 
-              className="bg-blue-50 p-4 rounded-lg"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "In Progress")}
-            >
-              <h3 className="font-medium mb-3">In Progress ({inProgressTasks.length})</h3>
-              <div className="space-y-2">
-                {inProgressTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-                {inProgressTasks.length === 0 && !searchQuery && (
-                  <div className="text-gray-500 text-sm">No tasks in progress</div>
-                )}
-              </div>
+          <div 
+            className="bg-blue-50 p-4 rounded-lg"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => handleDrop(e, "In Progress")}
+          >
+            <h3 className="font-medium mb-3">In Progress ({inProgressTasks.length})</h3>
+            <div className="space-y-2">
+              {inProgressTasks.map(task => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+              {inProgressTasks.length === 0 && !searchQuery && (
+                <div className="text-gray-500 text-sm">No tasks in progress</div>
+              )}
             </div>
-          )}
+          </div>
 
-          
-            <div 
-              className="bg-green-50 p-4 rounded-lg"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Completed")}
-            >
-              <h3 className="font-medium mb-3">Completed ({completedTasks.length})</h3>
-              <div className="space-y-2">
-                {completedTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
-                ))}
-                {completedTasks.length === 0 && !searchQuery && (
-                  <div className="text-gray-500 text-sm">No completed tasks</div>
-                )}
-              </div>
+          <div 
+            className="bg-green-50 p-4 rounded-lg"
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={(e) => handleDrop(e, "Completed")}
+          >
+            <h3 className="font-medium mb-3">Completed ({completedTasks.length})</h3>
+            <div className="space-y-2">
+              {completedTasks.map(task => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+              {completedTasks.length === 0 && !searchQuery && (
+                <div className="text-gray-500 text-sm">No completed tasks</div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
