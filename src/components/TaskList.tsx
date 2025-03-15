@@ -204,7 +204,7 @@ export default function TaskView() {
     const task = tasks.find(t => t.id === taskId);
     const dropTarget = e.target as HTMLElement;
     const dropTargetTask = dropTarget.closest('[data-task-id]');
-    const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
+    const dropTargetId = dropTargetTask?.getAttribute('data-task-id'););
 
     if (task) {
     const tasksInSection = tasks.filter(t => t.status === newStatus);
