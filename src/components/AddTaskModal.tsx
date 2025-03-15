@@ -141,6 +141,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            min={new Date().toISOString().split('T')[0]}
             className="w-full p-2 mb-3 border rounded"
             required
           />
