@@ -117,7 +117,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                   day: 'numeric',
                   month: 'short',
                   year: 'numeric'
-                }).replace(',', '')
+                }).split(',')[0].split(' ').reverse().join(' ') + ', ' + new Date(task.dueDate).getFullYear()
             }
           </span>
         </div>
