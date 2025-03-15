@@ -202,26 +202,38 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
+    const dropTarget = e.target as HTMLElement;
+    const dropTargetTask = dropTarget.closest('[data-task-id]');
+    const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
 
     if (task) {
-      // Update the task's status and completed state
+      const tasksInSection = tasks.filter(t => t.status === newStatus);
+      let newOrder = tasksInSection.length;
+
+      if (dropTargetId) {
+        const targetTask = tasks.find(t => t.id === dropTargetId);
+        if (targetTask) {
+          newOrder = targetTask.order || 0;
+          // Update orders of tasks after the drop target
+          tasksInSection.forEach(t => {
+            if ((t.order || 0) >= newOrder && t.id !== taskId) {
+              dispatch(updateTask({
+                ...t,
+                order: (t.order || 0) + 1
+              } as Task));
+            }
+          });
+        }
+      }
+
+      // Update the dragged task with new status and order
       const isCompleted = newStatus === "Completed";
       dispatch(updateTask({
         ...task,
         status: newStatus,
-        completed: isCompleted
+        completed: isCompleted,
+        order: newOrder
       } as Task));
-
-      // Update order for all tasks in the section
-      const tasksInSection = tasks.filter(t => t.status === newStatus);
-      tasksInSection.forEach((t, index) => {
-        if (t.id !== taskId) {
-          dispatch(updateTask({
-            ...t,
-            order: index
-          } as Task));
-        }
-      });
     }
   };
 
