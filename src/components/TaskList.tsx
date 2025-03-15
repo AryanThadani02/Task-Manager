@@ -206,25 +206,30 @@ export default function TaskView() {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
-    const dropTarget = e.target as HTMLElement;
-    const dropTargetTask = dropTarget.closest('[data-task-id]');
-    const dropTargetId = dropTargetTask?.getAttribute('data-task-id');
-
+    
     if (!task) return;
 
     try {
-      const tasksInSection = tasks
-        .filter(t => t.status === newStatus)
-        .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-      let newOrder: number;
+      const dropTarget = e.target as HTMLElement;
+      const taskContainer = dropTarget.closest('[data-task-id]') as HTMLElement;
+      const tasksInSection = tasks.filter(t => t.status === newStatus);
       
-      if (dropTargetId && dropTargetId !== taskId) {
-        const targetTask = tasks.find(t => t.id === dropTargetId);
-        if (targetTask) {
-          const isBefore = dropTarget.compareDocumentPosition(document.getElementById(`task-${taskId}`)!) & Node.DOCUMENT_POSITION_FOLLOWING;
-          newOrder = isBefore ? targetTask.order! : targetTask.order! + 1;
+      let newOrder = tasksInSection.length;
+
+      if (taskContainer) {
+        const targetTaskId = taskContainer.getAttribute('data-task-id');
+        const targetTask = tasks.find(t => t.id === targetTaskId);
+        
+        if (targetTask && targetTaskId !== taskId) {
+          const rect = taskContainer.getBoundingClientRect();
+          const dropPosition = e.clientY;
+          const isDroppedBelow = dropPosition > rect.top + rect.height / 2;
           
+          newOrder = targetTask.order || 0;
+          if (isDroppedBelow) {
+            newOrder += 1;
+          }
+
           // Update orders of other tasks
           for (const t of tasksInSection) {
             if (t.id !== taskId && (t.order || 0) >= newOrder) {
@@ -234,14 +239,9 @@ export default function TaskView() {
               }) as any);
             }
           }
-        } else {
-          newOrder = tasksInSection.length;
         }
-      } else {
-        newOrder = tasksInSection.length;
       }
 
-      // Update the dragged task
       await dispatch(modifyTask({
         ...task,
         status: newStatus,
@@ -250,7 +250,6 @@ export default function TaskView() {
         category: task.category,
         dueDate: task.dueDate
       }) as any);
-
     } catch (error) {
       console.error("Failed to update task:", error);
     }
