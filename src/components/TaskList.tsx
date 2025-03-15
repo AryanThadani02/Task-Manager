@@ -5,6 +5,7 @@ import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
 import { updateTask, deleteTask, removeTask, modifyTask } from "../redux/taskSlice";
+import NoResultsFound from "./NoResultsFound";
 
 interface TaskCardProps {
   task: Task;
