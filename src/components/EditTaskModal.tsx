@@ -90,7 +90,8 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
       setFile(file);
       try {
         const imageUrl = await uploadImage(file, auth.currentUser.uid);
-        setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+        const updatedImageUrl = `${imageUrl}?t=${Date.now()}`; // Add timestamp to prevent caching
+        setEditedTask(prev => ({...prev, fileUrl: updatedImageUrl}));
       } catch (error) {
         console.error("Error uploading image:", error);
         alert("Failed to upload image. Please try again.");

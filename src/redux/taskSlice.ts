@@ -168,8 +168,10 @@ export const modifyTask = createAsyncThunk<Task, Task>(
       try {
         console.log("Modifying task:", taskData);
         const taskRef = doc(db, 'tasks', taskData.id || '');
+        // Add timestamp to fileUrl if it exists
         const updatedTask = {
           ...taskData,
+          fileUrl: taskData.fileUrl ? `${taskData.fileUrl.split('?')[0]}?t=${Date.now()}` : null,
           updatedAt: new Date().toISOString(),
           activity: [
             ...(taskData.activity || []),

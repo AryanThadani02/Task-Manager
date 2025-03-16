@@ -62,6 +62,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
     e.currentTarget.classList.remove('opacity-50');
   };
 
+  // Force re-render of image when fileUrl changes
+  const imageUrl = task.fileUrl ? `${task.fileUrl}${task.fileUrl.includes('?') ? '&' : '?'}t=${Date.now()}` : null;
+
   return (
     <div 
       className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
@@ -118,12 +121,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
       />
       <div className="mt-3 flex justify-between items-center">
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-        {task.fileUrl && (
+        {imageUrl && (
           <img 
-            src={task.fileUrl} 
+            src={imageUrl} 
             alt="attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
-            onClick={() => window.open(task.fileUrl, '_blank')}
+            onClick={() => window.open(imageUrl, '_blank')}
+            onError={(e) => {
+              const img = e.target as HTMLImageElement;
+              img.style.display = 'none';
+            }}
           />
         )}
       </div>
