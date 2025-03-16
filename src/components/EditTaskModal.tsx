@@ -262,9 +262,17 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     id="file-upload"
                   />
                   {(file || editedTask.fileUrl) && (
-                    <p className="text-sm text-gray-500 mt-2">
-                      📎 {file ? file.name : editedTask.fileUrl}
-                    </p>
+                    <div className="mt-4">
+                      <img 
+                        src={file ? URL.createObjectURL(file) : editedTask.fileUrl} 
+                        alt="Task attachment" 
+                        className="max-w-full h-auto rounded-lg mx-auto"
+                        style={{ maxHeight: '200px' }} 
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        📎 {file ? file.name : editedTask.fileUrl}
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
@@ -368,9 +376,17 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     id="file-upload"
                   />
                   {(file || editedTask.fileUrl) && (
-                    <p className="text-sm text-gray-500 mt-2">
-                      📎 {file ? file.name : editedTask.fileUrl}
-                    </p>
+                    <div className="mt-4">
+                      <img 
+                        src={file ? URL.createObjectURL(file) : editedTask.fileUrl} 
+                        alt="Task attachment" 
+                        className="max-w-full h-auto rounded-lg mx-auto"
+                        style={{ maxHeight: '200px' }} 
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        📎 {file ? file.name : editedTask.fileUrl}
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
