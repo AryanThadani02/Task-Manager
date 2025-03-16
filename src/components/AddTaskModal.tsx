@@ -4,7 +4,6 @@ import { createTask } from "../redux/taskSlice";
 import { RootState, AppDispatch } from "../redux/store";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebase/storageConfig";
-import { storage } from "../firebase/storageConfig";
 
 interface AddTaskModalProps {
   onClose: () => void;

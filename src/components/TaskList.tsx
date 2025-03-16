@@ -219,20 +219,7 @@ export default function TaskView() {
     e.preventDefault();
   };
 
-  const handleImageUpload = async (file: File, taskId: string) => {
-  const user = auth.currentUser;
-  if (!user) return;
   
-  try {
-    const imageUrl = await uploadImage(file, user.uid);
-    const docRef = doc(db, 'tasks', taskId);
-    await updateDoc(docRef, {
-      imageUrl
-    });
-  } catch (error) {
-    console.error("Error uploading image:", error);
-  }
-};
 
 const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
   e.preventDefault();
