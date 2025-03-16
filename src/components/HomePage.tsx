@@ -97,31 +97,35 @@ export default function HomePage() {
       {/* Filter Section */}
       <div className="mt-4 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
         {/* Category and Date Filters */}
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <span className="text-gray-600 text-sm whitespace-nowrap">Filter by:</span>
-          <select
-            className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            value={categoryFilter}
-          >
+        <div className="space-y-2 sm:space-y-0 sm:flex sm:items-center sm:gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600 text-sm whitespace-nowrap">Filter by:</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              value={categoryFilter}
+            >
             <option value="">All Categories</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
           </select>
           <input
-            type="date"
-            className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
-            onChange={(e) => setDueDateFilter(e.target.value)}
-            value={dueDateFilter}
-          />
-          {(categoryFilter || dueDateFilter) && (
-            <button
-              onClick={clearFilters}
-              className="text-gray-600 hover:text-gray-800 text-sm whitespace-nowrap"
-            >
-              Clear
-            </button>
-          )}
+              type="date"
+              className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
+              onChange={(e) => setDueDateFilter(e.target.value)}
+              value={dueDateFilter}
+            />
+            {(categoryFilter || dueDateFilter) && (
+              <button
+                onClick={clearFilters}
+                className="text-gray-600 hover:text-gray-800 text-sm whitespace-nowrap"
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Search and Add Task (Desktop) */}
