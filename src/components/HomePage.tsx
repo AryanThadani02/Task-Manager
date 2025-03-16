@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, setTasks } from "../redux/taskSlice";
@@ -18,6 +17,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [dueDateFilter, setDueDateFilter] = useState("");
+  const categories = ["Work", "Personal", "Other"]; // Added categories array
 
   useEffect(() => {
     if (user?.uid) {
@@ -87,23 +87,36 @@ export default function HomePage() {
       </div>
 
       {/* Third Row */}
-      <div className="flex justify-between items-center mt-3 mx-3">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-3 mx-3 space-y-4 sm:space-y-0">
+        <div className="text-lg text-gray-700 font-medium mb-2 sm:mb-0">Filter by:</div>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
           <select
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
-            <option value="">All Categories</option>
-            <option value="Work">Work</option>
-            <option value="Personal">Personal</option>
+            <option value="">Category</option>
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
           </select>
           <input
             type="date"
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
+          <input
+            type="text"
+            placeholder="Search tasks..."
+            className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center gap-4">
           {(categoryFilter || dueDateFilter) && (
             <button
               onClick={clearFilters}
@@ -112,15 +125,6 @@ export default function HomePage() {
               Clear
             </button>
           )}
-        </div>
-        <div className="flex items-center gap-4 ">
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
