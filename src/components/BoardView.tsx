@@ -182,69 +182,42 @@ export default function BoardView() {
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(!isSearching || todoTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-purple-200 p-3 font-medium">Todo</div>
-              <div 
-                className={`p-4 min-h-[200px] ${!isSearching ? 'transition-colors duration-200' : ''} flex items-center justify-center`}
-                {...(!isSearching && {
-                  onDragOver: handleDragOver,
-                  onDragLeave: handleDragLeave,
-                  onDrop: (e) => handleDrop(e, "Todo")
-                })}
-              >
-                {todoTasks.length > 0 ? (
-                  <div className="w-full">
-                    {todoTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                ) : null} 
-              </div>
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-purple-200 p-3 font-medium">Todo</div>
+            <div className="p-4 min-h-[50px]">
+              {todoTasks.length > 0 && (
+                <div className="w-full">
+                  {todoTasks.map(task => 
+                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                  )}
+                </div>
+              )}
             </div>
-          )}
-          {(!isSearching || inProgressTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
-              <div 
-                className={`p-4 min-h-[200px] ${!isSearching ? 'transition-colors duration-200' : ''} flex items-center justify-center`}
-                {...(!isSearching && {
-                  onDragOver: handleDragOver,
-                  onDragLeave: handleDragLeave,
-                  onDrop: (e) => handleDrop(e, "In Progress")
-                })}
-              >
-                {inProgressTasks.length > 0 ? (
-                  <div className="w-full">
-                    {inProgressTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                ) : null}
-              </div>
+          </div>
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
+            <div className="p-4 min-h-[50px]">
+              {inProgressTasks.length > 0 && (
+                <div className="w-full">
+                  {inProgressTasks.map(task => 
+                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                  )}
+                </div>
+              )}
             </div>
-          )}
-          {(!isSearching || completedTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-green-200 p-3 font-medium">Completed</div>
-              <div 
-                className={`p-4 min-h-[200px] ${!isSearching ? 'transition-colors duration-200' : ''} flex items-center justify-center`}
-                {...(!isSearching && {
-                  onDragOver: handleDragOver,
-                  onDragLeave: handleDragLeave,
-                  onDrop: (e) => handleDrop(e, "Completed")
-                })}
-              >
-                {completedTasks.length > 0 ? (
-                  <div className="w-full">
-                    {completedTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                ) : null}
-              </div>
+          </div>
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-green-200 p-3 font-medium">Completed</div>
+            <div className="p-4 min-h-[50px]">
+              {completedTasks.length > 0 && (
+                <div className="w-full">
+                  {completedTasks.map(task => 
+                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                  )}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
