@@ -94,7 +94,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
       <div className="mt-3 flex justify-between items-center">
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
         {task.fileUrl && (
-          <img src={task.fileUrl} alt="attachment" className="w-10 h-10 object-cover rounded" />
+          <img 
+            src={task.fileUrl} 
+            alt="attachment" 
+            className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
+            onClick={() => window.open(task.fileUrl, '_blank')}
+          />
         )}
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}

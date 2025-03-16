@@ -2,10 +2,16 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTask } from "../redux/taskSlice";
 import { RootState, AppDispatch } from "../redux/store";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Added Firebase imports
+import { initializeApp } from "firebase/app"; // Added Firebase imports
+import { firebaseConfig } from "../firebaseConfig"; // Assumed config file
 
 interface AddTaskModalProps {
   onClose: () => void;
 }
+
+const app = initializeApp(firebaseConfig); // Initialize Firebase
+const storage = getStorage(app); // Initialize Firebase Storage
 
 export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [title, setTitle] = useState("");
@@ -14,7 +20,8 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const user = useSelector((state: RootState) => state.user.user); // Added useSelector
+  const [fileUrl, setFileUrl] = useState<string | null>(null); // Added fileUrl state
+  const user = useSelector((state: RootState) => state.user.user);
   const modalRef = useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -35,9 +42,52 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     };
   }, []);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
+  const uploadImage = async (file: File, userId: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const storageRef = ref(storage, `images/${userId}/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL);
+          });
+        }
+      );
+    });
+  };
+
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFile(file);
+
+      if (user) {
+        try {
+          const imageUrl = await uploadImage(file, user.uid);
+          setFileUrl(imageUrl);
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
     }
   };
 
@@ -58,7 +108,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         category: category as "Work" | "Personal",
         dueDate,
         status: status as "Todo" | "In Progress" | "Completed",
-        fileUrl: file ? file.name : null,
+        fileUrl: fileUrl, // Use the uploaded URL
         completed: status === "Completed",
         selected: false
       };

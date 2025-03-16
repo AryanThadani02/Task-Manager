@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { modifyTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
+import { auth } from "../firebase"; // Assuming firebase import is needed
+import { uploadImage } from '../firebase'; //Assuming uploadImage function exists
+
 
 interface EditTaskModalProps {
   task: Task;
@@ -81,9 +84,20 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     };
   }, [editedTask.id]); // Only reinitialize when editing a different task
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFile(file);
+
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const imageUrl = await uploadImage(file, user.uid);
+          setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
+      }
     }
   };
 
