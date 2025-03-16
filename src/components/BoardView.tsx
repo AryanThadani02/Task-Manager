@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { RootState, AppDispatch } from "../redux/store";
@@ -16,32 +16,12 @@ const LoadingSpinner = () => (
 interface TaskCardProps {
   task: Task;
   draggable: boolean;
-  openMenuId: string | null;
-  setOpenMenuId: (id: string | null) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpenMenuId }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, draggable }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
-
-  const showMenu = openMenuId === task.id;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setOpenMenuId(null);
-      }
-    };
-
-    if (showMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showMenu, setOpenMenuId]);
 
   const handleDelete = async () => {
     try {
@@ -79,20 +59,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
           </span>
           <div className="relative">
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpenMenuId(showMenu ? null : task.id);
-              }}
+              onClick={() => setShowMenu(!showMenu)}
               className="text-gray-600 hover:text-gray-800"
             >
               ⋮
             </button>
             {showMenu && (
-              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20" ref={menuRef}>
+              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
-                    setOpenMenuId(null);
+                    setShowMenu(false);
                   }}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                 >
@@ -101,7 +78,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
                 <button
                   onClick={() => {
                     handleDelete();
-                    setOpenMenuId(null);
+                    setShowMenu(false);
                   }}
                   className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
@@ -135,7 +112,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
 export default function BoardView() {
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
   const dispatch = useDispatch<AppDispatch>();
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -224,13 +200,7 @@ export default function BoardView() {
                 {todoTasks.length > 0 && (
                   <div className="w-full">
                     {todoTasks.map(task => 
-                      <TaskCard 
-                        key={task.id} 
-                        task={task} 
-                        draggable={!isSearching}
-                        openMenuId={openMenuId}
-                        setOpenMenuId={setOpenMenuId} 
-                      />
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
                     )}
                   </div>
                 )}
@@ -246,13 +216,7 @@ export default function BoardView() {
                 {inProgressTasks.length > 0 && (
                   <div className="w-full">
                     {inProgressTasks.map(task => 
-                      <TaskCard 
-                        key={task.id} 
-                        task={task} 
-                        draggable={!isSearching}
-                        openMenuId={openMenuId}
-                        setOpenMenuId={setOpenMenuId} 
-                      />
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
                     )}
                   </div>
                 )}
@@ -268,13 +232,7 @@ export default function BoardView() {
                 {completedTasks.length > 0 && (
                   <div className="w-full">
                     {completedTasks.map(task => 
-                      <TaskCard 
-                        key={task.id} 
-                        task={task} 
-                        draggable={!isSearching}
-                        openMenuId={openMenuId}
-                        setOpenMenuId={setOpenMenuId} 
-                      />
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
                     )}
                   </div>
                 )}
