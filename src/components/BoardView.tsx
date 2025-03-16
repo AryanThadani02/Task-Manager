@@ -95,7 +95,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
         {task.fileUrl && (
           <img 
-            src={`${task.fileUrl}?t=${Date.now()}`} 
+            src={task.fileUrl} 
             alt="attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
             onClick={() => window.open(task.fileUrl, '_blank')}
