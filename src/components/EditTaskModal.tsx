@@ -85,19 +85,15 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [editedTask.id]); // Only reinitialize when editing a different task
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files && e.target.files[0] && auth.currentUser) {
       const file = e.target.files[0];
       setFile(file);
-
-      const user = auth.currentUser;
-      if (user) {
-        try {
-          const imageUrl = await uploadImage(file, user.uid);
-          setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
-        } catch (error) {
-          console.error("Error uploading image:", error);
-          // Handle error appropriately
-        }
+      try {
+        const imageUrl = await uploadImage(file, auth.currentUser.uid);
+        setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        alert("Failed to upload image. Please try again.");
       }
     }
   };
