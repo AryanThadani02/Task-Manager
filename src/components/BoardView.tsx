@@ -62,8 +62,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
     e.currentTarget.classList.remove('opacity-50');
   };
 
-  // Force re-render of image when fileUrl changes
-  const imageUrl = task.fileUrl ? `${task.fileUrl}${task.fileUrl.includes('?') ? '&' : '?'}t=${Date.now()}` : null;
 
   return (
     <div 
@@ -124,7 +122,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
         {task.fileUrl && (
           <img 
             src={task.fileUrl.includes('http') ? task.fileUrl : `https://firebasestorage.googleapis.com/v0/b/taskmanager-a1e8a.firebasestorage.com/${task.fileUrl}`} 
-            alt="attachment" 
+            alt="Task attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
             onClick={() => window.open(task.fileUrl, '_blank')}
             onError={(e) => {
