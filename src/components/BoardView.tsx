@@ -98,7 +98,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
             src={task.fileUrl} 
             alt="attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
-            onClick={() => window.open(task.fileUrl, '_blank')}
+            onClick={() => task.fileUrl && window.open(task.fileUrl, '_blank')}
           />
         )}
       </div>

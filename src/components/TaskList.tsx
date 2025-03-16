@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebase/firebaseConfig';
+import { db, auth } from '../firebase/firebaseConfig';
+import { uploadImage } from '../firebase/storageConfig';
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
@@ -238,7 +239,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
   const taskId = e.dataTransfer.getData("taskId");
   const task = tasks.find(t => t.id === taskId);
 
-  if (!task) return;n;
+  if (!task) return;
 
     try {
       const updatedTask: Task = {

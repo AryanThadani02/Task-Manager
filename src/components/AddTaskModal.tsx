@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createTask } from "../redux/taskSlice";
 import { RootState, AppDispatch } from "../redux/store";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Added Firebase imports
-import { initializeApp } from "firebase/app"; // Added Firebase imports
-import { app } from "../firebase/firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase/storageConfig";
 import { storage } from "../firebase/storageConfig";
 
 interface AddTaskModalProps {
