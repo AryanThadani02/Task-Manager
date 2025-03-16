@@ -6,6 +6,7 @@ import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
 import NoResultsFound from "./NoResultsFound";
+import LoadingSpinner from "./LoadingSpinner.tsx"; // Corrected import statement
 
 const TaskCard: React.FC<{ task: Task }> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
