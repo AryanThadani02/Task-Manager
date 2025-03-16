@@ -17,7 +17,8 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null); // Added fileUrl state
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // Added loading state
   const user = useSelector((state: RootState) => state.user.user);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -76,13 +77,16 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setFile(file);
+      setIsUploading(true); // Set loading state to true
 
       if (user) {
         try {
           const imageUrl = await uploadImage(file, user.uid);
           setFileUrl(imageUrl);
+          setIsUploading(false); // Set loading state to false after upload
         } catch (error) {
           console.error("Error uploading image:", error);
+          setIsUploading(false); // Set loading state to false on error
         }
       }
     }
@@ -105,7 +109,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         category: category as "Work" | "Personal",
         dueDate,
         status: status as "Todo" | "In Progress" | "Completed",
-        fileUrl: fileUrl, // Use the uploaded URL
+        fileUrl: fileUrl,
         completed: status === "Completed",
         selected: false
       };
@@ -229,8 +233,14 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
             <button type="button" onClick={onClose} className="px-4 py-2 border rounded">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded">
-              Create
+            <button
+              type="submit"
+              disabled={isUploading}
+              className={`${
+                isUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'
+              } text-white px-4 py-2 rounded`}
+            >
+              {isUploading ? 'Uploading...' : 'Create Task'}
             </button>
           </div>
         </form>
