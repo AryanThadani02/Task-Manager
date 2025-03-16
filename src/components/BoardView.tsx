@@ -5,7 +5,6 @@ import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
-import LoadingSpinner from "./LoadingSpinner";
 import NoResultsFound from "./NoResultsFound";
 
 const TaskCard: React.FC<{ task: Task }> = ({ task }) => {
