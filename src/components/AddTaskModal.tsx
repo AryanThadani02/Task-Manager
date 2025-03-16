@@ -43,7 +43,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
 
   const uploadImage = async (file: File, userId: string): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const storageRef = ref(storage, `images/${userId}/${file.name}`);
+      const storageRef = ref(storage, `taskImages/${userId}/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on('state_changed',

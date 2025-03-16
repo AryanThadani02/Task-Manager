@@ -5,7 +5,7 @@ import { app } from "./firebaseConfig";
 const storage = getStorage(app);
 
 export const uploadImage = async (file: File, userId: string): Promise<string> => {
-  const storageRef = ref(storage, `taskImages/${userId}/${Date.now()}_${file.name}`);
+  const storageRef = ref(storage, `taskImages/${userId}/${file.name}`);
   
   try {
     const snapshot = await uploadBytes(storageRef, file);
