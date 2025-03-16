@@ -3,10 +3,8 @@ import { useDispatch } from "react-redux";
 import { modifyTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
 import { auth } from "../firebase/firebaseConfig";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { app } from "../firebase/firebaseConfig";
+import { uploadImage } from '../firebase/storageConfig';
 
-const storage = getStorage(app);
 
 interface EditTaskModalProps {
   task: Task;
@@ -91,21 +89,14 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
       const file = e.target.files[0];
       setFile(file);
 
-      if (auth.currentUser) {
-        const storageRef = ref(storage, `taskImages/${auth.currentUser.uid}/${file.name}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-
-        uploadTask.on(
-          'state_changed',
-          null,
-          (error) => {
-            console.error('Upload error:', error);
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            setEditedTask(prev => ({ ...prev, fileUrl: downloadURL }));
-          }
-        );
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const imageUrl = await uploadImage(file, user.uid);
+          setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
       }
     }
   };
