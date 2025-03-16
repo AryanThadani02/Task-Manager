@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { modifyTask } from "../redux/taskSlice";
 import { Task } from "../types/Task";
-import { auth } from "../firebase"; // Assuming firebase import is needed
-import { uploadImage } from '../firebase'; //Assuming uploadImage function exists
+import { auth } from "../firebase/firebaseConfig";
+import { uploadImage } from '../firebase/storageConfig';
 
 
 interface EditTaskModalProps {

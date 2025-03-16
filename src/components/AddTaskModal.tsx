@@ -4,14 +4,13 @@ import { createTask } from "../redux/taskSlice";
 import { RootState, AppDispatch } from "../redux/store";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Added Firebase imports
 import { initializeApp } from "firebase/app"; // Added Firebase imports
-import { firebaseConfig } from "../firebaseConfig"; // Assumed config file
+import { app } from "../firebase/firebaseConfig";
+import { storage } from "../firebase/storageConfig";
 
 interface AddTaskModalProps {
   onClose: () => void;
 }
 
-const app = initializeApp(firebaseConfig); // Initialize Firebase
-const storage = getStorage(app); // Initialize Firebase Storage
 
 export default function AddTaskModal({ onClose }: AddTaskModalProps) {
   const [title, setTitle] = useState("");
