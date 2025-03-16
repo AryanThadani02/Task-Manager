@@ -5,18 +5,10 @@ import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
+import LoadingSpinner from "./LoadingSpinner";
+import NoResultsFound from "./NoResultsFound";
 
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center h-full">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-  </div>
-);
-
-interface TaskCardProps {
-  task: Task;
-}
-
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<{ task: Task }> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
@@ -53,7 +45,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   }, []);
 
   return (
-    <div 
+    <div
       className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
       draggable={!isEditModalOpen}
       onDragStart={!isEditModalOpen ? handleDragStart : undefined}
@@ -99,17 +91,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           </div>
         </div>
       </div>
-      <div 
+      <div
         className="text-gray-600 mt-2"
         dangerouslySetInnerHTML={{ __html: task.description }}
       />
       <div className="mt-3 flex justify-between items-center">
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
         {task.fileUrl && (
-          <img 
-            src={task.fileUrl} 
-            alt="attachment" 
-            className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
+          <img
+            src={task.fileUrl}
+            alt="attachment"
+            className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer"
             onClick={() => task.fileUrl && window.open(task.fileUrl, '_blank')}
           />
         )}
@@ -146,22 +138,9 @@ export default function BoardView() {
   const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.add('bg-gray-50');
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.remove('bg-gray-50');
-  };
-
   const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
+    if (searchQuery) return;
     e.preventDefault();
-    const draggedOverElement = e.currentTarget as HTMLElement;
-    draggedOverElement.classList.remove('bg-gray-50');
-
     const taskId = e.dataTransfer.getData("taskId");
     const task = tasks.find(t => t.id === taskId);
 
@@ -186,78 +165,68 @@ export default function BoardView() {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
-
         <div className="grid grid-cols-3 gap-4">
-          {(!searchQuery || todoTasks.length > 0) && (
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">Todo</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={!searchQuery ? handleDragOver : undefined}
-              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+            <div
+              className="p-4"
               onDrop={!searchQuery ? (e) => handleDrop(e, "Todo") : undefined}
+              onDragOver={!searchQuery ? (e) => e.preventDefault() : undefined}
             >
-              {todoTasks.length > 0 ? (
+              {todoTasks.length > 0 && (
                 <div className="w-full">
                   {todoTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
-              ) : (
-                searchQuery ? null : (
-                  <div className="text-gray-500 text-center">
-                    <p>No tasks in Todo</p>
-                  </div>
-                )
+              )}
+              {!todoTasks.length && !searchQuery && (
+                <div className="text-gray-500 text-center">
+                  <p>No tasks in Todo</p>
+                </div>
               )}
             </div>
           </div>
-          )}
-          {(!searchQuery || inProgressTasks.length > 0) && (
+
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-blue-200 p-3 font-medium">In Progress</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={!searchQuery ? handleDragOver : undefined}
-              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+            <div
+              className="p-4"
               onDrop={!searchQuery ? (e) => handleDrop(e, "In Progress") : undefined}
+              onDragOver={!searchQuery ? (e) => e.preventDefault() : undefined}
             >
-              {inProgressTasks.length > 0 ? (
+              {inProgressTasks.length > 0 && (
                 <div className="w-full">
                   {inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
-              ) : (
-                searchQuery ? null : (
-                  <div className="text-gray-500 text-center">
-                    <p>No tasks in progress</p>
-                  </div>
-                )
+              )}
+              {!inProgressTasks.length && !searchQuery && (
+                <div className="text-gray-500 text-center">
+                  <p>No tasks in progress</p>
+                </div>
               )}
             </div>
           </div>
-          )}
-          {(!searchQuery || completedTasks.length > 0) && (
+
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-green-200 p-3 font-medium">Completed</div>
-            <div 
-              className="p-4 min-h-[200px] transition-colors duration-200"
-              onDragOver={!searchQuery ? handleDragOver : undefined}
-              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+            <div
+              className="p-4"
               onDrop={!searchQuery ? (e) => handleDrop(e, "Completed") : undefined}
+              onDragOver={!searchQuery ? (e) => e.preventDefault() : undefined}
             >
-              {completedTasks.length > 0 ? (
+              {completedTasks.length > 0 && (
                 <div className="w-full">
                   {completedTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
-              ) : (
-                searchQuery ? null : (
-                  <div className="text-gray-500 text-center">
-                    <p>No completed tasks</p>
-                  </div>
-                )
+              )}
+              {!completedTasks.length && !searchQuery && (
+                <div className="text-gray-500 text-center">
+                  <p>No completed tasks</p>
+                </div>
               )}
             </div>
           </div>
-          )}
         </div>
+        {searchQuery && filteredTasks.length === 0 && <NoResultsFound />}
       </div>
     </div>
   );
