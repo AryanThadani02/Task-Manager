@@ -43,13 +43,12 @@ export default function HomePage() {
       {/* First Row */}
       <div className="flex justify-between items-center">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex sm:hidden items-center gap-4">
           <img
             src={user?.photoURL ?? ""}
             alt="Profile"
-            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+            className="w-8 h-8 rounded-full"
           />
-          <span className="hidden sm:inline-block text-gray-700 font-medium">{user?.displayName}</span>
           <button
             onClick={handleLogout}
             className="text-gray-600 hover:text-gray-800"
@@ -60,28 +59,45 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation - Hidden on mobile */}
-      <div className="hidden sm:flex items-center gap-4 mt-4">
-        <Link
-          to="/home/tasks"
-          className={`flex items-center gap-2 ${
-            location.pathname === '/home/tasks'
-              ? 'text-purple-600'
-              : 'text-gray-600'
-          }`}
-        >
-          <FaListUl /> List
-        </Link>
-        <Link
-          to="/home/board"
-          className={`flex items-center gap-2 ${
-            location.pathname === '/home/board'
-              ? 'text-purple-600'
-              : 'text-gray-600'
-          }`}
-        >
-          <FaThLarge /> Board
-        </Link>
+      {/* Navigation and Profile - Hidden on mobile */}
+      <div className="hidden sm:flex items-center justify-between mt-4">
+        <div className="flex items-center gap-6">
+          <Link
+            to="/home/tasks"
+            className={`flex items-center gap-2 ${
+              location.pathname === '/home/tasks'
+                ? 'text-purple-600'
+                : 'text-gray-600'
+            }`}
+          >
+            <FaListUl /> List
+          </Link>
+          <Link
+            to="/home/board"
+            className={`flex items-center gap-2 ${
+              location.pathname === '/home/board'
+                ? 'text-purple-600'
+                : 'text-gray-600'
+            }`}
+          >
+            <FaThLarge /> Board
+          </Link>
+        </div>
+        <div className="flex items-center gap-4">
+          <img
+            src={user?.photoURL ?? ""}
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+          />
+          <span className="text-gray-700 font-medium">{user?.displayName}</span>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+          >
+            <FaSignOutAlt className="w-5 h-5" />
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
 
       {/* Add Task Button for Mobile */}
