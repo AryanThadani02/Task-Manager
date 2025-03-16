@@ -125,7 +125,7 @@ export default function HomePage() {
             />
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 sm:w-full md:w-auto" {/* Added responsiveness */}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 sm:w-full md:w-auto" /* Added responsiveness */
             >
               + Add Task
             </button>
