@@ -43,24 +43,27 @@ export default function HomePage() {
       {/* First Row */}
       <div className="flex justify-between items-center">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
-        <div className="flex sm:hidden items-center gap-4">
-          <img
-            src={user?.photoURL ?? ""}
-            alt="Profile"
-            className="w-8 h-8 rounded-full"
-          />
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-4">
+            <span className="hidden sm:inline-block text-gray-700 font-medium">{user?.displayName}</span>
+            <img
+              src={user?.photoURL ?? ""}
+              alt="Profile"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+            />
+          </div>
           <button
             onClick={handleLogout}
-            className="text-gray-600 hover:text-gray-800"
-            title="Logout"
+            className="text-gray-600 hover:text-gray-800 text-sm flex items-center gap-2"
           >
-            <FaSignOutAlt className="w-5 h-5" />
+            <FaSignOutAlt className="w-4 h-4" />
+            <span className="hidden sm:inline">Logout</span>
           </button>
         </div>
       </div>
 
-      {/* Navigation and Profile - Hidden on mobile */}
-      <div className="hidden sm:flex items-center justify-between mt-4">
+      {/* Navigation - Hidden on mobile */}
+      <div className="hidden sm:flex items-center mt-4">
         <div className="flex items-center gap-6">
           <Link
             to="/home/tasks"
@@ -82,21 +85,6 @@ export default function HomePage() {
           >
             <FaThLarge /> Board
           </Link>
-        </div>
-        <div className="flex items-center gap-4">
-          <img
-            src={user?.photoURL ?? ""}
-            alt="Profile"
-            className="w-10 h-10 rounded-full"
-          />
-          <span className="text-gray-700 font-medium">{user?.displayName}</span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-          >
-            <FaSignOutAlt className="w-5 h-5" />
-            <span>Logout</span>
-          </button>
         </div>
       </div>
 
