@@ -192,7 +192,7 @@ export default function BoardView() {
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">Todo</div>
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="p-4 min-h-[200px] transition-colors duration-200"
               onDragOver={!searchQuery ? handleDragOver : undefined}
               onDragLeave={!searchQuery ? handleDragLeave : undefined}
               onDrop={!searchQuery ? (e) => handleDrop(e, "Todo") : undefined}
@@ -202,18 +202,20 @@ export default function BoardView() {
                   {todoTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
               ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No tasks in Todo</p>
-                </div>
+                searchQuery ? null : (
+                  <div className="text-gray-500 text-center">
+                    <p>No tasks in Todo</p>
+                  </div>
+                )
               )}
             </div>
           </div>
           )}
           {(!searchQuery || inProgressTasks.length > 0) && (
           <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
+            <div className="bg-blue-200 p-3 font-medium">In Progress</div>
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="p-4 min-h-[200px] transition-colors duration-200"
               onDragOver={!searchQuery ? handleDragOver : undefined}
               onDragLeave={!searchQuery ? handleDragLeave : undefined}
               onDrop={!searchQuery ? (e) => handleDrop(e, "In Progress") : undefined}
@@ -223,9 +225,11 @@ export default function BoardView() {
                   {inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
               ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No tasks in progress</p>
-                </div>
+                searchQuery ? null : (
+                  <div className="text-gray-500 text-center">
+                    <p>No tasks in progress</p>
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -234,7 +238,7 @@ export default function BoardView() {
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-green-200 p-3 font-medium">Completed</div>
             <div 
-              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              className="p-4 min-h-[200px] transition-colors duration-200"
               onDragOver={!searchQuery ? handleDragOver : undefined}
               onDragLeave={!searchQuery ? handleDragLeave : undefined}
               onDrop={!searchQuery ? (e) => handleDrop(e, "Completed") : undefined}
@@ -244,9 +248,11 @@ export default function BoardView() {
                   {completedTasks.map(task => <TaskCard key={task.id} task={task} />)}
                 </div>
               ) : (
-                <div className="text-gray-500 text-center">
-                  <p>No completed tasks</p>
-                </div>
+                searchQuery ? null : (
+                  <div className="text-gray-500 text-center">
+                    <p>No completed tasks</p>
+                  </div>
+                )
               )}
             </div>
           </div>
