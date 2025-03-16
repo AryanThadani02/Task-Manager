@@ -188,13 +188,14 @@ export default function BoardView() {
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
         <div className="grid grid-cols-3 gap-4">
+          {(!searchQuery || todoTasks.length > 0) && (
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-purple-200 p-3 font-medium">Todo</div>
             <div 
               className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Todo")}
+              onDragOver={!searchQuery ? handleDragOver : undefined}
+              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+              onDrop={!searchQuery ? (e) => handleDrop(e, "Todo") : undefined}
             >
               {todoTasks.length > 0 ? (
                 <div className="w-full">
@@ -203,19 +204,20 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No tasks in Todo</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                  
                 </div>
               )}
             </div>
           </div>
-
+          )}
+          {(!searchQuery || inProgressTasks.length > 0) && (
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
             <div 
               className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "In Progress")}
+              onDragOver={!searchQuery ? handleDragOver : undefined}
+              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+              onDrop={!searchQuery ? (e) => handleDrop(e, "In Progress") : undefined}
             >
               {inProgressTasks.length > 0 ? (
                 <div className="w-full">
@@ -224,19 +226,20 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No tasks in progress</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                  
                 </div>
               )}
             </div>
           </div>
-
+          )}
+          {(!searchQuery || completedTasks.length > 0) && (
           <div className="border rounded-lg overflow-hidden">
             <div className="bg-green-200 p-3 font-medium">Completed</div>
             <div 
               className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, "Completed")}
+              onDragOver={!searchQuery ? handleDragOver : undefined}
+              onDragLeave={!searchQuery ? handleDragLeave : undefined}
+              onDrop={!searchQuery ? (e) => handleDrop(e, "Completed") : undefined}
             >
               {completedTasks.length > 0 ? (
                 <div className="w-full">
@@ -245,11 +248,12 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No completed tasks</p>
-                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                  
                 </div>
               )}
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>
