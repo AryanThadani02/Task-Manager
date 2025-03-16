@@ -232,7 +232,6 @@ export default function TaskView() {
     console.error("Error uploading image:", error);
   }
 };
-};
 
 const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
   e.preventDefault();
