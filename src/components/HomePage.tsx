@@ -113,7 +113,6 @@ export default function HomePage() {
             className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
-            placeholder="Due date"
           />
           {(categoryFilter || dueDateFilter) && (
             <button
