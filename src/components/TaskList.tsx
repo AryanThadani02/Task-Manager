@@ -216,12 +216,27 @@ export default function TaskView() {
     e.preventDefault();
   };
 
-  const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
-    e.preventDefault();
-    const taskId = e.dataTransfer.getData("taskId");
-    const task = tasks.find(t => t.id === taskId);
+  const handleImageUpload = async (file: File, taskId: string) => {
+  const user = auth.currentUser;
+  if (!user) return;
+  
+  try {
+    const imageUrl = await uploadImage(file, user.uid);
+    // Update task with image URL
+    await updateDoc(doc(db, 'tasks', taskId), {
+      imageUrl
+    });
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
+};
 
-    if (!task) return;
+const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
+  e.preventDefault();
+  const taskId = e.dataTransfer.getData("taskId");
+  const task = tasks.find(t => t.id === taskId);
+
+  if (!task) return;n;
 
     try {
       const updatedTask: Task = {
