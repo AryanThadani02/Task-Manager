@@ -40,26 +40,26 @@ export default function HomePage() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen mx-3">
+    <div className="p-3 sm:p-6 bg-gray-50 min-h-screen">
       {/* First Row */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
         <h1 className="text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
         <div className="flex items-center gap-3">
           <img
             src={user?.photoURL ?? ""}
             alt="Profile"
-            className="w-10 h-10 rounded-full"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
           />
-          <span className="text-gray-700 font-medium">{user?.displayName}</span>
+          <span className="text-gray-700 font-medium text-sm sm:text-base">{user?.displayName}</span>
         </div>
       </div>
 
       {/* Second Row */}
-      <div className="flex justify-between items-center mt-2 mx-3">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-4 sm:mt-2">
+        <div className="flex items-center gap-4 mb-4 sm:mb-0">
           <Link
             to="/home/tasks"
-            className={`flex items-center gap-2 ${
+            className={`flex items-center gap-2 text-sm sm:text-base ${
               location.pathname === '/home/tasks'
                 ? 'text-purple-600'
                 : 'text-gray-600'
@@ -69,7 +69,7 @@ export default function HomePage() {
           </Link>
           <Link
             to="/home/board"
-            className={`flex items-center gap-2 ${
+            className={`flex items-center gap-2 text-sm sm:text-base ${
               location.pathname === '/home/board'
                 ? 'text-purple-600'
                 : 'text-gray-600'
@@ -80,18 +80,18 @@ export default function HomePage() {
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 text-sm sm:text-base"
         >
           <FaSignOutAlt /> Logout
         </button>
       </div>
 
       {/* Third Row */}
-      <div className="flex justify-between items-center mt-3 mx-3">
-        <div className="flex items-center gap-4">
-          <p className="text-gray-500">Filter by:</p>
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mt-4 gap-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full lg:w-auto">
+          <p className="text-gray-500 text-sm sm:text-base whitespace-nowrap">Filter by:</p>
           <select
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
+            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
@@ -101,30 +101,30 @@ export default function HomePage() {
           </select>
           <input
             type="date"
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
+            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
           {(categoryFilter || dueDateFilter) && (
             <button
               onClick={clearFilters}
-              className="text-gray-600 hover:text-gray-800"
+              className="text-gray-600 hover:text-gray-800 text-sm sm:text-base"
             >
               Clear
             </button>
           )}
         </div>
-        <div className="flex items-center gap-4 ">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full lg:w-auto">
           <input
             type="text"
             placeholder="Search tasks..."
-            className="px-4 py-2 rounded-lg bg-white border border-gray-300"
+            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm sm:text-base w-full sm:w-auto"
           >
             + Add Task
           </button>
