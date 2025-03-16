@@ -5,7 +5,6 @@ import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
-import NoResultsFound from "./NoResultsFound"; // Import the NoResultsFound component
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full">
@@ -15,10 +14,9 @@ const LoadingSpinner = () => (
 
 interface TaskCardProps {
   task: Task;
-  draggable: boolean;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, draggable }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
@@ -45,9 +43,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable }) => {
   return (
     <div 
       className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
-      draggable={draggable}
-      onDragStart={draggable ? handleDragStart : undefined}
-      onDragEnd={draggable ? handleDragEnd : undefined}
+      draggable={!isEditModalOpen}
+      onDragStart={!isEditModalOpen ? handleDragStart : undefined}
+      onDragEnd={!isEditModalOpen ? handleDragEnd : undefined}
     >
       <div className="flex justify-between items-start">
         <h3 className={`font-semibold ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</h3>
@@ -125,8 +123,6 @@ export default function BoardView() {
 
   const { searchQuery = '', categoryFilter = '', dueDateFilter = '' } = context || {};
 
-  const isSearching = searchQuery.length > 0;
-
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !categoryFilter || task.category === categoryFilter;
@@ -139,20 +135,17 @@ export default function BoardView() {
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
   const handleDragOver = (e: React.DragEvent) => {
-    if (isSearching) return;
     e.preventDefault();
     const draggedOverElement = e.currentTarget as HTMLElement;
     draggedOverElement.classList.add('bg-gray-50');
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
-    if (isSearching) return;
     const draggedOverElement = e.currentTarget as HTMLElement;
     draggedOverElement.classList.remove('bg-gray-50');
   };
 
   const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
-    if (isSearching) return;
     e.preventDefault();
     const draggedOverElement = e.currentTarget as HTMLElement;
     draggedOverElement.classList.remove('bg-gray-50');
@@ -182,64 +175,70 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
-        {filteredTasks.length === 0 && isSearching && (
-          <div className="flex justify-center items-center h-64"> {/* Centered NoResultsFound */}
-            <NoResultsFound />
+        <div className="grid grid-cols-3 gap-4">
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-purple-200 p-3 font-medium">Todo</div>
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "Todo")}
+            >
+              {todoTasks.length > 0 ? (
+                <div className="w-full">
+                  {todoTasks.map(task => <TaskCard key={task.id} task={task} />)}
+                </div>
+              ) : (
+                <div className="text-gray-500 text-center">
+                  <p>No tasks in Todo</p>
+                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                </div>
+              )}
+            </div>
           </div>
-        )}
 
-        {filteredTasks.length > 0 && ( // Only render the board if tasks are found
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-purple-200 p-3 font-medium">Todo</div>
-              <div className="p-4 min-h-[50px]"
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, "Todo")}
-              >
-                {todoTasks.length > 0 && (
-                  <div className="w-full">
-                    {todoTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
-              <div className="p-4 min-h-[50px]"
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, "In Progress")}
-              >
-                {inProgressTasks.length > 0 && (
-                  <div className="w-full">
-                    {inProgressTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-green-200 p-3 font-medium">Completed</div>
-              <div className="p-4 min-h-[50px]"
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, "Completed")}
-              >
-                {completedTasks.length > 0 && (
-                  <div className="w-full">
-                    {completedTasks.map(task => 
-                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                    )}
-                  </div>
-                )}
-              </div>
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "In Progress")}
+            >
+              {inProgressTasks.length > 0 ? (
+                <div className="w-full">
+                  {inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)}
+                </div>
+              ) : (
+                <div className="text-gray-500 text-center">
+                  <p>No tasks in progress</p>
+                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                </div>
+              )}
             </div>
           </div>
-        )}
+
+          <div className="border rounded-lg overflow-hidden">
+            <div className="bg-green-200 p-3 font-medium">Completed</div>
+            <div 
+              className="p-4 min-h-[200px] transition-colors duration-200 flex items-center justify-center"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, "Completed")}
+            >
+              {completedTasks.length > 0 ? (
+                <div className="w-full">
+                  {completedTasks.map(task => <TaskCard key={task.id} task={task} />)}
+                </div>
+              ) : (
+                <div className="text-gray-500 text-center">
+                  <p>No completed tasks</p>
+                  <p className="text-sm text-gray-400">Drag tasks here</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
