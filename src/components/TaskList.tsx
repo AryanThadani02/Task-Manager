@@ -1,7 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { doc, updateDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase/firebaseConfig';
-import { uploadImage } from '../firebase/storageConfig';
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
