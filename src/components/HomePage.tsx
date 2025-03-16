@@ -102,7 +102,7 @@ export default function HomePage() {
             </select>
             <input
               type="date"
-              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto" {/* Added w-full for responsiveness */}
+              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto" /* Added w-full for responsiveness */
               onChange={(e) => setDueDateFilter(e.target.value)}
               value={dueDateFilter}
             />
@@ -119,7 +119,7 @@ export default function HomePage() {
             <input
               type="text"
               placeholder="Search tasks..."
-              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto" {/* Added w-full for responsiveness */}
+              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto" /* Added w-full for responsiveness */
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
