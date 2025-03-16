@@ -14,6 +14,8 @@ interface EditTaskModalProps {
 export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   const [editedTask, setEditedTask] = useState(task);
   const [file, setFile] = useState<File | null>(null);
+  const [fileUrl, setFileUrl] = useState<string | null>(task.fileUrl || null);
+  const [isUploading, setIsUploading] = useState(false);
   const [activeTab, setActiveTab] = useState('DETAILS');
   const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
@@ -84,18 +86,21 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
     };
   }, [editedTask.id]); // Only reinitialize when editing a different task
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setFile(file);
+      setIsUploading(true);
 
       const user = auth.currentUser;
       if (user) {
         try {
           const imageUrl = await uploadImage(file, user.uid);
-          setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+          setFileUrl(imageUrl);
+          setIsUploading(false);
         } catch (error) {
           console.error("Error uploading image:", error);
+          setIsUploading(false);
         }
       }
     }
@@ -126,7 +131,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
 
     const updatedTask = {
       ...editedTask,
-      fileUrl: file ? file.name : editedTask.fileUrl,
+      fileUrl: fileUrl,
       activity: [
         ...(editedTask.activity || []),
         {
@@ -250,23 +255,34 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-sm text-gray-600 mb-2">Attachment</label>
-                <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
-                  <p className="text-sm text-gray-500">Drop your files here or <label htmlFor="file-upload" className="text-purple-600 cursor-pointer">Upload</label></p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  {(file || editedTask.fileUrl) && (
-                    <p className="text-sm text-gray-500 mt-2">
-                      📎 {file ? file.name : editedTask.fileUrl}
-                    </p>
-                  )}
+              {/* File Upload */}
+              <div className="mb-4">
+                <label className="block text-sm text-gray-600 mb-2">
+                  Attachment
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">Add files here or </span>
+                  <label htmlFor="edit-file-upload" className="text-purple-600 cursor-pointer">
+                    Upload
+                  </label>
                 </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="edit-file-upload"
+                  disabled={isUploading}
+                />
+                {(fileUrl || file) && (
+                  <div className="mt-2">
+                    <img
+                      src={fileUrl + '?t=' + Date.now()}
+                      alt="Task attachment"
+                      className="max-w-xs rounded"
+                    />
+                  </div>
+                )}
               </div>
             </form>
           </div>
@@ -356,23 +372,34 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-sm text-gray-600 mb-2">Attachment</label>
-                <div className="mt-2 p-6 border-2 border-dashed rounded-lg text-center hover:border-purple-400 transition-colors">
-                  <p className="text-sm text-gray-500">Drop your files here or <label htmlFor="file-upload" className="text-purple-600 cursor-pointer">Upload</label></p>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  {(file || editedTask.fileUrl) && (
-                    <p className="text-sm text-gray-500 mt-2">
-                      📎 {file ? file.name : editedTask.fileUrl}
-                    </p>
-                  )}
+              {/* File Upload */}
+              <div className="mb-4">
+                <label className="block text-sm text-gray-600 mb-2">
+                  Attachment
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">Add files here or </span>
+                  <label htmlFor="edit-file-upload" className="text-purple-600 cursor-pointer">
+                    Upload
+                  </label>
                 </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="edit-file-upload"
+                  disabled={isUploading}
+                />
+                {(fileUrl || file) && (
+                  <div className="mt-2">
+                    <img
+                      src={fileUrl + '?t=' + Date.now()}
+                      alt="Task attachment"
+                      className="max-w-xs rounded"
+                    />
+                  </div>
+                )}
               </div>
             </form>
           ) : (
@@ -400,8 +427,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           <button
             onClick={handleSubmit}
             className="px-6 py-2 bg-purple-600 text-white rounded-full font-medium"
+            disabled={isUploading}
           >
-            UPDATE
+            {isUploading ? 'Uploading...' : 'UPDATE'}
           </button>
         </div>
       </div>
