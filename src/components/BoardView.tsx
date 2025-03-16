@@ -121,12 +121,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
       />
       <div className="mt-3 flex justify-between items-center">
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
-        {imageUrl && (
+        {task.fileUrl && (
           <img 
-            src={imageUrl} 
+            src={task.fileUrl.includes('http') ? task.fileUrl : `https://firebasestorage.googleapis.com/v0/b/taskmanager-a1e8a.firebasestorage.com/${task.fileUrl}`} 
             alt="attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
-            onClick={() => window.open(imageUrl, '_blank')}
+            onClick={() => window.open(task.fileUrl, '_blank')}
             onError={(e) => {
               const img = e.target as HTMLImageElement;
               img.src = 'https://placehold.co/80x80?text=No+Image';
