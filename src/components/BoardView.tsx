@@ -204,7 +204,6 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No tasks in Todo</p>
-                  
                 </div>
               )}
             </div>
@@ -226,7 +225,6 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No tasks in progress</p>
-                  
                 </div>
               )}
             </div>
@@ -248,7 +246,6 @@ export default function BoardView() {
               ) : (
                 <div className="text-gray-500 text-center">
                   <p>No completed tasks</p>
-                  
                 </div>
               )}
             </div>
