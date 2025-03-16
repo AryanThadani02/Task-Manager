@@ -62,7 +62,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
     e.currentTarget.classList.remove('opacity-50');
   };
 
-
   return (
     <div 
       className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
@@ -121,16 +120,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
         <span className="text-sm text-gray-500">Due: {task.dueDate}</span>
         {task.fileUrl && (
           <img 
-            src={task.fileUrl.includes('http') ? task.fileUrl : `https://firebasestorage.googleapis.com/v0/b/taskmanager-a1e8a.firebasestorage.com/${task.fileUrl}`} 
-            alt="Task attachment" 
+            src={task.fileUrl} 
+            alt="attachment" 
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
             onClick={() => window.open(task.fileUrl, '_blank')}
-            onError={(e) => {
-              const img = e.target as HTMLImageElement;
-              img.src = 'https://placehold.co/80x80?text=No+Image';
-              img.alt = 'Image not found';
-              console.error('Image failed to load:', task.fileUrl);
-            }}
           />
         )}
       </div>

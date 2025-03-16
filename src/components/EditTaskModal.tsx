@@ -85,17 +85,18 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   }, [editedTask.id]); // Only reinitialize when editing a different task
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0] && auth.currentUser) {
+    if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setFile(file);
-      try {
-        const imageUrl = await uploadImage(file, auth.currentUser.uid);
-        console.log('Uploaded image URL:', imageUrl);
-        const imageUrlWithTimestamp = `${imageUrl}?t=${Date.now()}`;
-        setEditedTask(prev => ({...prev, fileUrl: imageUrlWithTimestamp}));
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        alert("Failed to upload image. Please try again.");
+
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const imageUrl = await uploadImage(file, user.uid);
+          setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
+        } catch (error) {
+          console.error("Error uploading image:", error);
+        }
       }
     }
   };
@@ -261,17 +262,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     id="file-upload"
                   />
                   {(file || editedTask.fileUrl) && (
-                    <div className="mt-4">
-                      <img 
-                        src={file ? URL.createObjectURL(file) : editedTask.fileUrl} 
-                        alt="Task attachment" 
-                        className="max-w-full h-auto rounded-lg mx-auto"
-                        style={{ maxHeight: '200px' }} 
-                      />
-                      <p className="text-sm text-gray-500 mt-2">
-                        📎 {file ? file.name : editedTask.fileUrl}
-                      </p>
-                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      📎 {file ? file.name : editedTask.fileUrl}
+                    </p>
                   )}
                 </div>
               </div>
@@ -375,17 +368,9 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
                     id="file-upload"
                   />
                   {(file || editedTask.fileUrl) && (
-                    <div className="mt-4">
-                      <img 
-                        src={file ? URL.createObjectURL(file) : editedTask.fileUrl} 
-                        alt="Task attachment" 
-                        className="max-w-full h-auto rounded-lg mx-auto"
-                        style={{ maxHeight: '200px' }} 
-                      />
-                      <p className="text-sm text-gray-500 mt-2">
-                        📎 {file ? file.name : editedTask.fileUrl}
-                      </p>
-                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      📎 {file ? file.name : editedTask.fileUrl}
+                    </p>
                   )}
                 </div>
               </div>
