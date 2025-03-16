@@ -85,12 +85,22 @@ export default function HomePage() {
         </Link>
       </div>
 
-      {/* Third Row */}
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mt-4 gap-4">
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full lg:w-auto">
-          <p className="text-gray-500 text-sm sm:text-base whitespace-nowrap">Filter by:</p>
+      {/* Add Task Button for Mobile */}
+      <div className="sm:hidden mt-4">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm"
+        >
+          + Add Task
+        </button>
+      </div>
+
+      {/* Filter Section */}
+      <div className="mt-4 space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between">
+        {/* Category and Date Filters */}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <select
-            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
@@ -100,30 +110,32 @@ export default function HomePage() {
           </select>
           <input
             type="date"
-            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
+            className="flex-1 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
           {(categoryFilter || dueDateFilter) && (
             <button
               onClick={clearFilters}
-              className="text-gray-600 hover:text-gray-800 text-sm sm:text-base"
+              className="text-gray-600 hover:text-gray-800 text-sm whitespace-nowrap"
             >
               Clear
             </button>
           )}
         </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-4 w-full lg:w-auto">
+
+        {/* Search and Add Task (Desktop) */}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <input
             type="text"
             placeholder="Search tasks..."
-            className="px-2 sm:px-4 py-2 rounded-lg bg-white border border-gray-300 text-sm sm:text-base w-full sm:w-auto"
+            className="flex-1 px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm sm:text-base w-full sm:w-auto"
+            className="hidden sm:block px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm"
           >
             + Add Task
           </button>
