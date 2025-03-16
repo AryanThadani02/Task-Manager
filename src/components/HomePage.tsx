@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTasks, setTasks } from "../redux/taskSlice";
@@ -101,7 +100,7 @@ export default function HomePage() {
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <span className="text-gray-600 text-sm whitespace-nowrap">Filter by:</span>
           <select
-            className="flex-1 sm:flex-none px-1 py-2 rounded-lg bg-white border border-gray-300 text-sm"
+            className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             onChange={(e) => setCategoryFilter(e.target.value)}
             value={categoryFilter}
           >
@@ -111,7 +110,7 @@ export default function HomePage() {
           </select>
           <input
             type="date"
-            className="flex-1 sm:flex-none px-1 py-2 rounded-lg bg-white border border-gray-300 text-sm"
+            className="w-28 sm:flex-none px-3 py-2 rounded-lg bg-white border border-gray-300 text-sm"
             onChange={(e) => setDueDateFilter(e.target.value)}
             value={dueDateFilter}
           />
