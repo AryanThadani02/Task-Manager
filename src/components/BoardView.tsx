@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { RootState, AppDispatch } from "../redux/store";
@@ -20,6 +20,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const dispatch = useDispatch();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleDelete = async () => {
     try {
@@ -39,6 +40,17 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
   const handleDragEnd = (e: React.DragEvent) => {
     e.currentTarget.classList.remove('opacity-50');
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div 
@@ -63,7 +75,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
               ⋮
             </button>
             {showMenu && (
-              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+              <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20" ref={menuRef}>
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
