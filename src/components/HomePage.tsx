@@ -40,53 +40,66 @@ export default function HomePage() {
 
   return (
     <div className="p-3 sm:p-6 bg-gray-50 min-h-screen">
-      {/* First Row */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:inline-block text-gray-700 font-medium">{user?.displayName}</span>
-            <img
-              src={user?.photoURL ?? ""}
-              alt="Profile"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
-            />
-          </div>
-          <button
-            onClick={handleLogout}
-            className="text-gray-600 hover:text-gray-800 text-sm flex items-center gap-2"
-          >
-            <FaSignOutAlt className="w-4 h-4" />
-            <span className="hidden sm:inline">Logout</span>
-          </button>
-        </div>
-      </div>
+   {/* First Row */}
+<div className="flex justify-between items-center">
+  <h1 className="text-xl sm:text-2xl font-bold text-gray-800">📋 TaskBuddy</h1>
+  <div className="flex items-center gap-4">
+    <span className="hidden sm:inline-block text-gray-700 font-medium">{user?.displayName}</span>
+    <img
+      src={user?.photoURL ?? ""}
+      alt="Profile"
+      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+    />
+  </div>
+</div>
 
-      {/* Navigation - Hidden on mobile */}
-      <div className="hidden sm:flex items-center mt-4">
-        <div className="flex items-center gap-6">
-          <Link
-            to="/home/tasks"
-            className={`flex items-center gap-2 ${
-              location.pathname === '/home/tasks'
-                ? 'text-purple-600'
-                : 'text-gray-600'
-            }`}
-          >
-            <FaListUl /> List
-          </Link>
-          <Link
-            to="/home/board"
-            className={`flex items-center gap-2 ${
-              location.pathname === '/home/board'
-                ? 'text-purple-600'
-                : 'text-gray-600'
-            }`}
-          >
-            <FaThLarge /> Board
-          </Link>
-        </div>
-      </div>
+{/* Navigation and Logout (Second Row - Desktop Only) */}
+<div className="hidden sm:flex justify-between items-center mt-4">
+  {/* Navigation Links */}
+  <div className="flex items-center gap-6">
+    <Link
+      to="/home/tasks"
+      className={`flex items-center gap-2 ${
+        location.pathname === '/home/tasks'
+          ? 'text-purple-600'
+          : 'text-gray-600'
+      }`}
+    >
+      <FaListUl /> List
+    </Link>
+    <Link
+      to="/home/board"
+      className={`flex items-center gap-2 ${
+        location.pathname === '/home/board'
+          ? 'text-purple-600'
+          : 'text-gray-600'
+      }`}
+    >
+      <FaThLarge /> Board
+    </Link>
+  </div>
+
+  {/* Logout Button (Desktop Only) */}
+  <button
+    onClick={handleLogout}
+    className="text-gray-600 hover:text-gray-800 text-sm flex items-center gap-2"
+  >
+    <FaSignOutAlt className="w-4 h-4" />
+    <span className="hidden sm:inline">Logout</span>
+  </button>
+</div>
+
+{/* Logout Button (Mobile Only) */}
+<div className="sm:hidden mt-4">
+  <button
+    onClick={handleLogout}
+    className="w-full px-4 py-2 rounded-lg hover:bg-red-600 text-sm flex items-center justify-end gap-2"
+  >
+    <FaSignOutAlt className="w-4 h-4" />
+    Logout
+  </button>
+</div>
+
 
       {/* Add Task Button for Mobile */}
       <div className="sm:hidden mt-4">

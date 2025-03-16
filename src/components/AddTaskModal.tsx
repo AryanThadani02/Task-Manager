@@ -169,57 +169,62 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
             <div id="quill-editor" style={{height: "200px"}} className="mb-3"></div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 mb-3">
-            {/* Task Category */}
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Task Category*</label>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  className={`px-3 py-1 rounded ${category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
-                  onClick={() => setCategory("Work")}
-                >
-                  Work
-                </button>
-                <button
-                  type="button"
-                  className={`px-3 py-1 rounded ${category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"}`}
-                  onClick={() => setCategory("Personal")}
-                >
-                  Personal
-                </button>
-              </div>
-            </div>
+          {/* Filters Section */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-3">
+  {/* Task Category */}
+  <div>
+    <label className="text-sm text-gray-600 mb-1 block">Task Category*</label>
+    <div className="flex gap-2 flex-wrap">
+      <button
+        type="button"
+        className={`px-3 py-1 rounded ${
+          category === "Work" ? "bg-purple-500 text-white" : "bg-gray-200"
+        }`}
+        onClick={() => setCategory("Work")}
+      >
+        Work
+      </button>
+      <button
+        type="button"
+        className={`px-3 py-1 rounded ${
+          category === "Personal" ? "bg-purple-500 text-white" : "bg-gray-200"
+        }`}
+        onClick={() => setCategory("Personal")}
+      >
+        Personal
+      </button>
+    </div>
+  </div>
 
-            {/* Due Date */}
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Due Date*</label>
-              <input
-                type="date"
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
+  {/* Due Date */}
+  <div>
+    <label className="text-sm text-gray-600 mb-1 block">Due Date*</label>
+    <input
+      type="date"
+      value={dueDate}
+      onChange={(e) => setDueDate(e.target.value)}
+      min={new Date().toISOString().split('T')[0]}
+      className="w-full p-2 border rounded"
+      required
+    />
+  </div>
 
-            {/* Task Status */}
-            <div>
-              <label className="text-sm text-gray-600 mb-1 block">Task Status*</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              >
-                <option value="">Select Status</option>
-                <option value="Todo">To-Do</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Completed">Completed</option>
-              </select>
-            </div>
-          </div>
+  {/* Task Status */}
+  <div>
+    <label className="text-sm text-gray-600 mb-1 block">Task Status*</label>
+    <select
+      value={status}
+      onChange={(e) => setStatus(e.target.value)}
+      className="w-full p-2 border rounded"
+      required
+    >
+      <option value="">Select Status</option>
+      <option value="Todo">To-Do</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+  </div>
+</div>
 
           {/* File Upload */}
           <div className="mb-3 border p-3 rounded">
