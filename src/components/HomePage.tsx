@@ -92,7 +92,7 @@ export default function HomePage() {
         <div className="flex justify-between items-center mt-3 mx-3">
           <div className="flex items-center gap-4">
             <select
-              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto"  {/* Added w-full for responsiveness */}
+              className="px-4 py-2 rounded-lg bg-white border border-gray-300 w-full sm:w-auto" /* Added w-full for responsiveness */
               onChange={(e) => setCategoryFilter(e.target.value)}
               value={categoryFilter}
             >
