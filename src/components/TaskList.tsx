@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase/firebaseConfig';
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
@@ -222,13 +224,14 @@ export default function TaskView() {
   
   try {
     const imageUrl = await uploadImage(file, user.uid);
-    // Update task with image URL
-    await updateDoc(doc(db, 'tasks', taskId), {
+    const docRef = doc(db, 'tasks', taskId);
+    await updateDoc(docRef, {
       imageUrl
     });
   } catch (error) {
     console.error("Error uploading image:", error);
   }
+};
 };
 
 const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
