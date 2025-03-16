@@ -1,0 +1,54 @@
+src/components/AddTaskModal.tsx:5:10 - error TS6133: 'getStorage' is declared but its value is never read.
+
+5 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Added Firebase imports
+           ~~~~~~~~~~
+
+src/components/AddTaskModal.tsx:6:1 - error TS6133: 'initializeApp' is declared but its value is never read.
+
+6 import { initializeApp } from "firebase/app"; // Added Firebase imports
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/components/AddTaskModal.tsx:7:1 - error TS6133: 'app' is declared but its value is never read.
+
+7 import { app } from "../firebase/firebaseConfig";
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+src/components/BoardView.tsx:101:40 - error TS2345: Argument of type 'string | null | undefined' is not assignable to parameter of type 'string | URL | undefined'.
+  Type 'null' is not assignable to type 'string | URL | undefined'.
+
+101             onClick={() => window.open(task.fileUrl, '_blank')}
+                                           ~~~~~~~~~~~~
+
+src/components/TaskList.tsx:219:9 - error TS6133: 'handleImageUpload' is declared but its value is never read.
+
+219   const handleImageUpload = async (file: File, taskId: string) => {
+            ~~~~~~~~~~~~~~~~~
+
+src/components/TaskList.tsx:220:16 - error TS2304: Cannot find name 'auth'.
+
+220   const user = auth.currentUser;
+                   ~~~~
+
+src/components/TaskList.tsx:224:28 - error TS2304: Cannot find name 'uploadImage'.
+
+224     const imageUrl = await uploadImage(file, user.uid);
+                               ~~~~~~~~~~~
+
+src/components/TaskList.tsx:226:11 - error TS2304: Cannot find name 'updateDoc'.
+
+226     await updateDoc(doc(db, 'tasks', taskId), {
+              ~~~~~~~~~
+
+src/components/TaskList.tsx:226:21 - error TS2304: Cannot find name 'doc'.
+
+226     await updateDoc(doc(db, 'tasks', taskId), {
+                        ~~~
+
+src/components/TaskList.tsx:226:25 - error TS2304: Cannot find name 'db'.
+
+226     await updateDoc(doc(db, 'tasks', taskId), {
+                            ~~
+
+src/components/TaskList.tsx:239:21 - error TS2304: Cannot find name 'n'.
+
+239   if (!task) return;n;
