@@ -5,6 +5,7 @@ import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import { removeTask, modifyTask } from "../redux/taskSlice";
 import EditTaskModal from "./EditTaskModal";
+import NoResultsFound from "./NoResultsFound"; // Import the NoResultsFound component
 
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center h-full">
@@ -181,44 +182,64 @@ export default function BoardView() {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">📌 Kanban Board</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-purple-200 p-3 font-medium">Todo</div>
-            <div className="p-4 min-h-[50px]">
-              {todoTasks.length > 0 && (
-                <div className="w-full">
-                  {todoTasks.map(task => 
-                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                  )}
-                </div>
-              )}
+        {filteredTasks.length === 0 && isSearching && (
+          <div className="flex justify-center items-center h-64"> {/* Centered NoResultsFound */}
+            <NoResultsFound />
+          </div>
+        )}
+
+        {filteredTasks.length > 0 && ( // Only render the board if tasks are found
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-purple-200 p-3 font-medium">Todo</div>
+              <div className="p-4 min-h-[50px]"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "Todo")}
+              >
+                {todoTasks.length > 0 && (
+                  <div className="w-full">
+                    {todoTasks.map(task => 
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
+              <div className="p-4 min-h-[50px]"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "In Progress")}
+              >
+                {inProgressTasks.length > 0 && (
+                  <div className="w-full">
+                    {inProgressTasks.map(task => 
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-green-200 p-3 font-medium">Completed</div>
+              <div className="p-4 min-h-[50px]"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={(e) => handleDrop(e, "Completed")}
+              >
+                {completedTasks.length > 0 && (
+                  <div className="w-full">
+                    {completedTasks.map(task => 
+                      <TaskCard key={task.id} task={task} draggable={!isSearching} />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-blue-200 p-3 font-medium">In-Progress</div>
-            <div className="p-4 min-h-[50px]">
-              {inProgressTasks.length > 0 && (
-                <div className="w-full">
-                  {inProgressTasks.map(task => 
-                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="border rounded-lg overflow-hidden">
-            <div className="bg-green-200 p-3 font-medium">Completed</div>
-            <div className="p-4 min-h-[50px]">
-              {completedTasks.length > 0 && (
-                <div className="w-full">
-                  {completedTasks.map(task => 
-                    <TaskCard key={task.id} task={task} draggable={!isSearching} />
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
