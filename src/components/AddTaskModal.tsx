@@ -85,6 +85,7 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
           setFileUrl(imageUrl);
         } catch (error) {
           console.error("Error uploading image:", error);
+          // Handle error appropriately
         }
       }
     }

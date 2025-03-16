@@ -96,6 +96,7 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
           setEditedTask(prev => ({...prev, fileUrl: imageUrl}));
         } catch (error) {
           console.error("Error uploading image:", error);
+          // Handle error appropriately
         }
       }
     }
