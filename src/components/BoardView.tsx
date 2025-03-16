@@ -128,9 +128,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, draggable, openMenuId, setOpe
             className="w-20 h-20 object-cover rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer" 
             onClick={() => window.open(imageUrl, '_blank')}
             onError={(e) => {
-              console.error('Image failed to load:', task.fileUrl);
               const img = e.target as HTMLImageElement;
-              img.style.display = 'none';
+              img.src = 'https://placehold.co/80x80?text=No+Image';
+              img.alt = 'Image not found';
+              console.error('Image failed to load:', task.fileUrl);
             }}
           />
         )}
