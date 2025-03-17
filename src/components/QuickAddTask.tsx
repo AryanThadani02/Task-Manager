@@ -11,6 +11,7 @@ export default function QuickAddTask() {
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [category, setCategory] = useState<'Work' | 'Personal'>('Work');
+  const [status, setStatus] = useState<Task['status']>('Todo'); // Added status state
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +24,7 @@ export default function QuickAddTask() {
         description: '',
         category,
         dueDate,
-        status: 'Todo',
+        status, // Use the selected status
         completed: false,
         selected: false,
       };
@@ -39,6 +40,7 @@ export default function QuickAddTask() {
     setTitle('');
     setDueDate('');
     setCategory('Work');
+    setStatus('Todo'); // Reset status
     setIsExpanded(false);
   };
 
@@ -73,6 +75,17 @@ export default function QuickAddTask() {
           className="w-40 p-2 border rounded"
           required
         />
+
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value as Task['status'])}
+          className="w-40 p-2 border rounded"
+          required
+        >
+          <option value="Todo">To-Do</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
 
         <div className="flex gap-1">
           <button
