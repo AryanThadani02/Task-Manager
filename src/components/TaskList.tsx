@@ -212,34 +212,6 @@ export default function TaskView() {
     inProgress: 5,
     completed: 5
   });
-  const [showAddTask, setShowAddTask] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskDate, setNewTaskDate] = useState('');
-
-  const handleAddTask = async () => {
-    if (!newTaskTitle.trim()) return;
-    
-    const newTask = {
-      title: newTaskTitle,
-      status: 'Todo',
-      dueDate: newTaskDate || null,
-      category: 'PERSONAL',
-      completed: false,
-      userId: auth.currentUser?.uid || '',
-      description: '',
-      priority: 'Medium',
-      selected: false
-    };
-
-    try {
-      await dispatch(createTask({ ...newTask, fileUrl: null }) as any);
-      setNewTaskTitle('');
-      setNewTaskDate('');
-      setShowAddTask(false);
-    } catch (error) {
-      console.error('Failed to create task:', error);
-    }
-  };
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
@@ -439,44 +411,6 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, "Todo")}
                 >
-                  {showAddTask ? (
-                    <div className="p-4 bg-white rounded-lg shadow mb-4">
-                      <input
-                        type="text"
-                        value={newTaskTitle}
-                        onChange={(e) => setNewTaskTitle(e.target.value)}
-                        placeholder="Task Title"
-                        className="w-full p-2 mb-3 border rounded"
-                      />
-                      <input
-                        type="date"
-                        value={newTaskDate}
-                        onChange={(e) => setNewTaskDate(e.target.value)}
-                        className="w-full p-2 mb-3 border rounded"
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          onClick={handleAddTask}
-                          className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-                        >
-                          Add
-                        </button>
-                        <button
-                          onClick={() => setShowAddTask(false)}
-                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setShowAddTask(true)}
-                      className="w-full p-2 mb-4 text-left flex items-center gap-2 text-purple-600 hover:bg-purple-50 rounded"
-                    >
-                      <span className="text-xl">+</span> ADD TASK
-                    </button>
-                  )}
                   {todoTasks.length > 0 ? (
                     <>
                       {todoTasks.slice(0, visibleTasks.todo).map(task => 
