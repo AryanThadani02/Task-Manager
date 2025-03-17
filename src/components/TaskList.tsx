@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { RootState, AppDispatch } from "../redux/store"; 
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, removeTask, modifyTask } from "../redux/taskSlice";
+import { updateTask, deleteTask, removeTask, modifyTask, createTask } from "../redux/taskSlice"; 
 import NoResultsFound from "./NoResultsFound";
 
 interface TaskCardProps {
@@ -198,7 +198,7 @@ export default function TaskView() {
     dueDateFilter: string;
   }>();
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
@@ -206,7 +206,7 @@ export default function TaskView() {
     inProgress: true,
     completed: true
   });
-  
+
   const [visibleTasks, setVisibleTasks] = useState({
     todo: 5,
     inProgress: 5,
@@ -250,35 +250,35 @@ export default function TaskView() {
 
 
 
-const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
-  e.preventDefault();
-  const taskId = e.dataTransfer.getData("taskId");
-  const task = tasks.find(t => t.id === taskId);
+  const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("taskId");
+    const task = tasks.find(t => t.id === taskId);
 
-  if (!task) return;
+    if (!task) return;
 
-    try {
-      const updatedTask: Task = {
-        ...task,
-        status: newStatus,
-        completed: newStatus === "Completed",
-        category: task.category,
-        dueDate: task.dueDate,
-        activity: [
-          ...(task.activity || []),
-          {
-            timestamp: new Date().toISOString(),
-            action: "status_change",
-            details: `Task status changed to ${newStatus} via drag and drop`
-          }
-        ]
-      };
+      try {
+        const updatedTask: Task = {
+          ...task,
+          status: newStatus,
+          completed: newStatus === "Completed",
+          category: task.category,
+          dueDate: task.dueDate,
+          activity: [
+            ...(task.activity || []),
+            {
+              timestamp: new Date().toISOString(),
+              action: "status_change",
+              details: `Task status changed to ${newStatus} via drag and drop`
+            }
+          ]
+        };
 
-      await dispatch(modifyTask(updatedTask) as any);
-    } catch (error) {
-      console.error("Failed to update task:", error);
-    }
-  };
+        await dispatch(modifyTask(updatedTask) as any);
+      } catch (error) {
+        console.error("Failed to update task:", error);
+      }
+    };
 
   const handleBulkDelete = () => {
     const selectedTasks = tasks.filter(task => task.selected);
@@ -287,7 +287,6 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
         dispatch(deleteTask(task.id));
       }
     });
-    // Reset all selected states after bulk delete
     tasks.forEach(task => {
       if (task.selected) {
         dispatch(updateTask({ ...task, selected: false } as Task));
@@ -305,6 +304,417 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
         selected: false 
       }));
     });
+  };
+
+  const TodoSection = () => {
+    const todoTasks = tasks.filter(task => task.status === 'Todo');
+    const [isExpanded, setIsExpanded] = useState(true);
+    const [visibleTasks, setVisibleTasks] = useState(5);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [newTask, setNewTask] = useState({
+      title: '',
+      dueDate: '',
+      category: 'Work'
+    });
+    const user = useSelector((state: RootState) => state.user.user);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleAddTask = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!user) return;
+
+      try {
+        const taskData = {
+          userId: user.uid,
+          title: newTask.title,
+          description: '',
+          category: newTask.category as "Work" | "Personal",
+          dueDate: newTask.dueDate,
+          status: "Todo" as "Todo",
+          fileUrl: null,
+          completed: false,
+          selected: false
+        };
+
+        await dispatch(createTask(taskData)); 
+        setNewTask({ title: '', dueDate: '', category: 'Work' });
+        setShowAddForm(false);
+      } catch (error) {
+        console.error("Failed to create task:", error);
+      }
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+
+    return (
+      <div className="mb-4">
+        <div 
+          className="flex items-center justify-between bg-pink-100 p-3 rounded-t cursor-pointer"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <h2 className="text-lg font-semibold flex items-center">
+            Todo ({todoTasks.length})
+            <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'} ml-2`}></i>
+          </h2>
+          <button
+            className="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddForm(!showAddForm);
+            }}
+          >
+            + Add Task
+          </button>
+        </div>
+        {isExpanded && (
+          <>
+            {showAddForm && (
+              <form onSubmit={handleAddTask} className="bg-white p-4 border-b" onClick={e => e.stopPropagation()}>
+                <input
+                  type="text"
+                  placeholder="Task Title"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  className="w-full p-2 mb-3 border rounded"
+                  required
+                />
+                <div className="flex gap-3 mb-3">
+                  <input
+                    type="date"
+                    min={today}
+                    value={newTask.dueDate}
+                    onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  />
+                  <select
+                    value={newTask.category}
+                    onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  >
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                  </select>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddForm(false)}
+                    className="px-3 py-1 border rounded hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700"
+                  >
+                    Add Task
+                  </button>
+                </div>
+              </form>
+            )}
+            <div 
+              className="p-4 min-h-[100px] transition-all duration-200"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, "Todo")}
+            >
+              {todoTasks.length > 0 ? (
+                <>
+                  {todoTasks.slice(0, visibleTasks).map(task => 
+                    <TaskCard key={task.id} task={task} />
+                  )}
+                  {todoTasks.length > visibleTasks && (
+                    <button 
+                      onClick={() => setVisibleTasks(visibleTasks + 5)}
+                      className="mt-4 w-full py-2 px-4 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
+                    >
+                      Load More ({todoTasks.length - visibleTasks} remaining)
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className="text-gray-600">No Todo Tasks</div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const InProgressSection = () => {
+    const inProgressTasks = tasks.filter(task => task.status === 'In Progress');
+    const [isExpanded, setIsExpanded] = useState(true);
+    const [visibleTasks, setVisibleTasks] = useState(5);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [newTask, setNewTask] = useState({
+      title: '',
+      dueDate: '',
+      category: 'Work'
+    });
+    const user = useSelector((state: RootState) => state.user.user);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleAddTask = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!user) return;
+
+      try {
+        const taskData = {
+          userId: user.uid,
+          title: newTask.title,
+          description: '',
+          category: newTask.category as "Work" | "Personal",
+          dueDate: newTask.dueDate,
+          status: "In Progress" as "In Progress",
+          fileUrl: null,
+          completed: false,
+          selected: false
+        };
+
+        await dispatch(createTask(taskData)); 
+        setNewTask({ title: '', dueDate: '', category: 'Work' });
+        setShowAddForm(false);
+      } catch (error) {
+        console.error("Failed to create task:", error);
+      }
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+
+    return (
+      <div className="mb-4">
+        <div 
+          className="flex items-center justify-between bg-blue-100 p-3 rounded-t cursor-pointer"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <h2 className="text-lg font-semibold flex items-center">
+            In Progress ({inProgressTasks.length})
+            <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'} ml-2`}></i>
+          </h2>
+          <button
+            className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddForm(!showAddForm);
+            }}
+          >
+            + Add Task
+          </button>
+        </div>
+        {isExpanded && (
+          <>
+            {showAddForm && (
+              <form onSubmit={handleAddTask} className="bg-white p-4 border-b" onClick={e => e.stopPropagation()}>
+                <input
+                  type="text"
+                  placeholder="Task Title"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  className="w-full p-2 mb-3 border rounded"
+                  required
+                />
+                <div className="flex gap-3 mb-3">
+                  <input
+                    type="date"
+                    min={today}
+                    value={newTask.dueDate}
+                    onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  />
+                  <select
+                    value={newTask.category}
+                    onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  >
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                  </select>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddForm(false)}
+                    className="px-3 py-1 border rounded hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Add Task
+                  </button>
+                </div>
+              </form>
+            )}
+            <div 
+              className="p-4 min-h-[100px] transition-all duration-200"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, "In Progress")}
+            >
+              {inProgressTasks.length > 0 ? (
+                <>
+                  {inProgressTasks.slice(0, visibleTasks).map(task => 
+                    <TaskCard key={task.id} task={task} />
+                  )}
+                  {inProgressTasks.length > visibleTasks && (
+                    <button 
+                      onClick={() => setVisibleTasks(visibleTasks + 5)}
+                      className="mt-4 w-full py-2 px-4 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                    >
+                      Load More ({inProgressTasks.length - visibleTasks} remaining)
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className="text-gray-600">No Tasks In Progress</div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  const CompletedSection = () => {
+    const completedTasks = tasks.filter(task => task.status === 'Completed');
+    const [isExpanded, setIsExpanded] = useState(true);
+    const [visibleTasks, setVisibleTasks] = useState(5);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [newTask, setNewTask] = useState({
+      title: '',
+      dueDate: '',
+      category: 'Work'
+    });
+    const user = useSelector((state: RootState) => state.user.user);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleAddTask = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!user) return;
+
+      try {
+        const taskData = {
+          userId: user.uid,
+          title: newTask.title,
+          description: '',
+          category: newTask.category as "Work" | "Personal",
+          dueDate: newTask.dueDate,
+          status: "Completed" as "Completed",
+          fileUrl: null,
+          completed: true,
+          selected: false
+        };
+
+        await dispatch(createTask(taskData)); 
+        setNewTask({ title: '', dueDate: '', category: 'Work' });
+        setShowAddForm(false);
+      } catch (error) {
+        console.error("Failed to create task:", error);
+      }
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+
+    return (
+      <div className="mb-4">
+        <div 
+          className="flex items-center justify-between bg-green-100 p-3 rounded-t cursor-pointer"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <h2 className="text-lg font-semibold flex items-center">
+            Completed ({completedTasks.length})
+            <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'} ml-2`}></i>
+          </h2>
+          <button
+            className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddForm(!showAddForm);
+            }}
+          >
+            + Add Task
+          </button>
+        </div>
+        {isExpanded && (
+          <>
+            {showAddForm && (
+              <form onSubmit={handleAddTask} className="bg-white p-4 border-b" onClick={e => e.stopPropagation()}>
+                <input
+                  type="text"
+                  placeholder="Task Title"
+                  value={newTask.title}
+                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  className="w-full p-2 mb-3 border rounded"
+                  required
+                />
+                <div className="flex gap-3 mb-3">
+                  <input
+                    type="date"
+                    min={today}
+                    value={newTask.dueDate}
+                    onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  />
+                  <select
+                    value={newTask.category}
+                    onChange={(e) => setNewTask({...newTask, category: e.target.value})}
+                    className="flex-1 p-2 border rounded"
+                    required
+                  >
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                  </select>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddForm(false)}
+                    className="px-3 py-1 border rounded hover:bg-gray-100"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                  >
+                    Add Task
+                  </button>
+                </div>
+              </form>
+            )}
+            <div 
+              className="p-4 min-h-[100px] transition-all duration-200"
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, "Completed")}
+            >
+              {completedTasks.length > 0 ? (
+                <>
+                  {completedTasks.slice(0, visibleTasks).map(task => 
+                    <TaskCard key={task.id} task={task} />
+                  )}
+                  {completedTasks.length > visibleTasks && (
+                    <button 
+                      onClick={() => setVisibleTasks(visibleTasks + 5)}
+                      className="mt-4 w-full py-2 px-4 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                    >
+                      Load More ({completedTasks.length - visibleTasks} remaining)
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className="text-gray-600">No Completed Tasks</div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
   };
 
   if (loading) {
@@ -383,8 +793,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   <button onClick={() => handleBulkStatusChange('Completed')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700">Completed</button>
                 </div>
               </div>
-            </div>
-            <button 
+            </div<button 
               onClick={handleBulkDelete}
               className="text-red-400 hover:text-red-300 text-sm"
             >
@@ -396,116 +805,9 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
           <NoResultsFound />
         ) : (
           <div className="flex flex-col gap-4">
-            {(!searchQuery || todoTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden mb-4">
-              <button 
-                onClick={() => toggleSection('todo')}
-                className="w-full bg-purple-200 p-3 font-medium text-left flex justify-between items-center"
-              >
-                <span>Todo ({todoTasks.length})</span>
-                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.todo ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
-              </button>
-              {expandedSections.todo && (
-                <div 
-                  className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, "Todo")}
-                >
-                  {todoTasks.length > 0 ? (
-                    <>
-                      {todoTasks.slice(0, visibleTasks.todo).map(task => 
-                        <TaskCard key={task.id} task={task} />
-                      )}
-                      {todoTasks.length > visibleTasks.todo && (
-                        <button 
-                          onClick={() => loadMore('todo')}
-                          className="mt-4 w-full py-2 px-4 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
-                        >
-                          Load More ({todoTasks.length - visibleTasks.todo} remaining)
-                        </button>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-gray-600">No Todo Tasks</div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {(!searchQuery || inProgressTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden mb-4">
-              <button 
-                onClick={() => toggleSection('inProgress')}
-                className="w-full bg-blue-200 p-3 font-medium text-left flex justify-between items-center"
-              >
-                <span>In-Progress ({inProgressTasks.length})</span>
-                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.inProgress ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
-              </button>
-              {expandedSections.inProgress && (
-                <div 
-                  className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, "In Progress")}
-                >
-                  {inProgressTasks.length > 0 ? (
-                    <>
-                      {inProgressTasks.slice(0, visibleTasks.inProgress).map(task => 
-                        <TaskCard key={task.id} task={task} />
-                      )}
-                      {inProgressTasks.length > visibleTasks.inProgress && (
-                        <button 
-                          onClick={() => loadMore('inProgress')}
-                          className="mt-4 w-full py-2 px-4 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
-                        >
-                          Load More ({inProgressTasks.length - visibleTasks.inProgress} remaining)
-                        </button>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-gray-600">No Tasks In Progress</div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {(!searchQuery || completedTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden mb-4">
-              <button 
-                onClick={() => toggleSection('completed')}
-                className="w-full bg-green-200 p-3 font-medium text-left flex justify-between items-center"
-              >
-                <span>Completed ({completedTasks.length})</span>
-                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.completed ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
-              </button>
-              {expandedSections.completed && (
-                <div 
-                  className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
-                  onDrop={(e) => handleDrop(e, "Completed")}
-                >
-                  {completedTasks.length > 0 ? (
-                    <>
-                      {completedTasks.slice(0, visibleTasks.completed).map(task => 
-                        <TaskCard key={task.id} task={task} />
-                      )}
-                      {completedTasks.length > visibleTasks.completed && (
-                        <button 
-                          onClick={() => loadMore('completed')}
-                          className="mt-4 w-full py-2 px-4 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
-                        >
-                          Load More ({completedTasks.length - visibleTasks.completed} remaining)
-                        </button>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-gray-600">No Completed Tasks</div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+            <TodoSection />
+            <InProgressSection />
+            <CompletedSection />
           </div>
         )}
       </div>
