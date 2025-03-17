@@ -29,6 +29,7 @@ export default function QuickAddTask() {
         status,
         completed: false,
         selected: false,
+        fileUrl: null,
       };
 
       await dispatch(createTask(newTask));
