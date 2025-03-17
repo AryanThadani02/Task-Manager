@@ -201,6 +201,18 @@ export default function TaskView() {
   const dispatch = useDispatch();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    todo: true,
+    inProgress: true,
+    completed: true
+  });
+
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
 
   const filteredTasks = tasks.filter(task => {
@@ -223,7 +235,7 @@ export default function TaskView() {
     e.preventDefault();
   };
 
-  
+
 
 const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
   e.preventDefault();
@@ -248,7 +260,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
           }
         ]
       };
-      
+
       await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
@@ -372,59 +384,77 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
         ) : (
           <div className="flex flex-col gap-4">
             {(!searchQuery || todoTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden h-auto min-h-[150px] sm:min-h-[200px]">
-              <div className="bg-purple-200 p-2 sm:p-3 font-medium text-sm sm:text-base">
-                Todo ({todoTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[50px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "Todo")}
+            <div className="border rounded-lg overflow-hidden mb-4">
+              <button 
+                onClick={() => toggleSection('todo')}
+                className="w-full bg-purple-200 p-3 font-medium text-left flex justify-between items-center"
               >
-                {todoTasks.length > 0 ? (
-                  todoTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Tasks In To-Do</div>
-                )}
-              </div>
+                <span>Todo ({todoTasks.length})</span>
+                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.todo ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+              </button>
+              {expandedSections.todo && (
+                <div 
+                  className="p-4 min-h-[100px] transition-all duration-200"
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, "Todo")}
+                >
+                  {todoTasks.length > 0 ? (
+                    todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                  ) : (
+                    <div className="text-gray-600">No Todo Tasks</div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
           {(!searchQuery || inProgressTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-blue-200 p-3 font-medium">
-                In-Progress ({inProgressTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[100px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "In Progress")}
+            <div className="border rounded-lg overflow-hidden mb-4">
+              <button 
+                onClick={() => toggleSection('inProgress')}
+                className="w-full bg-blue-200 p-3 font-medium text-left flex justify-between items-center"
               >
-                {inProgressTasks.length > 0 ? (
-                  inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Tasks In Progress</div>
-                )}
-              </div>
+                <span>In-Progress ({inProgressTasks.length})</span>
+                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.inProgress ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+              </button>
+              {expandedSections.inProgress && (
+                <div 
+                  className="p-4 min-h-[100px] transition-all duration-200"
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, "In Progress")}
+                >
+                  {inProgressTasks.length > 0 ? (
+                    inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                  ) : (
+                    <div className="text-gray-600">No Tasks In Progress</div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
           {(!searchQuery || completedTasks.length > 0) && (
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-green-200 p-3 font-medium">
-                Completed ({completedTasks.length})
-              </div>
-              <div 
-                className="p-4 min-h-[100px]"
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, "Completed")}
+            <div className="border rounded-lg overflow-hidden mb-4">
+              <button 
+                onClick={() => toggleSection('completed')}
+                className="w-full bg-green-200 p-3 font-medium text-left flex justify-between items-center"
               >
-                {completedTasks.length > 0 ? (
-                  completedTasks.map(task => <TaskCard key={task.id} task={task} />)
-                ) : (
-                  <div className="text-gray-600">No Completed Tasks</div>
-                )}
-              </div>
+                <span>Completed ({completedTasks.length})</span>
+                <span className="transform transition-transform duration-200" style={{ transform: expandedSections.completed ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
+              </button>
+              {expandedSections.completed && (
+                <div 
+                  className="p-4 min-h-[100px] transition-all duration-200"
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, "Completed")}
+                >
+                  {completedTasks.length > 0 ? (
+                    completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                  ) : (
+                    <div className="text-gray-600">No Completed Tasks</div>
+                  )}
+                </div>
+              )}
             </div>
           )}
           </div>
