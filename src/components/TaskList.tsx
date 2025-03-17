@@ -206,11 +206,24 @@ export default function TaskView() {
     inProgress: true,
     completed: true
   });
+  
+  const [visibleTasks, setVisibleTasks] = useState({
+    todo: 5,
+    inProgress: 5,
+    completed: 5
+  });
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
+    }));
+  };
+
+  const loadMore = (section: string) => {
+    setVisibleTasks(prev => ({
+      ...prev,
+      [section]: prev[section] + 5
     }));
   };
 
@@ -399,7 +412,19 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDrop={(e) => handleDrop(e, "Todo")}
                 >
                   {todoTasks.length > 0 ? (
-                    todoTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    <>
+                      {todoTasks.slice(0, visibleTasks.todo).map(task => 
+                        <TaskCard key={task.id} task={task} />
+                      )}
+                      {todoTasks.length > visibleTasks.todo && (
+                        <button 
+                          onClick={() => loadMore('todo')}
+                          className="mt-4 w-full py-2 px-4 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors"
+                        >
+                          Load More ({todoTasks.length - visibleTasks.todo} remaining)
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="text-gray-600">No Todo Tasks</div>
                   )}
@@ -424,7 +449,19 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDrop={(e) => handleDrop(e, "In Progress")}
                 >
                   {inProgressTasks.length > 0 ? (
-                    inProgressTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    <>
+                      {inProgressTasks.slice(0, visibleTasks.inProgress).map(task => 
+                        <TaskCard key={task.id} task={task} />
+                      )}
+                      {inProgressTasks.length > visibleTasks.inProgress && (
+                        <button 
+                          onClick={() => loadMore('inProgress')}
+                          className="mt-4 w-full py-2 px-4 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                        >
+                          Load More ({inProgressTasks.length - visibleTasks.inProgress} remaining)
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="text-gray-600">No Tasks In Progress</div>
                   )}
@@ -449,7 +486,19 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDrop={(e) => handleDrop(e, "Completed")}
                 >
                   {completedTasks.length > 0 ? (
-                    completedTasks.map(task => <TaskCard key={task.id} task={task} />)
+                    <>
+                      {completedTasks.slice(0, visibleTasks.completed).map(task => 
+                        <TaskCard key={task.id} task={task} />
+                      )}
+                      {completedTasks.length > visibleTasks.completed && (
+                        <button 
+                          onClick={() => loadMore('completed')}
+                          className="mt-4 w-full py-2 px-4 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                        >
+                          Load More ({completedTasks.length - visibleTasks.completed} remaining)
+                        </button>
+                      )}
+                    </>
                   ) : (
                     <div className="text-gray-600">No Completed Tasks</div>
                   )}
