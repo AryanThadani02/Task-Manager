@@ -64,7 +64,7 @@ export default function QuickAddTask() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Task title"
-          className="flex-1 p-2 border rounded"
+          className="w-60 p-2 border rounded"
           required
         />
 
