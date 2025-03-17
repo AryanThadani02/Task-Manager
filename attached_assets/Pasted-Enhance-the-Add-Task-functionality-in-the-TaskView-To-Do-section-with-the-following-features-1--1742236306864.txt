@@ -1,0 +1,44 @@
+Enhance the 'Add Task' functionality in the TaskView To-Do section with the following features:
+
+1. Add Task Button:
+Place an 'Add Task' button at the top of the To-Do section.
+When clicked, it should expand an input form directly under the respective column headers:
+Task Title
+Due Date
+Status (To-Do, In-Progress, Completed)
+Category
+2. Task Input Fields:
+Task Title:
+
+A text input field where users can enter the task name.
+It should be a required field.
+Due Date Picker:
+
+Allow users to select a due date for the task.
+Restrict past dates so that users can only pick today’s date or future dates.
+Status Dropdown:
+
+Provide a dropdown menu with three options: To-Do, In-Progress, Completed.
+Users should be able to select the task status while creating it, instead of restricting it to just "To-Do".
+The selected status should determine where the task appears in the UI.
+Category Selection:
+
+Provide a dropdown or tag selector where users can choose from predefined categories (e.g., Work, Personal, etc.).
+Allow users to select one or multiple categories.
+3. Action Buttons:
+Add Button:
+
+Clicking this should save the task to Firebase and display it in the appropriate section based on the selected status.
+The task should appear immediately in the UI without requiring a refresh.
+Cancel Button:
+
+Clicking this should close the input form without saving any data.
+4. Firebase Integration:
+Ensure the newly added task is stored in Firebase with all the correct details (Title, Due Date, Status, and Category).
+Tasks should be dynamically rendered in the correct section based on the selected status.
+5. UI & UX Considerations:
+Keep the design clean and consistent with the existing UI.
+Ensure smooth transitions when expanding and collapsing the input form.
+Validate required fields to prevent empty submissions.
+If a task is created under the wrong status, users should still be able to move it using drag-and-drop functionality.
+By implementing these changes, users will have more flexibility when adding tasks while maintaining an intuitive and user-friendly experience.
