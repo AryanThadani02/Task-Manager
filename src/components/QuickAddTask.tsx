@@ -104,8 +104,9 @@ export default function QuickAddTask() {
             Personal
           </button>
         </div>
-
-        <div className="flex gap-2">
+      </div>
+      
+      <div className="flex gap-2 mt-4 justify-end">
           <button
             type="button"
             onClick={handleCancel}
