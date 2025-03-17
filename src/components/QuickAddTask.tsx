@@ -49,7 +49,7 @@ export default function QuickAddTask() {
     return (
       <button
         onClick={() => setIsExpanded(true)}
-        className="w-full p-2 text-left text-gray-600 hover:bg-gray-50 rounded flex items-center gap-2 border border-dashed border-gray-300"
+        className="hidden lg:w-full lg:p-2 lg:text-left lg:text-gray-600 lg:hover:bg-gray-50 lg:rounded lg:flex lg:items-center lg:gap-2 lg:border lg:border-dashed lg:border-gray-300"
       >
         <span className="text-xl">+</span> Add New Task
       </button>
