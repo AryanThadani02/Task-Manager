@@ -6,6 +6,7 @@ import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
 import { updateTask, deleteTask, removeTask, modifyTask } from "../redux/taskSlice";
 import NoResultsFound from "./NoResultsFound";
+import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 
 interface TaskCardProps {
   task: Task;
@@ -206,7 +207,7 @@ export default function TaskView() {
     inProgress: true,
     completed: true
   });
-  
+
   const [visibleTasks, setVisibleTasks] = useState({
     todo: 5,
     inProgress: 5,
@@ -411,6 +412,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, "Todo")}
                 >
+                  <QuickAddTask /> {/* Add QuickAddTask component here */}
                   {todoTasks.length > 0 ? (
                     <>
                       {todoTasks.slice(0, visibleTasks.todo).map(task => 
@@ -448,6 +450,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, "In Progress")}
                 >
+                  <QuickAddTask /> {/* Add QuickAddTask component here */}
                   {inProgressTasks.length > 0 ? (
                     <>
                       {inProgressTasks.slice(0, visibleTasks.inProgress).map(task => 
@@ -485,6 +488,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, "Completed")}
                 >
+                  <QuickAddTask /> {/* Add QuickAddTask component here */}
                   {completedTasks.length > 0 ? (
                     <>
                       {completedTasks.slice(0, visibleTasks.completed).map(task => 
