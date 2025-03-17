@@ -213,14 +213,14 @@ export default function TaskView() {
     completed: 5
   });
 
-  const toggleSection = (section: string) => {
+  const toggleSection = (section: 'todo' | 'inProgress' | 'completed') => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
   };
 
-  const loadMore = (section: string) => {
+  const loadMore = (section: 'todo' | 'inProgress' | 'completed') => {
     setVisibleTasks(prev => ({
       ...prev,
       [section]: prev[section] + 5
