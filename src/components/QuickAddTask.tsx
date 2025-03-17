@@ -58,7 +58,7 @@ export default function QuickAddTask() {
 
   return (
     <form onSubmit={handleSubmit} className={`w-full bg-white border border-gray-200 rounded-lg p-3 ${containerClassName}`}>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between">
         <input
           type="text"
           value={title}
