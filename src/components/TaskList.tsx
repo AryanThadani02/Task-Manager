@@ -291,24 +291,15 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
       <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md max-w-full overflow-x-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
-          
-        </div>
-
-        <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="relative">
             <button 
               onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="flex items-center gap-1 hover:text-purple-600 transition-colors"
+              className="px-4 py-2 text-sm bg-white border rounded-md hover:bg-gray-50 focus:outline-none"
             >
-              Due Date
-              {sortOrder && (
-                <span className="text-xs">
-                  {sortOrder === 'asc' ? '↑' : '↓'}
-                </span>
-              )}
+              {sortOrder ? `Due Date (${sortOrder === 'asc' ? 'Ascending' : 'Descending'})` : 'Sort by Due Date'}
             </button>
             {showSortDropdown && (
-              <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border">
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border">
                 <button
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onClick={() => {
@@ -316,7 +307,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                     setShowSortDropdown(false);
                   }}
                 >
-                  Sort Ascending
+                  Sort by Due Date (Ascending)
                 </button>
                 <button
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -325,7 +316,7 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                     setShowSortDropdown(false);
                   }}
                 >
-                  Sort Descending
+                  Sort by Due Date (Descending)
                 </button>
                 {sortOrder && (
                   <button
@@ -341,6 +332,9 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
           <div className="w-12"></div>
           <div>Task name</div>
           <div>Due on</div>
