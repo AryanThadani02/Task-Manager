@@ -12,6 +12,7 @@ export default function QuickAddTask() {
   const [dueDate, setDueDate] = useState('');
   const [category, setCategory] = useState<'Work' | 'Personal'>('Work');
   const [status, setStatus] = useState<Task['status']>('Todo'); // Added status state
+  const containerClassName = "hidden lg:block";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +57,7 @@ export default function QuickAddTask() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full bg-white border border-gray-200 rounded-lg p-3">
+    <form onSubmit={handleSubmit} className={`w-full bg-white border border-gray-200 rounded-lg p-3 ${containerClassName}`}>
       <div className="flex items-center gap-3">
         <input
           type="text"
