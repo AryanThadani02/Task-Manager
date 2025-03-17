@@ -487,7 +487,6 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
                   onDragOver={handleDragOver}
                   onDrop={(e) => handleDrop(e, "Completed")}
                 >
-                  <QuickAddTask /> {/* Add QuickAddTask component here */}
                   {completedTasks.length > 0 ? (
                     <>
                       {completedTasks.slice(0, visibleTasks.completed).map(task => 
