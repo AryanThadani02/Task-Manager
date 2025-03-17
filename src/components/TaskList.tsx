@@ -199,6 +199,8 @@ export default function TaskView() {
   }>();
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
   const dispatch = useDispatch();
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
 
 
   const filteredTasks = tasks.filter(task => {
@@ -206,6 +208,11 @@ export default function TaskView() {
     const matchesCategory = !categoryFilter || task.category === categoryFilter;
     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
     return matchesSearch && matchesCategory && matchesDueDate;
+  }).sort((a, b) => {
+    if (!sortOrder) return 0;
+    const dateA = new Date(a.dueDate).getTime();
+    const dateB = new Date(b.dueDate).getTime();
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
   });
 
   const todoTasks = filteredTasks.filter(task => task.status === "Todo");
@@ -284,6 +291,47 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
       <div className="bg-white p-3 sm:p-4 md:p-6 rounded-lg shadow-md max-w-full overflow-x-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">📋 Task List</h2>
+          <div className="relative">
+            <button 
+              onClick={() => setShowSortDropdown(!showSortDropdown)}
+              className="px-4 py-2 text-sm bg-white border rounded-md hover:bg-gray-50 focus:outline-none"
+            >
+              {sortOrder ? `Due Date (${sortOrder === 'asc' ? 'Ascending' : 'Descending'})` : 'Sort by Due Date'}
+            </button>
+            {showSortDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border">
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    setSortOrder('asc');
+                    setShowSortDropdown(false);
+                  }}
+                >
+                  Sort by Due Date (Ascending)
+                </button>
+                <button
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => {
+                    setSortOrder('desc');
+                    setShowSortDropdown(false);
+                  }}
+                >
+                  Sort by Due Date (Descending)
+                </button>
+                {sortOrder && (
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-t"
+                    onClick={() => {
+                      setSortOrder(null);
+                      setShowSortDropdown(false);
+                    }}
+                  >
+                    Clear Sorting
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="hidden md:grid grid-cols-[auto_1fr_1fr_1fr_auto] gap-4 p-3 bg-gray-100 rounded-t-lg font-medium text-gray-600 border-b">
