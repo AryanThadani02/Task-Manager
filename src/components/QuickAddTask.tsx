@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask } from '../redux/taskSlice';
@@ -11,7 +12,7 @@ export default function QuickAddTask() {
   const [title, setTitle] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [category, setCategory] = useState<'Work' | 'Personal'>('Work');
-  const [status, setStatus] = useState<Task['status']>('Todo'); // Added status state
+  const [status, setStatus] = useState<Task['status']>('Todo');
   const containerClassName = "hidden lg:block";
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,7 +26,7 @@ export default function QuickAddTask() {
         description: '',
         category,
         dueDate,
-        status, // Use the selected status
+        status,
         completed: false,
         selected: false,
       };
@@ -41,7 +42,7 @@ export default function QuickAddTask() {
     setTitle('');
     setDueDate('');
     setCategory('Work');
-    setStatus('Todo'); // Reset status
+    setStatus('Todo');
     setIsExpanded(false);
   };
 
@@ -88,17 +89,17 @@ export default function QuickAddTask() {
           <option value="Completed">Completed</option>
         </select>
 
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           <button
             type="button"
-            className={`px-3 py-1 rounded text-sm ${category === 'Work' ? 'bg-purple-500 text-white' : 'bg-gray-200'}`}
+            className={`px-3 py-1 rounded ${category === 'Work' ? 'bg-purple-500 text-white' : 'bg-gray-200'}`}
             onClick={() => setCategory('Work')}
           >
             Work
           </button>
           <button
             type="button"
-            className={`px-3 py-1 rounded text-sm ${category === 'Personal' ? 'bg-purple-500 text-white' : 'bg-gray-200'}`}
+            className={`px-3 py-1 rounded ${category === 'Personal' ? 'bg-purple-500 text-white' : 'bg-gray-200'}`}
             onClick={() => setCategory('Personal')}
           >
             Personal
@@ -107,20 +108,19 @@ export default function QuickAddTask() {
       </div>
       
       <div className="flex gap-2 mt-4 justify-end">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-3 py-1.5 text-sm bg-purple-500 text-white rounded hover:bg-purple-600"
-          >
-            Add
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleCancel}
+          className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+        >
+          Add Task
+        </button>
       </div>
     </form>
   );
