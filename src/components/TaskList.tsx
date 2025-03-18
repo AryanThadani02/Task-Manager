@@ -181,7 +181,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
                 >
                   Delete
                 </button>
-                
+
               </div>
             )}
           </div>
@@ -344,21 +344,6 @@ export default function TaskView() {
     }
   };
 
-  const handleBulkDelete = async () => {
-    const selectedTasks = tasks.filter(task => task.selected);
-    const selectedTaskIds = selectedTasks
-      .map(task => task.id)
-      .filter((id): id is string => id !== undefined);
-
-    if (selectedTaskIds.length > 0 && window.confirm('Are you sure you want to delete the selected tasks?')) {
-      try {
-        await dispatch(deleteBulkTasks(selectedTaskIds)).unwrap();
-      } catch (error) {
-        console.error('Failed to delete tasks:', error);
-      }
-    }
-  };
-
   const handleBulkStatusChange = async (newStatus: Task['status']) => {
     const selectedTasks = tasks.filter(task => task.selected);
 
@@ -384,11 +369,21 @@ export default function TaskView() {
     }
   };
 
-  const confirmBulkDelete = () => {
-    const selectedTasks = tasks.filter(task => task.selected);
-    const taskIds = selectedTasks.map(task => task.id).filter(id => id !== undefined) as string[];
-    dispatch(deleteBulkTasks(taskIds));
-    setShowBulkDeleteDialog(false);
+  const confirmBulkDelete = async () => {
+    try {
+      const taskIds = tasks
+        .filter((task) => task.selected)
+        .map((task) => task.id);
+
+      if (taskIds.length > 0) {
+        await dispatch(deleteBulkTasks(taskIds));
+        toast.success("Selected tasks deleted successfully");
+      }
+      setShowBulkDeleteDialog(false);
+    } catch (error) {
+      console.error("Error deleting tasks:", error);
+      toast.error("Failed to delete tasks");
+    }
   };
 
   if (loading) {

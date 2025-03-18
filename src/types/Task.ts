@@ -9,6 +9,7 @@ export interface Task {
   dueDate: string;
   completed: boolean;
   selected: boolean;
+  order: number;
   fileUrl?: string | null;
   createdAt?: string;
   updatedAt?: string;
