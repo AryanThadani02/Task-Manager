@@ -212,25 +212,12 @@ export const removeTask = createAsyncThunk(
       }
       try {
         const taskRef = doc(db, 'tasks', taskId);
-        await deleteDoc(taskRef);
-        return taskId;
-        console.log("CHECKING TASK - Verifying task existence in Firestore");
         const docSnapshot = await getDoc(taskRef);
         if (!docSnapshot.exists()) {
-          console.error("SERVER RESPONSE - Task not found in Firestore");
           throw new Error("Task not found");
         }
-        console.log("TASK DATA - Current task data:", docSnapshot.data());
-        console.log("SENDING DELETE - Executing deleteDoc operation");
         await deleteDoc(taskRef);
-        const verifySnapshot = await getDoc(taskRef);
-        if (!verifySnapshot.exists()) {
-          console.log("SERVER RESPONSE - Task successfully deleted from Firestore");
-          return taskId;
-        } else {
-          console.error("SERVER RESPONSE - Delete operation failed, document still exists");
-          throw new Error("Delete operation failed");
-        }
+        return taskId;
       } catch (error) {
         const err = error as Error;
         console.error('=== DELETE OPERATION FAILED ===');
