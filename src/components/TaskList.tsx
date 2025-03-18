@@ -4,8 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, deleteBulkTasks } from "../redux/taskSlice";
-import toast from 'react-hot-toast';
+import { updateTask, deleteTask, removeTask, modifyTask, updateBulkTasks, deleteBulkTasks } from "../redux/taskSlice";
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 
@@ -79,7 +78,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
       id={`task-${task.id}`}
       draggable
       onDragStart={handleDragStart}
-      onDragEnd={() => {
+      onDragEnd={(e) => {
         dragRef.current?.classList.remove('dragging');
       }}
       className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
@@ -294,7 +293,7 @@ export default function TaskView() {
   const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, section: 'Todo' | 'In Progress' | 'Completed') => {
     e.preventDefault();
   };
 
@@ -377,7 +376,7 @@ export default function TaskView() {
         .map((task) => task.id);
 
       if (taskIds.length > 0) {
-        await dispatch(deleteBulkTasks(taskIds)).unwrap();
+        await dispatch(deleteBulkTasks(taskIds));
         toast.success("Selected tasks deleted successfully");
       }
       setShowBulkDeleteDialog(false);
