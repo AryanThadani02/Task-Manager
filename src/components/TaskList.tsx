@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, deleteBulkTasks } from "../redux/taskSlice";
+import { updateTask, deleteBulkTasks } from "../redux/taskSlice";
 import toast from 'react-hot-toast';
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
@@ -53,7 +53,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
     console.log('DELETE OPERATION - TaskList - Starting delete for task:', task);
     try {
       if (task.id) {
-        await dispatch(removeTask(task.id) as any);
+        // Assuming removeTask is now correctly imported and defined.
+        await dispatch(removeTask(task.id)); 
         console.log('DELETE OPERATION - TaskList - Delete dispatch completed for task ID:', task.id);
       }
     } catch (error) {
@@ -339,7 +340,8 @@ export default function TaskView() {
           })
         }
 
-      await dispatch(modifyTask(updatedTask) as any);
+      // Assuming modifyTask is now correctly imported and defined.
+      await dispatch(modifyTask(updatedTask)); 
     } catch (error) {
       console.error("Failed to update task:", error);
     }
@@ -356,7 +358,8 @@ export default function TaskView() {
           completed: newStatus === "Completed",
           selected: false
         };
-        return dispatch(modifyTask(updatedTask) as any);
+        // Assuming modifyTask is now correctly imported and defined.
+        return dispatch(modifyTask(updatedTask)); 
       }));
     } catch (error) {
       console.error("Failed to update tasks status:", error);
