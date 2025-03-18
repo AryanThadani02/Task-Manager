@@ -309,15 +309,30 @@ export default function TaskView() {
     if (!task) return;
 
     try {
-      const tasksInNewStatus = tasks.filter(t => t.status === section);
-      const maxOrder = tasksInNewStatus.length > 0 
-        ? Math.max(...tasksInNewStatus.map(t => t.order || 0))
-        : -1;
+      const dropTarget = e.target as HTMLElement;
+      const dropTargetTask = dropTarget.closest('.task-card');
+      const tasksInSection = tasks.filter(t => t.status === section);
+      
+      let newOrder;
+      if (dropTargetTask) {
+        const targetId = dropTargetTask.id.replace('task-', '');
+        const targetTask = tasks.find(t => t.id === targetId);
+        if (targetTask) {
+          const targetOrder = targetTask.order || 0;
+          const isMovingUp = taskIndex > tasksInSection.findIndex(t => t.id === targetId);
+          newOrder = isMovingUp ? targetOrder - 0.5 : targetOrder + 0.5;
+        }
+      } else {
+        newOrder = tasksInSection.length > 0 
+          ? Math.max(...tasksInSection.map(t => t.order || 0)) + 1
+          : 1;
+      }
+
       const updatedTask: Task = {
         ...task,
         status: section,
         completed: section === "Completed",
-        order: maxOrder + 1,
+        order: newOrder,
         category: task.category,
         dueDate: task.dueDate,
         activity: [
