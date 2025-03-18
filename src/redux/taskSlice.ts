@@ -211,11 +211,9 @@ export const removeTask = createAsyncThunk(
         throw new Error('Task ID is required');
       }
       try {
-        console.log('=== DELETE OPERATION START ===');
-        if (!taskId) {
-          console.error("VALIDATION ERROR: No taskId provided for deletion");
-          throw new Error("No taskId provided");
-        }
+        const taskRef = doc(db, 'tasks', taskId);
+        await deleteDoc(taskRef);
+        return taskId;
         console.log('1. DELETE REQUEST - Task ID:', taskId);
         console.log('2. FIRESTORE CONNECTION:', !!db ? 'Connected' : 'Not Connected');
         const taskRef = doc(db, 'tasks', taskId);
