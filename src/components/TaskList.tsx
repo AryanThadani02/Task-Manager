@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteBulkTasks, createTask, modifyTask, removeTask } from "../redux/taskSlice";
+import { updateTask, deleteBulkTasks, modifyTask, removeTask } from "../redux/taskSlice";
 import toast from 'react-hot-toast';
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
