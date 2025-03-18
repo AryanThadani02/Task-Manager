@@ -19,6 +19,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false); // Added confirm dialog state
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -173,13 +174,25 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
                 </button>
                 <button
                   onClick={() => {
-                    handleDelete();
+                    setShowConfirmDialog(true);
                     setShowMenu(false);
                   }}
                   className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
                   Delete
                 </button>
+                {showConfirmDialog && (
+                  <ConfirmDialog
+                    isOpen={showConfirmDialog}
+                    title="Delete Task"
+                    message="Are you sure you want to delete this task? This action cannot be undone."
+                    onConfirm={() => {
+                      handleDelete();
+                      setShowConfirmDialog(false);
+                    }}
+                    onCancel={() => setShowConfirmDialog(false)}
+                  />
+                )}
               </div>
             )}
           </div>
@@ -195,6 +208,30 @@ const LoadingSpinner = () => (
     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
   </div>
 );
+
+const ConfirmDialog = ({ isOpen, title, message, onConfirm, onCancel }: {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+        <h2 className="text-lg font-bold mb-4">{title}</h2>
+        <p className="mb-4">{message}</p>
+        <div className="flex justify-end space-x-4">
+          <button onClick={onCancel} className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded">Cancel</button>
+          <button onClick={onConfirm} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
 export default function TaskView() {
   const { searchQuery, categoryFilter, dueDateFilter } = useOutletContext<{
