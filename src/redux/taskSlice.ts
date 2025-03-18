@@ -140,22 +140,9 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
       try {
         console.log("Creating task:", taskData);
         const tasksCollection = collection(db, 'tasks');
-        
-        // Get tasks with same status to calculate order
-        const q = query(tasksCollection, where('status', '==', taskData.status));
-        const querySnapshot = await getDocs(q);
-        const tasksInSameStatus = querySnapshot.docs.map(doc => ({
-          ...doc.data(),
-          order: doc.data().order || 0
-        }));
-        const maxOrder = tasksInSameStatus.length > 0 
-          ? Math.max(...tasksInSameStatus.map(t => t.order))
-          : -1;
-
         const taskWithActivity = {
           ...taskData,
           fileUrl: taskData.fileUrl || null,
-          order: maxOrder + 1,
           createdAt: new Date().toISOString(),
           activity: [{
             timestamp: new Date().toISOString(),
