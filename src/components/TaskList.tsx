@@ -235,10 +235,14 @@ export default function TaskView() {
     const matchesDueDate = !dueDateFilter || task.dueDate === dueDateFilter;
     return matchesSearch && matchesCategory && matchesDueDate;
   }).sort((a, b) => {
-    if (!sortOrder) return 0;
-    const dateA = new Date(a.dueDate).getTime();
-    const dateB = new Date(b.dueDate).getTime();
-    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    // First sort by status-specific order
+    if (a.status === b.status) {
+      if (!sortOrder) return a.order - b.order;
+      const dateA = new Date(a.dueDate).getTime();
+      const dateB = new Date(b.dueDate).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    }
+    return a.order - b.order;
   });
 
   const todoTasks = filteredTasks.filter(task => task.status === "Todo");
