@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createTask } from '../redux/taskSlice';
@@ -30,6 +29,7 @@ export default function QuickAddTask() {
         completed: false,
         selected: false,
         fileUrl: null,
+        order: Date.now() // Using timestamp as order
       };
 
       await dispatch(createTask(newTask));
@@ -107,7 +107,7 @@ export default function QuickAddTask() {
           </button>
         </div>
       </div>
-      
+
       <div className="flex gap-2 mt-4 justify-end">
         <button
           type="button"

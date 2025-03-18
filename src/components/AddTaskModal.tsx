@@ -111,7 +111,8 @@ export default function AddTaskModal({ onClose }: AddTaskModalProps) {
         status: status as "Todo" | "In Progress" | "Completed",
         fileUrl: fileUrl,
         completed: status === "Completed",
-        selected: false
+        selected: false,
+        order: Date.now() // Using timestamp as order
       };
 
       await dispatch(createTask(newTask));
