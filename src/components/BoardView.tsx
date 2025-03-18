@@ -46,10 +46,24 @@ const TaskCard: React.FC<{ task: Task }> = ({ task }) => {
 
   return (
     <div
+      data-task-id={task.id}
       className={`bg-white p-4 rounded-lg shadow mb-3 ${!isEditModalOpen && 'cursor-move'}`}
       draggable={!isEditModalOpen}
       onDragStart={!isEditModalOpen ? handleDragStart : undefined}
       onDragEnd={!isEditModalOpen ? handleDragEnd : undefined}
+      onDragOver={(e) => {
+        e.preventDefault();
+        const draggingElement = document.querySelector('.dragging');
+        if (draggingElement && draggingElement !== e.currentTarget) {
+          const box = e.currentTarget.getBoundingClientRect();
+          const offset = e.clientY - box.top - box.height / 2;
+          if (offset < 0) {
+            e.currentTarget.style.transform = 'translateY(0)';
+          } else {
+            e.currentTarget.style.transform = 'translateY(0)';
+          }
+        }
+      }}
     >
       <div className="flex justify-between items-start">
         <h3 className={`font-semibold ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</h3>
@@ -142,7 +156,49 @@ export default function BoardView() {
     if (searchQuery) return;
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
-    const task = tasks.find(t => t.id === taskId);
+    const draggedTask = tasks.find(t => t.id === taskId);
+    const dropTarget = e.target as HTMLElement;
+    const dropTaskId = dropTarget.closest('[data-task-id]')?.getAttribute('data-task-id');
+    const dropTask = tasks.find(t => t.id === dropTaskId);
+
+    if (!draggedTask) return;
+
+    try {
+      const statusTasks = tasks
+        .filter(t => t.status === newStatus)
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+      let newOrder;
+      if (!dropTask) {
+        // Dropped at the end
+        newOrder = statusTasks.length > 0 ? Math.max(...statusTasks.map(t => t.order || 0)) + 1 : 0;
+      } else if (dropTask.id === draggedTask.id) {
+        return; // Same task, no change needed
+      } else {
+        const dropIndex = statusTasks.findIndex(t => t.id === dropTask.id);
+        const aboveTask = statusTasks[dropIndex - 1];
+        const belowTask = statusTasks[dropIndex];
+        
+        if (!aboveTask) {
+          newOrder = (belowTask.order || 0) / 2;
+        } else if (!belowTask) {
+          newOrder = (aboveTask.order || 0) + 1;
+        } else {
+          newOrder = ((aboveTask.order || 0) + (belowTask.order || 0)) / 2;
+        }
+      }
+
+      const updatedTask: Task = {
+        ...draggedTask,
+        status: newStatus,
+        order: newOrder,
+        completed: newStatus === "Completed"
+      };
+
+      await dispatch(modifyTask(updatedTask) as any);
+    } catch (error) {
+      console.error("Failed to update task order:", error);
+    });
 
     if (task && task.status !== newStatus) {
       try {
