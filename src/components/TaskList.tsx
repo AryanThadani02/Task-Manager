@@ -293,11 +293,11 @@ export default function TaskView() {
   const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
-  const handleDragOver = (e: React.DragEvent, section: 'todo' | 'inProgress' | 'completed') => {
+  const handleDragOver = (e: React.DragEvent, section: 'Todo' | 'In Progress' | 'Completed') => {
     e.preventDefault();
   };
 
-  const handleDrop = async (e: React.DragEvent, section: 'todo' | 'inProgress' | 'completed') => {
+  const handleDrop = async (e: React.DragEvent, section: 'Todo' | 'In Progress' | 'Completed') => {
     e.preventDefault();
     const taskId = e.dataTransfer.getData("taskId");
     const taskIndex = parseInt(e.dataTransfer.getData("taskIndex"), 10);
