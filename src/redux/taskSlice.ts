@@ -214,9 +214,6 @@ export const removeTask = createAsyncThunk(
         const taskRef = doc(db, 'tasks', taskId);
         await deleteDoc(taskRef);
         return taskId;
-        console.log('1. DELETE REQUEST - Task ID:', taskId);
-        console.log('2. FIRESTORE CONNECTION:', !!db ? 'Connected' : 'Not Connected');
-        const taskRef = doc(db, 'tasks', taskId);
         console.log("CHECKING TASK - Verifying task existence in Firestore");
         const docSnapshot = await getDoc(taskRef);
         if (!docSnapshot.exists()) {
