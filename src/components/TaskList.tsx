@@ -386,7 +386,8 @@ export default function TaskView() {
 
   const confirmBulkDelete = () => {
     const selectedTasks = tasks.filter(task => task.selected);
-    dispatch(deleteBulkTasks(selectedTasks));
+    const taskIds = selectedTasks.map(task => task.id).filter(id => id !== undefined) as string[];
+    dispatch(deleteBulkTasks(taskIds));
     setShowBulkDeleteDialog(false);
   };
 
