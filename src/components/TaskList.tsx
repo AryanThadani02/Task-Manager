@@ -319,21 +319,21 @@ export default function TaskView() {
     }
   };
 
-  const handleBulkStatusChange = async (newStatus: string) => {
+  const handleBulkStatusChange = async (newStatus: Task['status']) => {
     const selectedTasks = tasks.filter(task => task.selected);
-    if (selectedTasks.length === 0) {
-      alert('Please select tasks to update');
-      return;
-    }
 
     try {
-      await dispatch(updateBulkTasks({
-        tasks: selectedTasks,
-        updates: { status: newStatus, selected: false }
-      })).unwrap();
+      await Promise.all(selectedTasks.map(task => {
+        const updatedTask = {
+          ...task,
+          status: newStatus,
+          completed: newStatus === "Completed",
+          selected: false
+        };
+        return dispatch(modifyTask(updatedTask) as any);
+      }));
     } catch (error) {
-      console.error('Failed to update tasks:', error);
-      alert('Failed to update tasks. Please try again.');
+      console.error("Failed to update tasks status:", error);
     }
   };
 

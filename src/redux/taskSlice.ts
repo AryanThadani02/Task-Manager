@@ -80,7 +80,7 @@ const taskSlice = createSlice({
       builder.addCase(modifyTask.fulfilled, (state, action) => {
           const index = state.tasks.findIndex((task) => task.id === action.payload.id);
           if (index !== -1) {
-              state.tasks[index] = action.payload;
+              state.tasks[index] = { ...state.tasks[index], ...action.payload };
           }
           state.status = 'succeeded';
           state.error = null;
@@ -251,12 +251,12 @@ export const deleteBulkTasks = createAsyncThunk(
         try {
             console.log('Starting bulk delete for tasks:', taskIds);
             const batch = writeBatch(db);
-            
+
             for (const taskId of taskIds) {
                 if (!taskId) continue;
                 const taskRef = doc(db, 'tasks', taskId);
                 const taskDoc = await getDoc(taskRef);
-                
+
                 if (taskDoc.exists()) {
                     batch.delete(taskRef);
                     console.log('Added task to batch delete:', taskId);
@@ -264,7 +264,7 @@ export const deleteBulkTasks = createAsyncThunk(
                     console.warn('Task not found:', taskId);
                 }
             }
-            
+
             await batch.commit();
             console.log('Bulk delete completed successfully');
             return taskIds;
@@ -280,13 +280,13 @@ export const updateBulkTasks = createAsyncThunk(
     async ({ tasks, updates }: { tasks: Task[], updates: Partial<Task> }) => {
         try {
             const batch = writeBatch(db);
-            
+
             for (const task of tasks) {
                 if (!task.id) continue;
                 const taskRef = doc(db, 'tasks', task.id);
                 batch.update(taskRef, updates);
             }
-            
+
             await batch.commit();
             return { tasks, updates };
         } catch (error) {
