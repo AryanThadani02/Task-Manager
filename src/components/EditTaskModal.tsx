@@ -350,14 +350,31 @@ export default function EditTaskModal({ task, onClose }: EditTaskModalProps) {
   {/* Due Date */}
   <div>
     <label className="text-sm text-gray-600 mb-1 block">Due Date*</label>
-    <input
-      type="date"
-      value={editedTask.dueDate}
-      onChange={(e) => setEditedTask({ ...editedTask, dueDate: e.target.value })}
-      min={new Date().toISOString().split('T')[0]}
-      className="w-full p-2 border rounded"
-      required
-    />
+    <div className="relative">
+      <input
+        type="date"
+        value={editedTask.dueDate}
+        onChange={(e) => {
+          const selectedDate = new Date(e.target.value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          if (selectedDate < today) {
+            alert("Please select a future date");
+            setEditedTask({ ...editedTask, dueDate: today.toISOString().split('T')[0] });
+          } else {
+            setEditedTask({ ...editedTask, dueDate: e.target.value });
+          }
+        }}
+        min={new Date().toISOString().split('T')[0]}
+        placeholder="Select Due Date"
+        className="w-full p-2 pl-8 border rounded appearance-none"
+        required
+      />
+      <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+        📅
+      </span>
+    </div>
   </div>
 
   {/* Task Status */}
