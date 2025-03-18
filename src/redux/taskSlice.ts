@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 
 import { Task } from '../types/Task';
@@ -102,6 +102,17 @@ const taskSlice = createSlice({
           state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
+      builder.addCase(deleteBulkTasks.pending, (state) => {
+          state.status = 'loading';
+      });
+      builder.addCase(deleteBulkTasks.fulfilled, (state, action) => {
+          state.tasks = state.tasks.filter(task => !action.payload.includes(task.id));
+          state.status = 'succeeded';
+      });
+      builder.addCase(deleteBulkTasks.rejected, (state, action) => {
+          state.status = 'failed';
+          state.error = action.error.message || 'Failed to delete tasks';
+      });
   }
 });
 
@@ -201,6 +212,24 @@ export const modifyTask = createAsyncThunk<Task, Task>(
         console.error("Error modifying task:", err);
         throw err;
       }
+    }
+);
+
+export const deleteBulkTasks = createAsyncThunk(
+    'tasks/deleteBulkTasks',
+    async (taskIds: string[]) => {
+        try {
+            const batch = writeBatch(db);
+            taskIds.forEach(taskId => {
+                const taskRef = doc(db, 'tasks', taskId);
+                batch.delete(taskRef);
+            });
+            await batch.commit();
+            return taskIds;
+        } catch (error) {
+            console.error('Error deleting bulk tasks:', error);
+            throw error;
+        }
     }
 );
 
