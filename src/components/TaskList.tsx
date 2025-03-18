@@ -181,24 +181,25 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
                 >
                   Delete
                 </button>
-                {showConfirmDialog && (
-                  <ConfirmDialog
-                    isOpen={showConfirmDialog}
-                    title="Delete Task"
-                    message="Are you sure you want to delete this task? This action cannot be undone."
-                    onConfirm={() => {
-                      handleDelete();
-                      setShowConfirmDialog(false);
-                    }}
-                    onCancel={() => setShowConfirmDialog(false)}
-                  />
-                )}
+                
               </div>
             )}
           </div>
         </div>
       </div>
       {isEditModalOpen && <EditTaskModal task={task} onClose={() => setIsEditModalOpen(false)} />}
+      {showConfirmDialog && (
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Delete Task"
+          message="Are you sure you want to delete this task? This action cannot be undone."
+          onConfirm={() => {
+            handleDelete();
+            setShowConfirmDialog(false);
+          }}
+          onCancel={() => setShowConfirmDialog(false)}
+        />
+      )}
     </div>
   );
 };
@@ -254,6 +255,8 @@ export default function TaskView() {
     inProgress: 5,
     completed: 5
   });
+
+  const [showBulkDeleteDialog, setShowBulkDeleteDialog] = useState(false);
 
   const toggleSection = (section: 'todo' | 'inProgress' | 'completed') => {
     setExpandedSections(prev => ({
@@ -374,6 +377,19 @@ export default function TaskView() {
     }
   };
 
+  const handleDeleteSelected = () => {
+    const selectedTasks = tasks.filter(task => task.selected);
+    if (selectedTasks.length > 0) {
+      setShowBulkDeleteDialog(true);
+    }
+  };
+
+  const confirmBulkDelete = () => {
+    const selectedTasks = tasks.filter(task => task.selected);
+    dispatch(deleteBulkTasks(selectedTasks));
+    setShowBulkDeleteDialog(false);
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -452,7 +468,7 @@ export default function TaskView() {
               </div>
             </div>
             <button 
-              onClick={handleBulkDelete}
+              onClick={handleDeleteSelected}
               className="text-red-400 hover:text-red-300 text-sm"
             >
               Delete
@@ -577,6 +593,15 @@ export default function TaskView() {
           </div>
         )}
       </div>
+      {showBulkDeleteDialog && (
+        <ConfirmDialog
+          isOpen={showBulkDeleteDialog}
+          title="Delete Multiple Tasks"
+          message="Are you sure you want to delete the selected tasks? This action cannot be undone."
+          onConfirm={confirmBulkDelete}
+          onCancel={() => setShowBulkDeleteDialog(false)}
+        />
+      )}
     </div>
   );
 }
