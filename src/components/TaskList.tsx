@@ -304,23 +304,19 @@ export default function TaskView() {
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDelete = () => {
     const selectedTasks = tasks.filter(task => task.selected);
-    const selectedTaskIds = selectedTasks.map(task => task.id).filter((id): id is string => id !== undefined);
-    
-    if (selectedTaskIds.length > 0) {
-      try {
-        await dispatch(deleteBulkTasks(selectedTaskIds)).unwrap();
-        // Reset selections after successful deletion
-        tasks.forEach(task => {
-          if (task.selected) {
-            dispatch(updateTask({ ...task, selected: false } as Task));
-          }
-        });
-      } catch (error) {
-        console.error("Failed to delete selected tasks:", error);
+    selectedTasks.forEach(task => {
+      if (task.id) {
+        dispatch(deleteTask(task.id));
       }
-    }
+    });
+    // Reset all selected states after bulk delete
+    tasks.forEach(task => {
+      if (task.selected) {
+        dispatch(updateTask({ ...task, selected: false } as Task));
+      }
+    });
   };
 
   const handleBulkStatusChange = (newStatus: string) => {

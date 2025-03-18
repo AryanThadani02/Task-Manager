@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc, writeBatch } from 'firebase/firestore';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebaseConfig';
 
 import { Task } from '../types/Task';
@@ -102,19 +102,6 @@ const taskSlice = createSlice({
           state.status = 'failed';
           state.error = action.error.message || 'An unknown error occurred';
       });
-      builder.addCase(deleteBulkTasks.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      });
-      builder.addCase(deleteBulkTasks.fulfilled, (state, action) => {
-        state.tasks = state.tasks.filter(task => !action.payload.includes(task.id));
-        state.status = 'succeeded';
-        state.error = null;
-      });
-      builder.addCase(deleteBulkTasks.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'An unknown error occurred';
-      });
   }
 });
 
@@ -153,7 +140,7 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
       try {
         console.log("Creating task:", taskData);
         const tasksCollection = collection(db, 'tasks');
-
+        
         // Get tasks with same status to calculate order
         const q = query(tasksCollection, where('status', '==', taskData.status));
         const querySnapshot = await getDocs(q);
@@ -217,9 +204,9 @@ export const modifyTask = createAsyncThunk<Task, Task>(
     }
 );
 
-export const deleteTask = createAsyncThunk(
-    'tasks/deleteTask',
-    async (taskId: string) => {
+export const removeTask = createAsyncThunk(
+    'tasks/removeTask',
+    async (taskId: string | undefined) => {
       if (!taskId) {
         throw new Error('Task ID is required');
       }
@@ -233,26 +220,13 @@ export const deleteTask = createAsyncThunk(
         return taskId;
       } catch (error) {
         const err = error as Error;
-        console.error('Error deleting task:', err);
-        throw err;
-      }
-    }
-);
-
-export const deleteBulkTasks = createAsyncThunk(
-    'tasks/deleteBulkTasks',
-    async (taskIds: string[]) => {
-      try {
-        const batch = writeBatch(db);
-        taskIds.forEach(taskId => {
-          const taskRef = doc(db, 'tasks', taskId);
-          batch.delete(taskRef);
-        });
-        await batch.commit();
-        return taskIds;
-      } catch (error) {
-        const err = error as Error;
-        console.error('Error deleting bulk tasks:', err);
+        console.error('=== DELETE OPERATION FAILED ===');
+        console.error('Error name:', err.name);
+        console.error('Error message:', err.message);
+        console.error('Error stack:', err.stack);
+        console.error('Full error object:', JSON.stringify(err, null, 2));
+        console.error('Firestore connection state:', !!db);
+        console.error('TaskId:', taskId);
         throw err;
       }
     }
