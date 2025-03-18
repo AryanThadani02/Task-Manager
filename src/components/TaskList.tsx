@@ -164,13 +164,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
             </button>
 
             {showMenu && (
-              <div className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-md shadow-lg z-50">
+              <div className="absolute right-0 bottom-full mb-2 w-32 sm:w-40 md:w-48 bg-white rounded-md shadow-lg z-50">
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
                     setShowMenu(false);
                   }}
-                  className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                  className="block px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
                 >
                   Edit
                 </button>
@@ -179,7 +179,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
                     setShowConfirmDialog(true);
                     setShowMenu(false);
                   }}
-                  className="block px-3 py-1.5 text-sm text-red-600 hover:bg-gray-100 w-full text-left"
+                  className="block px-2 sm:px-3 py-1.5 text-xs sm:text-sm text-red-600 hover:bg-gray-100 w-full text-left"
                 >
                   Delete
                 </button>
