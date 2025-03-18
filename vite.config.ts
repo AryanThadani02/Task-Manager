@@ -13,4 +13,15 @@ export default defineConfig({
       "cd04679d-08c2-4a4e-ab14-ef32e93e1db0-00-1o7ahwylvfqed.sisko.replit.dev"
     ],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
+  preview: {
+    port: 3000,
+    host: '0.0.0.0',
+  }
 });
