@@ -249,17 +249,12 @@ export const deleteBulkTasks = createAsyncThunk(
     'tasks/deleteBulkTasks',
     async (taskIds: string[]) => {
         try {
-            console.log('Deleting tasks:', taskIds);
             const batch = writeBatch(db);
-            
-            for (const taskId of taskIds) {
-                if (!taskId) continue;
+            taskIds.forEach(taskId => {
                 const taskRef = doc(db, 'tasks', taskId);
                 batch.delete(taskRef);
-            }
-            
+            });
             await batch.commit();
-            console.log('Tasks deleted successfully');
             return taskIds;
         } catch (error) {
             console.error('Error deleting bulk tasks:', error);

@@ -310,24 +310,11 @@ export default function TaskView() {
       .map(task => task.id)
       .filter((id): id is string => id !== undefined);
     
-    if (selectedTaskIds.length === 0) {
-      alert('Please select tasks to delete');
-      return;
-    }
-
-    if (window.confirm('Are you sure you want to delete the selected tasks?')) {
+    if (selectedTaskIds.length > 0 && window.confirm('Are you sure you want to delete the selected tasks?')) {
       try {
-        console.log('Deleting tasks:', selectedTaskIds);
         await dispatch(deleteBulkTasks(selectedTaskIds)).unwrap();
-        // Unselect all tasks after deletion
-        tasks.forEach(task => {
-          if (task.selected) {
-            dispatch(updateTask({ ...task, selected: false }));
-          }
-        });
       } catch (error) {
         console.error('Failed to delete tasks:', error);
-        alert('Failed to delete tasks. Please try again.');
       }
     }
   };
