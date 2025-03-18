@@ -249,15 +249,48 @@ export const deleteBulkTasks = createAsyncThunk(
     'tasks/deleteBulkTasks',
     async (taskIds: string[]) => {
         try {
+            console.log('Starting bulk delete for tasks:', taskIds);
             const batch = writeBatch(db);
-            taskIds.forEach(taskId => {
+            
+            for (const taskId of taskIds) {
+                if (!taskId) continue;
                 const taskRef = doc(db, 'tasks', taskId);
-                batch.delete(taskRef);
-            });
+                const taskDoc = await getDoc(taskRef);
+                
+                if (taskDoc.exists()) {
+                    batch.delete(taskRef);
+                    console.log('Added task to batch delete:', taskId);
+                } else {
+                    console.warn('Task not found:', taskId);
+                }
+            }
+            
             await batch.commit();
+            console.log('Bulk delete completed successfully');
             return taskIds;
         } catch (error) {
-            console.error('Error deleting bulk tasks:', error);
+            console.error('Error in bulk delete:', error);
+            throw error;
+        }
+    }
+);
+
+export const updateBulkTasks = createAsyncThunk(
+    'tasks/updateBulkTasks',
+    async ({ tasks, updates }: { tasks: Task[], updates: Partial<Task> }) => {
+        try {
+            const batch = writeBatch(db);
+            
+            for (const task of tasks) {
+                if (!task.id) continue;
+                const taskRef = doc(db, 'tasks', task.id);
+                batch.update(taskRef, updates);
+            }
+            
+            await batch.commit();
+            return { tasks, updates };
+        } catch (error) {
+            console.error('Error updating bulk tasks:', error);
             throw error;
         }
     }

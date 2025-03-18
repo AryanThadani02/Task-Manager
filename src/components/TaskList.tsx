@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, removeTask, modifyTask } from "../redux/taskSlice";
+import { updateTask, deleteTask, removeTask, modifyTask, updateBulkTasks, deleteBulkTasks } from "../redux/taskSlice";
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 
@@ -309,7 +309,7 @@ export default function TaskView() {
     const selectedTaskIds = selectedTasks
       .map(task => task.id)
       .filter((id): id is string => id !== undefined);
-    
+
     if (selectedTaskIds.length > 0 && window.confirm('Are you sure you want to delete the selected tasks?')) {
       try {
         await dispatch(deleteBulkTasks(selectedTaskIds)).unwrap();
@@ -319,16 +319,22 @@ export default function TaskView() {
     }
   };
 
-  const handleBulkStatusChange = (newStatus: string) => {
+  const handleBulkStatusChange = async (newStatus: string) => {
     const selectedTasks = tasks.filter(task => task.selected);
-    selectedTasks.forEach(task => {
-      dispatch(updateTask({ 
-        ...task, 
-        status: newStatus as "Todo" | "In Progress" | "Completed",
-        completed: newStatus === "Completed",
-        selected: false 
-      }));
-    });
+    if (selectedTasks.length === 0) {
+      alert('Please select tasks to update');
+      return;
+    }
+
+    try {
+      await dispatch(updateBulkTasks({
+        tasks: selectedTasks,
+        updates: { status: newStatus, selected: false }
+      })).unwrap();
+    } catch (error) {
+      console.error('Failed to update tasks:', error);
+      alert('Failed to update tasks. Please try again.');
+    }
   };
 
   if (loading) {
