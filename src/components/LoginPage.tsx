@@ -31,11 +31,8 @@ export default function LoginPage() {
   }, [dispatch, navigate]);
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-purple-50">
-      
-      {/* Login Section */}
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center">
+    <div className="min-h-screen bg-purple-50 flex items-center justify-center">
+      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md text-center relative z-10">
           <h1 className="text-3xl font-bold text-purple-600 mb-6">TaskBuddy</h1>
           <p className="text-gray-600 mb-6 text-sm">
             Streamline your workflow and track progress effortlessly.
@@ -52,8 +49,8 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Circles Section - Desktop Right, Mobile Bottom */}
-      <div className="flex-1 relative overflow-hidden flex items-center justify-center p-6">
+      {/* Circles Section - Centered Background */}
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         <svg
           viewBox="0 0 200 200"
           className="w-[80%] h-[80%] max-w-none opacity-30"
