@@ -242,7 +242,7 @@ export default function TaskView() {
       const dateB = new Date(b.dueDate).getTime();
       return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     }
-    return a.order - b.order;
+    return a.order - b.order; //Added this line to handle the case when status is different.
   });
 
   const todoTasks = filteredTasks.filter(task => task.status === "Todo");
@@ -263,10 +263,15 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
   if (!task) return;
 
     try {
+      const tasksInNewStatus = tasks.filter(t => t.status === newStatus);
+      const maxOrder = tasksInNewStatus.length > 0 
+        ? Math.max(...tasksInNewStatus.map(t => t.order || 0))
+        : -1;
       const updatedTask: Task = {
         ...task,
         status: newStatus,
         completed: newStatus === "Completed",
+        order: maxOrder + 1,
         category: task.category,
         dueDate: task.dueDate,
         activity: [
