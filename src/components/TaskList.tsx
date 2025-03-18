@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, removeTask, modifyTask } from "../redux/taskSlice";
+import { updateTask, deleteTask, removeTask, modifyTask, removeBulkTasks } from "../redux/taskSlice";
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 
@@ -12,9 +12,11 @@ interface TaskCardProps {
   task: Task;
   index: number;
   section: 'todo' | 'inProgress' | 'completed';
+  selectedTasks: string[];
+  handleSelectTask: (taskId: string) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, index, section, selectedTasks, handleSelectTask }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -33,18 +35,13 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
     };
   }, []);
   const dispatch = useDispatch();
-  const [isSelected, setIsSelected] = useState(false);
+
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("taskId", task.id || '');
     e.dataTransfer.setData("taskIndex", index.toString());
     e.dataTransfer.setData("section", section);
     dragRef.current?.classList.add('dragging');
-  };
-
-  const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsSelected(e.target.checked);
-    dispatch(updateTask({ ...task, selected: e.target.checked } as Task));
   };
 
   const handleDelete = async () => {
@@ -86,8 +83,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
         <div className="flex items-center space-x-2">
           <input
             type="checkbox"
-            checked={isSelected}
-            onChange={handleSelect}
+            checked={selectedTasks.includes(task.id!)}
+            onChange={() => handleSelectTask(task.id!)}
             className="w-4 h-4 border-gray-300 rounded focus:ring-0"
           />
           <div className="hidden md:block drag-handle cursor-move text-gray-400">
@@ -95,30 +92,30 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
             <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
           </svg>
         </div>
-        <input
-          type="checkbox"
-          checked={task.status === "Completed"}
-          onChange={(e) => {
-            const isCompleted = e.target.checked;
-            dispatch(updateTask({ 
-              ...task, 
-              completed: isCompleted,
-              category: task.category,
-              dueDate: task.dueDate,
-              status: isCompleted ? "Completed" : "Todo",
-              selected: task.selected || false,
-              activity: [
-                ...(task.activity || []),
-                {
-                  timestamp: new Date().toISOString(),
-                  action: "status_change",
-                  details: `Task marked as ${isCompleted ? 'completed' : 'incomplete'} via checkbox`
-                }
-              ]
-            } as Task));
-          }}
-          className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
-        />
+          <input
+            type="checkbox"
+            checked={task.status === "Completed"}
+            onChange={(e) => {
+              const isCompleted = e.target.checked;
+              dispatch(updateTask({ 
+                ...task, 
+                completed: isCompleted,
+                category: task.category,
+                dueDate: task.dueDate,
+                status: isCompleted ? "Completed" : "Todo",
+                selected: task.selected || false,
+                activity: [
+                  ...(task.activity || []),
+                  {
+                    timestamp: new Date().toISOString(),
+                    action: "status_change",
+                    details: `Task marked as ${isCompleted ? 'completed' : 'incomplete'} via checkbox`
+                  }
+                ]
+              } as Task));
+            }}
+            className="relative w-4 h-4 rounded-full border border-black text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent appearance-none before:content-['✓'] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:text-white before:opacity-0 checked:before:opacity-100 before:text-xs"
+          />
         </div>
         <div className="flex items-center">
           <span className={`text-sm font-normal text-gray-900 ${task.status === 'Completed' ? 'line-through' : ''}`}>{task.title}</span>
@@ -217,6 +214,8 @@ export default function TaskView() {
     inProgress: 5,
     completed: 5
   });
+  const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const toggleSection = (section: 'todo' | 'inProgress' | 'completed') => {
     setExpandedSections(prev => ({
@@ -304,19 +303,34 @@ export default function TaskView() {
     }
   };
 
-  const handleBulkDelete = () => {
-    const selectedTasks = tasks.filter(task => task.selected);
-    selectedTasks.forEach(task => {
-      if (task.id) {
-        dispatch(deleteTask(task.id));
+  const handleSelectTask = (taskId: string) => {
+    setSelectedTasks(prev => 
+      prev.includes(taskId) 
+        ? prev.filter(id => id !== taskId)
+        : [...prev, taskId]
+    );
+  };
+
+  const handleSelectAllInSection = (sectionTasks: Task[]) => {
+    const sectionTaskIds = sectionTasks.map(task => task.id!);
+    const allSelected = sectionTaskIds.every(id => selectedTasks.includes(id));
+
+    if (allSelected) {
+      setSelectedTasks(prev => prev.filter(id => !sectionTaskIds.includes(id)));
+    } else {
+      setSelectedTasks(prev => [...new Set([...prev, ...sectionTaskIds])]);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (window.confirm("Are you sure you want to delete the selected tasks? This action cannot be undone.")) {
+      try {
+        await dispatch(removeBulkTasks(selectedTasks)).unwrap();
+        setSelectedTasks([]);
+      } catch (error) {
+        console.error("Failed to delete tasks:", error);
       }
-    });
-    // Reset all selected states after bulk delete
-    tasks.forEach(task => {
-      if (task.selected) {
-        dispatch(updateTask({ ...task, selected: false } as Task));
-      }
-    });
+    }
   };
 
   const handleBulkStatusChange = (newStatus: string) => {
@@ -390,12 +404,17 @@ export default function TaskView() {
           <div>Task Status</div>
           <div>Task Category</div>
         </div>
-        {tasks.some(task => task.selected) && (
+        {selectedTasks.length > 0 && (
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-4 z-50">
             <span className="text-sm">
-              {tasks.filter(task => task.selected).length} Tasks Selected
+              {selectedTasks.length} Tasks Selected
             </span>
-            <span className="text-gray-400">|</span>
+            <button 
+              onClick={handleBulkDelete}
+              className="text-red-400 hover:text-red-300 text-sm"
+            >
+              Delete
+            </button>
             <div className="relative group">
               <button className="text-sm hover:text-gray-300">
                 Status ▾
@@ -408,12 +427,6 @@ export default function TaskView() {
                 </div>
               </div>
             </div>
-            <button 
-              onClick={handleBulkDelete}
-              className="text-red-400 hover:text-red-300 text-sm"
-            >
-              Delete
-            </button>
           </div>
         )}
         {filteredTasks.length === 0 && searchQuery ? (
@@ -422,6 +435,10 @@ export default function TaskView() {
           <div className="flex flex-col gap-4">
             {(!searchQuery || todoTasks.length > 0) && (
             <div className="border rounded-lg overflow-hidden mb-4">
+              <div className="flex justify-between items-center p-3">
+                <span>Todo ({todoTasks.length})</span>
+                <button onClick={() => handleSelectAllInSection(todoTasks)} className="text-gray-600">Select All</button>
+              </div>
               <button 
                 onClick={() => toggleSection('todo')}
                 className="w-full bg-purple-200 p-3 font-medium text-left flex justify-between items-center"
@@ -439,7 +456,7 @@ export default function TaskView() {
                   {todoTasks.length > 0 ? (
                     <>
                       {todoTasks.slice(0, visibleTasks.todo).map((task, index) => 
-                        <TaskCard key={task.id} task={task} index={index} section={"Todo"}/>
+                        <TaskCard key={task.id} task={task} index={index} section={"Todo"} selectedTasks={selectedTasks} handleSelectTask={handleSelectTask}/>
                       )}
                       {todoTasks.length > visibleTasks.todo && (
                         <button 
@@ -460,6 +477,10 @@ export default function TaskView() {
 
           {(!searchQuery || inProgressTasks.length > 0) && (
             <div className="border rounded-lg overflow-hidden mb-4">
+              <div className="flex justify-between items-center p-3">
+                <span>In Progress ({inProgressTasks.length})</span>
+                <button onClick={() => handleSelectAllInSection(inProgressTasks)} className="text-gray-600">Select All</button>
+              </div>
               <button 
                 onClick={() => toggleSection('inProgress')}
                 className="w-full bg-blue-200 p-3 font-medium text-left flex justify-between items-center"
@@ -476,7 +497,7 @@ export default function TaskView() {
                   {inProgressTasks.length > 0 ? (
                     <>
                       {inProgressTasks.slice(0, visibleTasks.inProgress).map((task, index) => 
-                        <TaskCard key={task.id} task={task} index={index} section={"In Progress"}/>
+                        <TaskCard key={task.id} task={task} index={index} section={"In Progress"} selectedTasks={selectedTasks} handleSelectTask={handleSelectTask}/>
                       )}
                       {inProgressTasks.length > visibleTasks.inProgress && (
                         <button 
@@ -497,6 +518,10 @@ export default function TaskView() {
 
           {(!searchQuery || completedTasks.length > 0) && (
             <div className="border rounded-lg overflow-hidden mb-4">
+              <div className="flex justify-between items-center p-3">
+                <span>Completed ({completedTasks.length})</span>
+                <button onClick={() => handleSelectAllInSection(completedTasks)} className="text-gray-600">Select All</button>
+              </div>
               <button 
                 onClick={() => toggleSection('completed')}
                 className="w-full bg-green-200 p-3 font-medium text-left flex justify-between items-center"
@@ -513,7 +538,7 @@ export default function TaskView() {
                   {completedTasks.length > 0 ? (
                     <>
                       {completedTasks.slice(0, visibleTasks.completed).map((task, index) => 
-                        <TaskCard key={task.id} task={task} index={index} section={"Completed"}/>
+                        <TaskCard key={task.id} task={task} index={index} section={"Completed"} selectedTasks={selectedTasks} handleSelectTask={handleSelectTask}/>
                       )}
                       {completedTasks.length > visibleTasks.completed && (
                         <button 

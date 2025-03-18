@@ -220,13 +220,26 @@ export const removeTask = createAsyncThunk(
         return taskId;
       } catch (error) {
         const err = error as Error;
-        console.error('=== DELETE OPERATION FAILED ===');
-        console.error('Error name:', err.name);
-        console.error('Error message:', err.message);
-        console.error('Error stack:', err.stack);
-        console.error('Full error object:', JSON.stringify(err, null, 2));
-        console.error('Firestore connection state:', !!db);
-        console.error('TaskId:', taskId);
+        console.error('=== DELETE OPERATION FAILED ===', err);
+        throw err;
+      }
+    }
+);
+
+export const removeBulkTasks = createAsyncThunk(
+    'tasks/removeBulkTasks',
+    async (taskIds: string[]) => {
+      try {
+        const batch = writeBatch(db);
+        taskIds.forEach(taskId => {
+          const taskRef = doc(db, 'tasks', taskId);
+          batch.delete(taskRef);
+        });
+        await batch.commit();
+        return taskIds;
+      } catch (error) {
+        const err = error as Error;
+        console.error('=== BULK DELETE OPERATION FAILED ===', err);
         throw err;
       }
     }
