@@ -13,5 +13,4 @@ export interface Task {
   createdAt?: string;
   updatedAt?: string;
   activity?: { timestamp: string; action: string; details: string }[];
-  order?: number;
 }
