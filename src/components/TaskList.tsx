@@ -164,7 +164,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
             </button>
 
             {showMenu && (
-              <div className="absolute right-0 top-0 py-2 w-36 sm:w-48 bg-white rounded-md shadow-xl z-20">
+              <div className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-md shadow-lg z-50">
                 <button
                   onClick={() => {
                     setIsEditModalOpen(true);
