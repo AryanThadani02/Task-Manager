@@ -488,7 +488,7 @@ export default function TaskView() {
               {expandedSections.todo && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={(e) => handleDragOver(e, "Todo")}
+                  onDragOver={(e) => handleDragOver(e)}
                   onDrop={(e) => handleDrop(e, "Todo")}
                 >
                   <QuickAddTask /> {/* Add QuickAddTask component here */}
@@ -526,7 +526,7 @@ export default function TaskView() {
               {expandedSections.inProgress && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={(e) => handleDragOver(e, "In Progress")}
+                  onDragOver={(e) => handleDragOver(e)}
                   onDrop={(e) => handleDrop(e, "In Progress")}
                 >
                   {inProgressTasks.length > 0 ? (
@@ -563,7 +563,7 @@ export default function TaskView() {
               {expandedSections.completed && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={(e) => handleDragOver(e, "Completed")}
+                  onDragOver={(e) => handleDragOver(e)}
                   onDrop={(e) => handleDrop(e, "Completed")}
                 >
                   {completedTasks.length > 0 ? (
