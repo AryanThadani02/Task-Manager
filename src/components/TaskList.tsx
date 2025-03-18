@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { RootState } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteTask, deleteBulkTasks, modifyTask } from "../redux/taskSlice"; //Import modifyTask
+import { updateTask, deleteTask, deleteBulkTasks } from "../redux/taskSlice";
 import toast from 'react-hot-toast';
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
@@ -34,7 +34,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  const dispatch = useDispatch<AppDispatch>(); // Fixed dispatch type
+  const dispatch = useDispatch();
   const [isSelected, setIsSelected] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -53,7 +53,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
     console.log('DELETE OPERATION - TaskList - Starting delete for task:', task);
     try {
       if (task.id) {
-        await dispatch(deleteTask(task.id) as any); // Assuming deleteTask is the correct action
+        await dispatch(removeTask(task.id) as any);
         console.log('DELETE OPERATION - TaskList - Delete dispatch completed for task ID:', task.id);
       }
     } catch (error) {
@@ -242,7 +242,7 @@ export default function TaskView() {
     dueDateFilter: string;
   }>();
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
-  const dispatch = useDispatch<AppDispatch>(); // Fixed dispatch type
+  const dispatch = useDispatch();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
@@ -294,7 +294,7 @@ export default function TaskView() {
   const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
-  const handleDragOver = (e: React.DragEvent, section: 'Todo' | 'In Progress' | 'Completed') => { // Corrected argument count
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
@@ -339,7 +339,7 @@ export default function TaskView() {
           })
         }
 
-      await dispatch(modifyTask(updatedTask));
+      await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
       console.error("Failed to update task:", error);
     }
@@ -356,7 +356,7 @@ export default function TaskView() {
           completed: newStatus === "Completed",
           selected: false
         };
-        return dispatch(modifyTask(updatedTask));
+        return dispatch(modifyTask(updatedTask) as any);
       }));
     } catch (error) {
       console.error("Failed to update tasks status:", error);
