@@ -11,7 +11,7 @@ import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 interface TaskCardProps {
   task: Task;
   index: number;
-  section: 'todo' | 'inProgress' | 'completed';
+  section: 'Todo' | 'In Progress' | 'Completed';
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {

@@ -165,7 +165,20 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
           ? Math.max(...tasksInSameStatus.map(t => t.order))
           : -1;
 
+        const docRef = await addDoc(tasksCollection, {
+          ...taskData,
+          fileUrl: taskData.fileUrl || null,
+          order: maxOrder + 1,
+          createdAt: new Date().toISOString(),
+          activity: [{
+            timestamp: new Date().toISOString(),
+            action: 'created',
+            details: `Task "${taskData.title}" created with status "${taskData.status}"`
+          }]
+        });
+        
         const taskWithActivity = {
+          id: docRef.id,
           ...taskData,
           fileUrl: taskData.fileUrl || null,
           order: maxOrder + 1,
@@ -176,7 +189,6 @@ export const createTask = createAsyncThunk<Task, Omit<Task, 'id' | 'createdAt' |
             details: `Task "${taskData.title}" created with status "${taskData.status}"`
           }]
         } as Task;
-        const docRef = await addDoc(tasksCollection, taskWithActivity);
         console.log("Task created successfully with ID:", docRef.id);
         return { ...taskWithActivity, id: docRef.id };
       } catch (error) {
