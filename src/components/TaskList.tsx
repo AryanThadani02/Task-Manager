@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useOutletContext } from "react-router-dom";
-import { RootState } from "../redux/store";
+import { RootState, AppDispatch } from "../redux/store";
 import { Task } from "../types/Task";
 import EditTaskModal from "./EditTaskModal";
-import { updateTask, deleteBulkTasks } from "../redux/taskSlice";
+import { updateTask, deleteBulkTasks, createTask, modifyTask, removeTask } from "../redux/taskSlice";
 import toast from 'react-hot-toast';
 import NoResultsFound from "./NoResultsFound";
 import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
@@ -34,7 +34,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [isSelected, setIsSelected] = useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
@@ -243,7 +243,7 @@ export default function TaskView() {
     dueDateFilter: string;
   }>();
   const { tasks, loading } = useSelector((state: RootState) => state.tasks);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
