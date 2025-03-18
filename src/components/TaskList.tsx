@@ -10,12 +10,15 @@ import QuickAddTask from "./QuickAddTask"; // Import QuickAddTask component
 
 interface TaskCardProps {
   task: Task;
+  index: number;
+  section: 'todo' | 'inProgress' | 'completed';
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, index, section }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,6 +37,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("taskId", task.id || '');
+    e.dataTransfer.setData("taskIndex", index.toString());
+    e.dataTransfer.setData("section", section);
+    dragRef.current?.classList.add('dragging');
   };
 
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,14 +73,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
 
   return (
     <div 
+      ref={dragRef}
       id={`task-${task.id}`}
       draggable
-      onDragStart={(e) => {
-        handleDragStart(e);
-        e.currentTarget.classList.add('dragging');
-      }}
+      onDragStart={handleDragStart}
       onDragEnd={(e) => {
-        e.currentTarget.classList.remove('dragging');
+        dragRef.current?.classList.remove('dragging');
       }}
       className="task-card bg-white px-2 sm:px-3 py-1.5 sm:py-2 rounded mb-2 border border-gray-200 hover:bg-gray-50"
     >
@@ -249,28 +253,28 @@ export default function TaskView() {
   const inProgressTasks = filteredTasks.filter(task => task.status === "In Progress");
   const completedTasks = filteredTasks.filter(task => task.status === "Completed");
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, section: 'todo' | 'inProgress' | 'completed') => {
     e.preventDefault();
   };
 
+  const handleDrop = async (e: React.DragEvent, section: 'todo' | 'inProgress' | 'completed') => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("taskId");
+    const taskIndex = parseInt(e.dataTransfer.getData("taskIndex"), 10);
+    const originalSection = e.dataTransfer.getData("section");
+    const task = tasks.find(t => t.id === taskId);
 
-
-const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
-  e.preventDefault();
-  const taskId = e.dataTransfer.getData("taskId");
-  const task = tasks.find(t => t.id === taskId);
-
-  if (!task) return;
+    if (!task) return;
 
     try {
-      const tasksInNewStatus = tasks.filter(t => t.status === newStatus);
+      const tasksInNewStatus = tasks.filter(t => t.status === section);
       const maxOrder = tasksInNewStatus.length > 0 
         ? Math.max(...tasksInNewStatus.map(t => t.order || 0))
         : -1;
       const updatedTask: Task = {
         ...task,
-        status: newStatus,
-        completed: newStatus === "Completed",
+        status: section,
+        completed: section === "Completed",
         order: maxOrder + 1,
         category: task.category,
         dueDate: task.dueDate,
@@ -279,10 +283,20 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
           {
             timestamp: new Date().toISOString(),
             action: "status_change",
-            details: `Task status changed to ${newStatus} via drag and drop`
+            details: `Task status changed to ${section} via drag and drop`
           }
         ]
       };
+
+        //Reorder tasks in the original section
+        if(originalSection !== section){
+          const originalTasks = tasks.filter(t => t.status === originalSection);
+          const newOriginalTasks = [...originalTasks];
+          newOriginalTasks.splice(taskIndex, 1);
+          newOriginalTasks.forEach((t, index) => {
+            dispatch(updateTask({...t, order: index}));
+          })
+        }
 
       await dispatch(modifyTask(updatedTask) as any);
     } catch (error) {
@@ -418,14 +432,14 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
               {expandedSections.todo && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
+                  onDragOver={(e) => handleDragOver(e, "Todo")}
                   onDrop={(e) => handleDrop(e, "Todo")}
                 >
                   <QuickAddTask /> {/* Add QuickAddTask component here */}
                   {todoTasks.length > 0 ? (
                     <>
-                      {todoTasks.slice(0, visibleTasks.todo).map(task => 
-                        <TaskCard key={task.id} task={task} />
+                      {todoTasks.slice(0, visibleTasks.todo).map((task, index) => 
+                        <TaskCard key={task.id} task={task} index={index} section={"Todo"}/>
                       )}
                       {todoTasks.length > visibleTasks.todo && (
                         <button 
@@ -456,13 +470,13 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
               {expandedSections.inProgress && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
+                  onDragOver={(e) => handleDragOver(e, "In Progress")}
                   onDrop={(e) => handleDrop(e, "In Progress")}
                 >
                   {inProgressTasks.length > 0 ? (
                     <>
-                      {inProgressTasks.slice(0, visibleTasks.inProgress).map(task => 
-                        <TaskCard key={task.id} task={task} />
+                      {inProgressTasks.slice(0, visibleTasks.inProgress).map((task, index) => 
+                        <TaskCard key={task.id} task={task} index={index} section={"In Progress"}/>
                       )}
                       {inProgressTasks.length > visibleTasks.inProgress && (
                         <button 
@@ -493,13 +507,13 @@ const handleDrop = async (e: React.DragEvent, newStatus: Task['status']) => {
               {expandedSections.completed && (
                 <div 
                   className="p-4 min-h-[100px] transition-all duration-200"
-                  onDragOver={handleDragOver}
+                  onDragOver={(e) => handleDragOver(e, "Completed")}
                   onDrop={(e) => handleDrop(e, "Completed")}
                 >
                   {completedTasks.length > 0 ? (
                     <>
-                      {completedTasks.slice(0, visibleTasks.completed).map(task => 
-                        <TaskCard key={task.id} task={task} />
+                      {completedTasks.slice(0, visibleTasks.completed).map((task, index) => 
+                        <TaskCard key={task.id} task={task} index={index} section={"Completed"}/>
                       )}
                       {completedTasks.length > visibleTasks.completed && (
                         <button 
